@@ -51,6 +51,7 @@ output "deployment_info" {
 # Useful kubectl commands for users
 output "kubectl_commands" {
   description = "Useful kubectl commands"
+  sensitive   = true
   value = {
     get_pods           = "kubectl get pods -n ${var.namespace}"
     get_services       = "kubectl get services -n ${var.namespace}"

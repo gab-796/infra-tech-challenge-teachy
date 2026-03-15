@@ -57,10 +57,14 @@ resource "null_resource" "inotify_tuning" {
       
       echo "Tuning inotify settings..."
       
-      # Check if running with sudo capability
       if sudo -n true 2>/dev/null; then
         sudo sysctl fs.inotify.max_user_watches=524288
         sudo sysctl fs.inotify.max_user_instances=512
+
+        # Persistir entre reboots
+        grep -q "max_user_watches" /etc/sysctl.conf || echo "fs.inotify.max_user_watches=524288" | sudo tee -a /etc/sysctl.conf
+        grep -q "max_user_instances" /etc/sysctl.conf || echo "fs.inotify.max_user_instances=512" | sudo tee -a /etc/sysctl.conf
+
         echo "inotify tuning completed"
       else
         echo "Warning: Cannot apply inotify tuning without sudo. Please run manually:"

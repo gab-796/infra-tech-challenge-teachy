@@ -168,6 +168,43 @@ variable "otel_collector_enabled" {
 }
 
 # ========================================
+# VAULT CONFIGURATION
+# ========================================
+variable "vault_enabled" {
+  description = "Install HashiCorp Vault (dev mode)"
+  type        = bool
+  default     = true
+}
+
+variable "vault_version" {
+  description = "Vault Helm chart version"
+  type        = string
+  default     = "0.27.0"
+}
+
+variable "vault_root_token" {
+  description = "Vault dev root token"
+  type        = string
+  sensitive   = true
+  default     = "root"
+}
+
+# ========================================
+# EXTERNAL SECRETS OPERATOR CONFIGURATION
+# ========================================
+variable "eso_enabled" {
+  description = "Install External Secrets Operator"
+  type        = bool
+  default     = true
+}
+
+variable "eso_version" {
+  description = "External Secrets Operator Helm chart version"
+  type        = string
+  default     = "0.10.0"
+}
+
+# ========================================
 # RESOURCE LIMITS
 # ========================================
 variable "resource_requests" {

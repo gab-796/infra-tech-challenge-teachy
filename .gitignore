@@ -51,3 +51,6 @@ logs/
 # Build/dist directories
 dist/
 build/
+
+# State local
+state/

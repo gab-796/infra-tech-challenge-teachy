@@ -1,0 +1,17 @@
+{{- if and .Values.inventoryApp.externalSecret.enabled (not (empty .Values.inventoryApp.externalSecret.vaultUrl)) }}
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: vault-backend
+spec:
+  provider:
+    vault:
+      server: {{ .Values.inventoryApp.externalSecret.vaultUrl }}
+      path: "secret"
+      version: "v2"
+      auth:
+        tokenSecretRef:
+          name: vault-token
+          namespace: {{ .Values.global.namespace }}
+          key: token
+{{- end }}

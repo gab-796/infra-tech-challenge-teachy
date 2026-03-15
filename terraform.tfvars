@@ -5,7 +5,7 @@ kubeconfig_path = "~/.kube/config"
 namespace            = "api-app-go"
 create_namespace     = true
 helm_release_name    = "api-observabilidade"
-helm_chart_path      = "../helm-chart/infra-tech-challenge-teachy"
+helm_chart_path      = "./helm-chart"
 
 # Chart configuration
 chart_version = "1.0.0"
@@ -44,6 +44,19 @@ mimir_enabled           = true
 pyroscope_enabled       = true
 alloy_enabled           = true
 otel_collector_enabled  = true
+
+# ========================================
+# VAULT CONFIGURATION
+# ========================================
+vault_enabled     = true
+vault_version     = "0.27.0"
+vault_root_token  = "root"
+
+# ========================================
+# EXTERNAL SECRETS OPERATOR
+# ========================================
+eso_enabled  = true
+eso_version  = "0.10.0"
 
 # ========================================
 # RESOURCE CONFIGURATION

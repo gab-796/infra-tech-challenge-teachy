@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tempo
+  namespace: api-app-go
+  labels:
+    app: tempo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tempo
+  template:
+    metadata:
+      labels:
+        app: tempo
+    spec:
+      containers:
+        - name: tempo
+          image: grafana/tempo:2.6.0
+          args:
+            - -config.file=/etc/tempo/tempo.yaml
+          ports:
+            - containerPort: 4317 # Porta para OTLP gRPC
+            - containerPort: 4318 # Porta para OTLP HTTP
+          env:
+            - name: TEMPO_GRPC_LISTEN_PORT
+              value: "9095" # Porta usada para os componentes do Tempo se conversarem.
+          volumeMounts:
+            - name: tempo-storage
+              mountPath: /var/tempo
+            - name: tempo-config
+              mountPath: /etc/tempo
+              readOnly: true
+      volumes:
+        - name: tempo-storage
+          persistentVolumeClaim:
+            claimName: tempo-pvc
+        - name: tempo-config
+          configMap:
+            name: tempo-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tempo-pvc
+  namespace: {{ .Values.global.namespace }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: {{ .Values.global.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.sizes.tempo }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tempo
+  namespace: api-app-go
+spec:
+  ports:
+    - name: http # Nome obrigatório
+      protocol: TCP
+      port: 3200
+      targetPort: 3200
+    - name: grpc # Nome obrigatório
+      protocol: TCP
+      port: 4317
+      targetPort: 4317
+  selector:
+    app: tempo
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tempo-config
+  namespace: api-app-go
+data:
+  tempo.yaml: |
+    auth_enabled: false
+    server:
+      http_listen_port: 3200
+      grpc_listen_port: 9095
+      log_level: warn
+
+    distributor:
+      receivers:
+        otlp:
+          protocols:
+            grpc:
+              endpoint: 0.0.0.0:4317
+            http:
+              endpoint: 0.0.0.0:4318
+
+    ingester:
+      trace_idle_period: 10s
+      max_block_bytes: 5242880
+      max_block_duration: 5m
+
+    storage:
+      trace:
+        backend: local
+        local:
+          path: /var/tempo
+        wal:
+          path: /var/tempo/wal
+
+    querier:
+      frontend_worker:
+        frontend_address: localhost:9095
+
+    metrics_generator:
+      ring:
+        kvstore:
+          store: inmemory
+      processor:
+        service_graphs:
+          dimensions: [service.name]
+        span_metrics:
+          dimensions: [service.name]
+        local_blocks:
+          filter_server_spans: false
+          flush_to_storage: true
+      storage:
+        path: /var/tempo/generator/wal
+        remote_write:
+          - url: http://mimir:9009/api/v1/push
+            send_exemplars: true
+
+    overrides:
+      defaults:
+        metrics_generator:
+          processors: [service-graphs, span-metrics, local-blocks]
+          generate_native_histograms: both
