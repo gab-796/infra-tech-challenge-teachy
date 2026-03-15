@@ -66,11 +66,27 @@ spec:
         {{- end }}
       volumes:
       - name: mysql-data
-        emptyDir: {}
+        persistentVolumeClaim:
+          claimName: mysql-pvc
       - name: init-db
         configMap:
           name: init-db-configmap
           defaultMode: 0755
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.mysql.name }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.accessMode }}
+  storageClassName: {{ .Values.persistence.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.sizes.mysql }}
 ---
 apiVersion: v1
 kind: Service
