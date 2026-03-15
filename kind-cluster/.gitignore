@@ -33,3 +33,6 @@ tfplan.backup
 # Environment
 .env
 .env.local
+
+# State local
+state/

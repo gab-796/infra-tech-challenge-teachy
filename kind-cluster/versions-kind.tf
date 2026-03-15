@@ -2,6 +2,10 @@
 
 # Provider local para executar scripts
 terraform {
+  backend "local" {
+    path = "state/terraform.tfstate"
+  }
+
   required_providers {
     local = {
       source  = "hashicorp/local"
@@ -21,6 +25,7 @@ terraform {
     }
   }
 }
+
 
 # Kubernetes provider
 provider "kubernetes" {
