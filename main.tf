@@ -160,6 +160,7 @@ resource "helm_release" "api_observabilidade" {
 
   version = var.chart_version
   wait    = true
+  timeout = 320
 
   # Convert local values to YAML and pass to Helm
   values = [
@@ -177,4 +178,22 @@ resource "helm_release" "api_observabilidade" {
     null_resource.vault_init,
     kubernetes_secret.vault_token,
   ]
+}
+
+# Install kube-state-metrics
+resource "helm_release" "ksm" {
+  name             = "ksm"
+  repository       = "https://prometheus-community.github.io/helm-charts"
+  chart            = "kube-state-metrics"
+  version          = "7.1.0"
+  namespace        = "ksm"
+  create_namespace = true
+  wait             = true
+
+  set {
+    name  = "image.tag"
+    value = "v2.18.0"
+  }
+
+  depends_on = [helm_release.api_observabilidade]
 }

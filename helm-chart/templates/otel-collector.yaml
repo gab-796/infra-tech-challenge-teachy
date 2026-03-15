@@ -141,13 +141,10 @@ data:
           initial_interval: 5s
           max_interval: 30s
           max_elapsed_time: 300s
-        sending_queue:
-          enabled: true
-          queue_size: 5000
-          num_consumers: 4     
 
     extensions:
-      health_check: {}
+      health_check:
+        endpoint: 0.0.0.0:13133
 
     service:
       extensions: [health_check]
@@ -253,22 +250,30 @@ spec:
           resources:
             {{- toYaml .Values.otelCollector.resources | nindent 12 }}
           {{- if .Values.monitoring.healthChecks.enabled }}
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: {{ .Values.otelCollector.ports.healthCheck }}
-          #   initialDelaySeconds: 75
-          #   periodSeconds: 20
-          #   failureThreshold: 5
-          #   timeoutSeconds: 5
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: {{ .Values.otelCollector.ports.healthCheck }}
-          #   initialDelaySeconds: 50
-          #   periodSeconds: 10
-          #   failureThreshold: 5
-          #   timeoutSeconds: 5
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.otelCollector.ports.healthCheck }}
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            failureThreshold: 50
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.otelCollector.ports.healthCheck }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.otelCollector.ports.healthCheck }}
+            initialDelaySeconds: 30
+            periodSeconds: 30
+            failureThreshold: 10
+            timeoutSeconds: 5
           {{- end }}
       volumes:
         - name: config-vol

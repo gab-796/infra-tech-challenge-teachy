@@ -363,7 +363,7 @@ otelCollector:
       scrapeInterval: "15s"
       scrapeMimir: true
       mimirScrapeInterval: "30s"
-      scrapeKubeStateMetrics: false
+      scrapeKubeStateMetrics: true
       kubeStateMetrics:
         scrapeInterval: "30s"
         metricsPath: /metrics
