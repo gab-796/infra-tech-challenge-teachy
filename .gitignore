@@ -1,0 +1,53 @@
+# .gitignore - Infra Challenge Teachy
+
+# Terraform files
+terraform.tfstate
+terraform.tfstate.*
+terraform.tfstate.backup
+crash.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform directories
+.terraform/
+.terraform.lock.hcl
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+.vscode/
+.DS_Store
+
+# Local environment files (keep .tfvars committed, but not local overrides)
+terraform.tfvars.local
+local.tfvars
+*.auto.tfvars.json
+
+# Kubeconfig (never commit)
+kubeconfig
+kubeconfig.yml
+kubeconfig.yaml
+~/.kube/config
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.backup
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build/dist directories
+dist/
+build/

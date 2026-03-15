@@ -1,0 +1,83 @@
+# Makefile - Kind Cluster via Terraform
+
+.PHONY: help init plan apply create destroy validate clean logs status
+
+# Cores
+GREEN := \033[0;32m
+YELLOW := \033[0;33m
+RED := \033[0;31m
+NC := \033[0m # No Color
+
+help: ## Mostrar esta ajuda
+	@echo "$(GREEN)Kind Cluster Terraform - Comandos Disponíveis$(NC)"
+	@echo ""
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "$(YELLOW)%-20s$(NC) %s\n", $$1, $$2}'
+	@echo ""
+
+init: ## Inicializar Terraform
+	@echo "$(GREEN)Inicializando Terraform para Kind...$(NC)"
+	terraform init
+
+validate: ## Validar configuração
+	@echo "$(GREEN)Validando configuração...$(NC)"
+	terraform validate
+
+plan: init validate ## Planejar criação do cluster
+	@echo "$(GREEN)Planejando cluster Kind...$(NC)"
+	terraform plan -out=tfplan
+
+apply: plan ## Aplicar (criar cluster)
+	@echo "$(YELLOW)Criando cluster Kind...$(NC)"
+	terraform apply tfplan
+	@echo "$(GREEN)✓ Cluster criado!$(NC)"
+
+create: apply status ## Alias para apply
+
+destroy: ## Destruir cluster
+	@echo "$(RED)⚠️  Isso vai destruir o cluster!$(NC)"
+	@read -p "Tem certeza? (s/n) " confirm && [ "$$confirm" = "s" ] && terraform destroy || echo "Cancelado"
+
+destroy-force: ## Destruir sem confirmação
+	@echo "$(RED)Destruindo cluster...$(NC)"
+	terraform destroy -auto-approve
+	kind delete cluster --name asus-local || true
+	@echo "$(GREEN)✓ Cluster removido!$(NC)"
+
+status: ## Ver status do cluster
+	@echo "$(GREEN)Status do Cluster:$(NC)"
+	@echo ""
+	@echo "Clusters Kind:"
+	@kind get clusters || echo "  Nenhum cluster encontrado"
+	@echo ""
+	@echo "Contexto atual:"
+	@kubectl config current-context || echo "  Nenhum contexto configurado"
+	@echo ""
+	@echo "Nós:"
+	@kubectl get nodes --context=kind-asus-local 2>/dev/null || echo "  Cluster não disponível"
+	@echo ""
+	@echo "Pods:"
+	@kubectl get pods -A --context=kind-asus-local 2>/dev/null || echo "  Cluster não disponível"
+	@echo ""
+
+logs: ## Ver logs do cluster
+	@echo "$(YELLOW)Logs do Kind:$(NC)"
+	@kind export kubeconfig --name asus-local
+	@echo "Kubeconfig exportado!"
+
+info: ## Informações do cluster
+	@echo "$(GREEN)Informações do Cluster:$(NC)"
+	@echo ""
+	terraform output cluster_info
+	@echo ""
+
+clean: ## Limpar arquivos temporários
+	@echo "$(YELLOW)Limpando arquivos...$(NC)"
+	@rm -f tfplan tfplan.backup
+	@echo "$(GREEN)✓ Limpeza concluída!$(NC)"
+
+reinstall: destroy-force apply status ## Reinstalar cluster
+
+show: ## Ver estado atual
+	terraform show
+
+.DEFAULT_GOAL := help
