@@ -53,6 +53,90 @@ data:
       format = "json"
     }
 
+    // Descoberta de pods Kubernetes para logs
+    discovery.kubernetes "pods" {
+      role = "pod"
+      namespaces {
+        names = ["api-app-go"]
+      }
+    }
+
+    // Adicionar labels dos metadados do Kubernetes
+    discovery.relabel "pods" {
+      targets = discovery.kubernetes.pods.targets
+
+      rule {
+        source_labels = ["__meta_kubernetes_pod_name"]
+        target_label  = "pod"
+      }
+
+      rule {
+        source_labels = ["__meta_kubernetes_pod_container_name"]
+        target_label  = "container"
+      }
+
+      rule {
+        source_labels = ["__meta_kubernetes_pod_label_app"]
+        target_label  = "service"
+      }
+
+      rule {
+        source_labels = ["__meta_kubernetes_namespace"]
+        target_label  = "namespace"
+      }
+
+      rule {
+        target_label = "job"
+        replacement = "kubernetes-pods"
+      }
+
+      // Garantir que pods sem label app tenham service baseado no nome do container
+      rule {
+        source_labels = ["__meta_kubernetes_pod_container_name"]
+        target_label  = "service"
+        regex = "(.+)"
+        replacement = "${1}"
+      }
+    }
+
+    // Coleta de logs dos pods Kubernetes
+    loki.source.kubernetes "pods" {
+      targets    = discovery.relabel.pods.output
+      forward_to = [loki.process.add_labels.receiver]
+    }
+
+    // Processar logs para preservar JSON original e adicionar apenas labels essenciais
+    loki.process "add_labels" {
+      forward_to = [loki.write.loki.receiver]
+
+      // Extrair level dos logs JSON se disponível
+      stage.json {
+        expressions = {
+          level_value = "level",
+        }
+      }
+
+      // Apenas level como label (baixa cardinalidade)
+      stage.labels {
+        values = {
+          level = "level_value",
+        }
+      }
+
+      // Preservar timestamp original
+      stage.timestamp {
+        source = "time"
+        format = "RFC3339"
+      }
+    }
+
+    // Write para Loki (logs)
+    loki.write "loki" {
+      endpoint {
+        url = "http://loki:3100/loki/api/v1/push"
+      }
+    }
+
     // Configuração para coletar métricas internas do próprio Alloy
     prometheus.exporter.self "alloy_metrics" { }
 
@@ -66,7 +150,7 @@ data:
     // Write para Mimir (métricas)
     prometheus.remote_write "mimir" {
       endpoint {
-        url = "http://mimir:9009/api/v1/push"
+        url = "http://mimir.local/api/v1/push"
       }
     }
 ---
