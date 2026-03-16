@@ -83,10 +83,15 @@ variable "mysql_image_tag" {
 }
 
 variable "mysql_root_password" {
-  description = "MySQL root password"
+  description = "MySQL root password (use TF_VAR_mysql_root_password env var)"
   type        = string
   sensitive   = true
-  default     = "rootpassword"
+}
+
+variable "minio_root_password" {
+  description = "MinIO root password (use TF_VAR_minio_root_password env var)"
+  type        = string
+  sensitive   = true
 }
 
 variable "mysql_database" {

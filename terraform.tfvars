@@ -21,8 +21,9 @@ inventory_app_metrics_port = 2113
 # ========================================
 # DATABASE CONFIGURATION
 # ========================================
-# IMPORTANTE: Altere essa senha em produção!
-mysql_root_password = "rootpassword"
+# IMPORTANTE: Senhas devem ser passadas via variáveis de ambiente:
+#   export TF_VAR_mysql_root_password="sua_senha"
+#   export TF_VAR_minio_root_password="sua_senha"
 mysql_database      = "inventory"
 mysql_storage_size  = "10Gi"
 mysql_image_tag     = "8.0"

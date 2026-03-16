@@ -57,7 +57,8 @@ resource "null_resource" "vault_init" {
         env VAULT_TOKEN=${var.vault_root_token} \
         vault kv put secret/inventory \
           DB_PASSWORD=${var.mysql_root_password} \
-          MYSQL_ROOT_PASSWORD=${var.mysql_root_password}
+          MYSQL_ROOT_PASSWORD=${var.mysql_root_password} \
+          MINIO_ROOT_PASSWORD=${var.minio_root_password}
 
       echo "Vault init complete."
     EOT
@@ -77,6 +78,20 @@ resource "kubernetes_secret" "vault_token" {
 
   data = {
     token = var.vault_root_token
+  }
+
+  depends_on = [helm_release.external_secrets]
+}
+
+# Create MinIO secret before helm release to avoid race condition with ESO
+resource "kubernetes_secret" "minio_secrets" {
+  metadata {
+    name      = "minio-secrets"
+    namespace = var.namespace
+  }
+
+  data = {
+    MINIO_ROOT_PASSWORD = var.minio_root_password
   }
 
   depends_on = [helm_release.external_secrets]
@@ -111,11 +126,16 @@ locals {
           tag = var.mysql_image_tag
         }
         config = {
-          rootPassword = var.mysql_root_password
-          database     = var.mysql_database
+          database = var.mysql_database
         }
         persistence = {
           size = var.mysql_storage_size
+        }
+      }
+
+      minio = {
+        credentials = {
+          rootPassword = var.minio_root_password
         }
       }
       
@@ -167,16 +187,11 @@ resource "helm_release" "api_observabilidade" {
     yamlencode(local.helm_values)
   ]
 
-  # Set individual values (overrides values from file)
-  set_sensitive {
-    name  = "mysql.config.rootPassword"
-    value = var.mysql_root_password
-  }
-
   depends_on = [
     helm_release.external_secrets,
     null_resource.vault_init,
     kubernetes_secret.vault_token,
+    kubernetes_secret.minio_secrets,
   ]
 }
 

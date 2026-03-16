@@ -40,9 +40,9 @@ inventoryApp:
     OTEL_EXPORTER_OTLP_ENDPOINT: otel-collector-service.api-app-go:4317
     PYROSCOPE_URL: http://pyroscope:4040
   
-  # Database password from secret
+  # Database password from secret (injected via Terraform set_sensitive)
   secret:
-    dbPassword: "rootpassword"
+    dbPassword: ""
 
   observability:
     prometheus:
@@ -75,9 +75,9 @@ mysql:
       memory: "512Mi"
       cpu: "500m"
   
-  # Database configuration
+  # Database configuration (rootPassword injected via Terraform set_sensitive)
   config:
-    rootPassword: "rootpassword"
+    rootPassword: ""
     database: "inventory"
   
   # Storage
@@ -321,7 +321,7 @@ minio:
 
   credentials:
     rootUser: minio
-    rootPassword: minio123
+    rootPassword: ""  # injected via Terraform set_sensitive
 
   resources:
     limits:

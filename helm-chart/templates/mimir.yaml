@@ -21,7 +21,7 @@ data:
         endpoint: {{ .Values.minio.name }}.{{ .Values.global.namespace }}.svc.cluster.local:9000
         bucket_name: mimir-blocks
         access_key_id: {{ .Values.minio.credentials.rootUser }}
-        secret_access_key: {{ .Values.minio.credentials.rootPassword }}
+        secret_access_key: ${MINIO_ROOT_PASSWORD}
         insecure: true
       {{- else }}
       backend: filesystem
@@ -88,11 +88,17 @@ spec:
       initContainers:
         - name: minio-init-bucket
           image: minio/mc:latest
+          env:
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secrets
+                  key: MINIO_ROOT_PASSWORD
           command:
             - /bin/sh
             - -c
             - |
-              until mc alias set myminio http://{{ .Values.minio.name }}.{{ .Values.global.namespace }}.svc.cluster.local:9000 {{ .Values.minio.credentials.rootUser }} {{ .Values.minio.credentials.rootPassword }}; do
+              until mc alias set myminio http://{{ .Values.minio.name }}.{{ .Values.global.namespace }}.svc.cluster.local:9000 {{ .Values.minio.credentials.rootUser }} $MINIO_ROOT_PASSWORD; do
                 echo "Aguardando MinIO ficar disponivel..."
                 sleep 5
               done
@@ -104,6 +110,7 @@ spec:
           image: grafana/mimir:2.13.0
           args:
             - -config.file=/etc/mimir/mimir.yaml
+            - -config.expand-env=true
             - -target=all
           ports:
             - containerPort: {{ .Values.mimir.config.server.httpListenPort }}
@@ -113,6 +120,11 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secrets
+                  key: MINIO_ROOT_PASSWORD
           volumeMounts:
             - name: mimir-storage
               mountPath: /data
@@ -132,7 +144,7 @@ spec:
             httpGet:
               path: /ready
               port: {{ .Values.mimir.config.server.httpListenPort }}
-            initialDelaySeconds: 90
+            initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 10
@@ -140,7 +152,7 @@ spec:
             httpGet:
               path: /ready
               port: {{ .Values.mimir.config.server.httpListenPort }}
-            initialDelaySeconds: 120
+            initialDelaySeconds: 60
             periodSeconds: 30
             timeoutSeconds: 5
             failureThreshold: 5
