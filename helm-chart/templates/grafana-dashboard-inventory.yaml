@@ -13,4 +13,6 @@ metadata:
 data:
   inventory-dashboard.json: |-
 {{ .Files.Get "dashboards/inventory-dashboard.json" | indent 4 }}
+  loki-dashboard.json: |-
+{{ .Files.Get "dashboards/loki.json" | indent 4 }}
 {{- end }}

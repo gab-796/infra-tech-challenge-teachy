@@ -54,3 +54,6 @@ build/
 
 # State local
 state/
+
+# Obsidian
+.obsidian/

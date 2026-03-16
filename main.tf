@@ -83,18 +83,37 @@ resource "kubernetes_secret" "vault_token" {
   depends_on = [helm_release.external_secrets]
 }
 
-# Create MinIO secret before helm release to avoid race condition with ESO
-resource "kubernetes_secret" "minio_secrets" {
-  metadata {
-    name      = "minio-secrets"
-    namespace = var.namespace
+
+# Create ClusterSecretStore + ExternalSecrets via kubectl and wait for ESO to sync.
+# Passwords never enter Terraform state — they flow: env var → Vault → ESO → K8s Secret.
+resource "null_resource" "setup_external_secrets" {
+  count = var.vault_enabled && var.eso_enabled ? 1 : 0
+
+  provisioner "local-exec" {
+    command = <<-EOT
+      export NAMESPACE=${var.namespace}
+      envsubst < ${path.module}/manifests/cluster-secret-store.yaml | kubectl apply -f -
+      envsubst < ${path.module}/manifests/external-secrets.yaml | kubectl apply -f -
+
+      echo "Waiting for ESO to sync secrets from Vault..."
+      until kubectl get secret mysql-secrets -n ${var.namespace} >/dev/null 2>&1; do
+        echo "  mysql-secrets not ready, retrying in 5s..."; sleep 5
+      done
+      until kubectl get secret inventory-app-secrets -n ${var.namespace} >/dev/null 2>&1; do
+        echo "  inventory-app-secrets not ready, retrying in 5s..."; sleep 5
+      done
+      until kubectl get secret minio-secrets -n ${var.namespace} >/dev/null 2>&1; do
+        echo "  minio-secrets not ready, retrying in 5s..."; sleep 5
+      done
+      echo "Secrets synced successfully."
+    EOT
   }
 
-  data = {
-    MINIO_ROOT_PASSWORD = var.minio_root_password
-  }
-
-  depends_on = [helm_release.external_secrets]
+  depends_on = [
+    helm_release.external_secrets,
+    null_resource.vault_init,
+    kubernetes_secret.vault_token,
+  ]
 }
 
 # Local values for Helm charts
@@ -107,7 +126,7 @@ locals {
         imagePullPolicy  = "IfNotPresent"
         storageClass     = "standard"
       }
-      
+
       inventoryApp = {
         enabled     = true
         replicaCount = var.inventory_app_replicas
@@ -118,8 +137,11 @@ locals {
           http    = var.inventory_app_http_port
           metrics = var.inventory_app_metrics_port
         }
+        externalSecret = {
+          enabled = false
+        }
       }
-      
+
       mysql = {
         enabled = true
         image = {
@@ -133,36 +155,30 @@ locals {
         }
       }
 
-      minio = {
-        credentials = {
-          rootPassword = var.minio_root_password
-        }
-      }
-      
       grafana = {
         enabled = var.grafana_enabled
       }
-      
+
       loki = {
         enabled = var.loki_enabled
       }
-      
+
       tempo = {
         enabled = var.tempo_enabled
       }
-      
+
       mimir = {
         enabled = var.mimir_enabled
       }
-      
+
       pyroscope = {
         enabled = var.pyroscope_enabled
       }
-      
+
       alloy = {
         enabled = var.alloy_enabled
       }
-      
+
       otelCollector = {
         enabled = var.otel_collector_enabled
       }
@@ -191,7 +207,7 @@ resource "helm_release" "api_observabilidade" {
     helm_release.external_secrets,
     null_resource.vault_init,
     kubernetes_secret.vault_token,
-    kubernetes_secret.minio_secrets,
+    null_resource.setup_external_secrets,
   ]
 }
 

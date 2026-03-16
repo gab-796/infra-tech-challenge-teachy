@@ -14,16 +14,16 @@ global:
 inventoryApp:
   enabled: true
   name: inventory-app
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: gab796/inventory_app
     tag: v4.0
     pullPolicy: IfNotPresent
-  
+
   ports:
     http: 10000
     metrics: 2113
-  
+
   resources:
     limits:
       memory: "128Mi"
@@ -31,7 +31,7 @@ inventoryApp:
     requests:
       memory: "64Mi"
       cpu: "250m"
-  
+
   # Environment variables
   env:
     DB_HOST: mysql-service
@@ -39,7 +39,7 @@ inventoryApp:
     DB_USER: root
     OTEL_EXPORTER_OTLP_ENDPOINT: otel-collector-service.api-app-go:4317
     PYROSCOPE_URL: http://pyroscope:4040
-  
+
   # Database password from secret (injected via Terraform set_sensitive)
   secret:
     dbPassword: ""
@@ -51,7 +51,7 @@ inventoryApp:
   externalSecret:
     enabled: true
     vaultUrl: "http://vault.vault.svc.cluster.local:8200"
-    secretPath: "secret/data/inventory"
+    secretPath: "inventory"
 
 # ========================================
 # DATABASE CONFIGURATION
@@ -64,9 +64,9 @@ mysql:
     repository: mysql
     tag: "8.0"
     pullPolicy: IfNotPresent
-  
+
   port: 3306
-  
+
   resources:
     limits:
       memory: "1Gi"
@@ -74,15 +74,20 @@ mysql:
     requests:
       memory: "512Mi"
       cpu: "500m"
-  
+
   # Database configuration (rootPassword injected via Terraform set_sensitive)
   config:
     rootPassword: ""
     database: "inventory"
-  
+
   # Storage
   persistence:
     size: 10Gi
+    storageClass: ""
+
+  pdb:
+    enabled: false
+    minAvailable: 1
 
 # ========================================
 # GRAFANA CONFIGURATION
@@ -90,14 +95,14 @@ mysql:
 grafana:
   enabled: true
   name: grafana
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: grafana/grafana
     tag: 11.6.0
     pullPolicy: IfNotPresent
-  
+
   port: 3000
-  
+
   resources:
     limits:
       memory: "512Mi"
@@ -105,7 +110,7 @@ grafana:
     requests:
       memory: "256Mi"
       cpu: "250m"
-  
+
   # Grafana configuration
   config:
     auth:
@@ -115,7 +120,7 @@ grafana:
     server:
       rootUrl: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
       serveFromSubPath: true
-  
+
   # Datasources configuration
   datasources:
     prometheus:
@@ -141,16 +146,16 @@ grafana:
 loki:
   enabled: true
   name: loki
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: grafana/loki
     tag: 2.9.5
     pullPolicy: IfNotPresent
-  
+
   ports:
     http: 3100
     grpc: 9095
-  
+
   resources:
     limits:
       memory: "1Gi"
@@ -158,7 +163,7 @@ loki:
     requests:
       memory: "512Mi"
       cpu: "500m"
-  
+
   # Loki configuration
   config:
     authEnabled: false
@@ -177,17 +182,17 @@ loki:
 tempo:
   enabled: true
   name: tempo
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: grafana/tempo
     tag: 2.6.0
     pullPolicy: IfNotPresent
-  
+
   ports:
     http: 3200
     otlpGrpc: 4317
     otlpHttp: 4318
-  
+
   resources:
     limits:
       memory: "1Gi"
@@ -195,7 +200,7 @@ tempo:
     requests:
       memory: "512Mi"
       cpu: "500m"
-  
+
   # Tempo configuration
   config:
     server:
@@ -213,16 +218,16 @@ tempo:
 pyroscope:
   enabled: true
   name: pyroscope
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: grafana/pyroscope
     tag: 1.13.0
     pullPolicy: IfNotPresent
-  
+
   ports:
     http: 4040
     grpc: 4041
-  
+
   resources:
     limits:
       memory: "1Gi"
@@ -230,7 +235,7 @@ pyroscope:
     requests:
       memory: "512Mi"
       cpu: "500m"
-  
+
   # Pyroscope configuration
   config:
     server:
@@ -248,16 +253,16 @@ pyroscope:
 alloy:
   enabled: true
   name: alloy
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: grafana/alloy
     tag: v1.9.1
     pullPolicy: IfNotPresent
-  
+
   ports:
     http: 12345
     grpc: 12346
-  
+
   resources:
     limits:
       memory: "512Mi"
@@ -265,7 +270,7 @@ alloy:
     requests:
       memory: "256Mi"
       cpu: "250m"
-  
+
   # Alloy configuration for metrics collection
   config:
     server:
@@ -279,16 +284,16 @@ alloy:
 mimir:
   enabled: true
   name: mimir
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: grafana/mimir
     tag: 2.13.0
     pullPolicy: IfNotPresent
-  
+
   ports:
     http: 8080
     grpc: 9095
-  
+
   resources:
     limits:
       memory: "2Gi"
@@ -296,7 +301,7 @@ mimir:
     requests:
       memory: "1Gi"
       cpu: "500m"
-  
+
   # Mimir configuration
   config:
     target: all
@@ -337,7 +342,7 @@ minio:
 otelCollector:
   enabled: true
   name: otel-collector
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: otel/opentelemetry-collector-contrib
     tag: 0.123.0
@@ -547,7 +552,7 @@ monitoring:
     enabled: false
     interval: 30s
     path: /metrics
-  
+
   # Health checks
   healthChecks:
     enabled: true

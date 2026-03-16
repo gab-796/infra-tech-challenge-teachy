@@ -1,0 +1,1731 @@
+# HELP cortex_distributor_ingester_clients The current number of ingester clients.
+# TYPE cortex_distributor_ingester_clients gauge
+cortex_distributor_ingester_clients 1
+# HELP cortex_dns_failures_total The number of DNS lookup failures
+# TYPE cortex_dns_failures_total counter
+cortex_dns_failures_total{name="memberlist"} 0
+# HELP cortex_dns_lookups_total The number of DNS lookups resolutions attempts
+# TYPE cortex_dns_lookups_total counter
+cortex_dns_lookups_total{name="memberlist"} 0
+# HELP cortex_ingester_flush_queue_length The total number of series pending in the flush queue.
+# TYPE cortex_ingester_flush_queue_length gauge
+cortex_ingester_flush_queue_length 0
+# HELP cortex_kv_request_duration_seconds Time spent on kv store requests.
+# TYPE cortex_kv_request_duration_seconds histogram
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.005"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.01"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.025"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.05"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.1"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.25"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.5"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="1"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="2.5"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="5"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="10"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="+Inf"} 1
+cortex_kv_request_duration_seconds_sum{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory"} 3.8922e-05
+cortex_kv_request_duration_seconds_count{kv_name="distributor-ring",operation="GET",role="primary",status_code="200",type="inmemory"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.005"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.01"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.025"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.05"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.1"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.25"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.5"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="1"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="2.5"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="5"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="10"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="+Inf"} 338
+cortex_kv_request_duration_seconds_sum{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory"} 0.07568389099999999
+cortex_kv_request_duration_seconds_count{kv_name="ingester-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory"} 338
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.005"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.01"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.025"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.05"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.1"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.25"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.5"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="1"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="2.5"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="5"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="10"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory",le="+Inf"} 3
+cortex_kv_request_duration_seconds_sum{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory"} 0.0014420790000000002
+cortex_kv_request_duration_seconds_count{kv_name="ingester-lifecycler",operation="GET",role="primary",status_code="200",type="inmemory"} 3
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.005"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.01"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.025"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.05"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.1"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.25"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="0.5"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="1"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="2.5"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="5"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="10"} 1
+cortex_kv_request_duration_seconds_bucket{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory",le="+Inf"} 1
+cortex_kv_request_duration_seconds_sum{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory"} 8.6668e-05
+cortex_kv_request_duration_seconds_count{kv_name="ingester-ring",operation="GET",role="primary",status_code="200",type="inmemory"} 1
+# HELP cortex_member_consul_heartbeats_total The total number of heartbeats sent to consul.
+# TYPE cortex_member_consul_heartbeats_total counter
+cortex_member_consul_heartbeats_total{name="ingester"} 336
+# HELP cortex_query_frontend_connected_schedulers Number of schedulers this frontend is connected to.
+# TYPE cortex_query_frontend_connected_schedulers gauge
+cortex_query_frontend_connected_schedulers 1
+# HELP cortex_query_frontend_queries_in_progress Number of queries in progress handled by this frontend.
+# TYPE cortex_query_frontend_queries_in_progress gauge
+cortex_query_frontend_queries_in_progress 0
+# HELP cortex_query_frontend_retries Number of times a request is retried.
+# TYPE cortex_query_frontend_retries histogram
+cortex_query_frontend_retries_bucket{le="0"} 0
+cortex_query_frontend_retries_bucket{le="1"} 0
+cortex_query_frontend_retries_bucket{le="2"} 0
+cortex_query_frontend_retries_bucket{le="3"} 0
+cortex_query_frontend_retries_bucket{le="4"} 0
+cortex_query_frontend_retries_bucket{le="5"} 0
+cortex_query_frontend_retries_bucket{le="+Inf"} 0
+cortex_query_frontend_retries_sum 0
+cortex_query_frontend_retries_count 0
+# HELP cortex_query_scheduler_connected_frontend_clients Number of query-frontend worker clients currently connected to the query-scheduler.
+# TYPE cortex_query_scheduler_connected_frontend_clients gauge
+cortex_query_scheduler_connected_frontend_clients 5
+# HELP cortex_query_scheduler_connected_querier_clients Number of querier worker clients currently connected to the query-scheduler.
+# TYPE cortex_query_scheduler_connected_querier_clients gauge
+cortex_query_scheduler_connected_querier_clients 10
+# HELP cortex_query_scheduler_inflight_requests Number of inflight requests (either queued or processing) sampled at a regular interval. Quantile buckets keep track of inflight requests over the last 60s.
+# TYPE cortex_query_scheduler_inflight_requests summary
+cortex_query_scheduler_inflight_requests{quantile="0.5"} 0
+cortex_query_scheduler_inflight_requests{quantile="0.75"} 0
+cortex_query_scheduler_inflight_requests{quantile="0.8"} 0
+cortex_query_scheduler_inflight_requests{quantile="0.9"} 0
+cortex_query_scheduler_inflight_requests{quantile="0.95"} 0
+cortex_query_scheduler_inflight_requests{quantile="0.99"} 0
+cortex_query_scheduler_inflight_requests_sum 0
+cortex_query_scheduler_inflight_requests_count 20199
+# HELP cortex_query_scheduler_queue_duration_seconds Time spend by requests in queue before getting picked up by a querier.
+# TYPE cortex_query_scheduler_queue_duration_seconds histogram
+cortex_query_scheduler_queue_duration_seconds_bucket{le="0.005"} 0
+cortex_query_scheduler_queue_duration_seconds_bucket{le="0.01"} 0
+cortex_query_scheduler_queue_duration_seconds_bucket{le="0.025"} 0
+cortex_query_scheduler_queue_duration_seconds_bucket{le="0.05"} 0
+cortex_query_scheduler_queue_duration_seconds_bucket{le="0.1"} 0
+cortex_query_scheduler_queue_duration_seconds_bucket{le="0.25"} 0
+cortex_query_scheduler_queue_duration_seconds_bucket{le="0.5"} 0
+cortex_query_scheduler_queue_duration_seconds_bucket{le="1"} 0
+cortex_query_scheduler_queue_duration_seconds_bucket{le="2.5"} 0
+cortex_query_scheduler_queue_duration_seconds_bucket{le="5"} 0
+cortex_query_scheduler_queue_duration_seconds_bucket{le="10"} 0
+cortex_query_scheduler_queue_duration_seconds_bucket{le="+Inf"} 0
+cortex_query_scheduler_queue_duration_seconds_sum 0
+cortex_query_scheduler_queue_duration_seconds_count 0
+# HELP cortex_query_scheduler_running Value will be 1 if the scheduler is in the ReplicationSet and actively receiving/processing requests
+# TYPE cortex_query_scheduler_running gauge
+cortex_query_scheduler_running 1
+# HELP cortex_ring_member_heartbeats_total The total number of heartbeats sent.
+# TYPE cortex_ring_member_heartbeats_total counter
+cortex_ring_member_heartbeats_total{name="distributor"} 336
+# HELP cortex_ring_member_tokens_owned The number of tokens owned in the ring.
+# TYPE cortex_ring_member_tokens_owned gauge
+cortex_ring_member_tokens_owned{name="distributor"} 1
+# HELP cortex_ring_member_tokens_to_own The number of tokens to own in the ring.
+# TYPE cortex_ring_member_tokens_to_own gauge
+cortex_ring_member_tokens_to_own{name="distributor"} 1
+# HELP cortex_ring_members Number of members in the ring
+# TYPE cortex_ring_members gauge
+cortex_ring_members{name="compactor",state="ACTIVE"} 1
+cortex_ring_members{name="compactor",state="JOINING"} 0
+cortex_ring_members{name="compactor",state="LEAVING"} 0
+cortex_ring_members{name="compactor",state="PENDING"} 0
+cortex_ring_members{name="compactor",state="Unhealthy"} 0
+cortex_ring_members{name="distributor",state="ACTIVE"} 1
+cortex_ring_members{name="distributor",state="JOINING"} 0
+cortex_ring_members{name="distributor",state="LEAVING"} 0
+cortex_ring_members{name="distributor",state="PENDING"} 0
+cortex_ring_members{name="distributor",state="Unhealthy"} 0
+cortex_ring_members{name="ingester",state="ACTIVE"} 1
+cortex_ring_members{name="ingester",state="JOINING"} 0
+cortex_ring_members{name="ingester",state="LEAVING"} 0
+cortex_ring_members{name="ingester",state="PENDING"} 0
+cortex_ring_members{name="ingester",state="Unhealthy"} 0
+cortex_ring_members{name="scheduler",state="ACTIVE"} 1
+cortex_ring_members{name="scheduler",state="JOINING"} 0
+cortex_ring_members{name="scheduler",state="LEAVING"} 0
+cortex_ring_members{name="scheduler",state="PENDING"} 0
+cortex_ring_members{name="scheduler",state="Unhealthy"} 0
+# HELP cortex_ring_oldest_member_timestamp Timestamp of the oldest member in the ring.
+# TYPE cortex_ring_oldest_member_timestamp gauge
+cortex_ring_oldest_member_timestamp{name="compactor",state="ACTIVE"} 1.773678533e+09
+cortex_ring_oldest_member_timestamp{name="compactor",state="JOINING"} 0
+cortex_ring_oldest_member_timestamp{name="compactor",state="LEAVING"} 0
+cortex_ring_oldest_member_timestamp{name="compactor",state="PENDING"} 0
+cortex_ring_oldest_member_timestamp{name="compactor",state="Unhealthy"} 0
+cortex_ring_oldest_member_timestamp{name="distributor",state="ACTIVE"} 1.773678533e+09
+cortex_ring_oldest_member_timestamp{name="distributor",state="JOINING"} 0
+cortex_ring_oldest_member_timestamp{name="distributor",state="LEAVING"} 0
+cortex_ring_oldest_member_timestamp{name="distributor",state="PENDING"} 0
+cortex_ring_oldest_member_timestamp{name="distributor",state="Unhealthy"} 0
+cortex_ring_oldest_member_timestamp{name="ingester",state="ACTIVE"} 1.773678533e+09
+cortex_ring_oldest_member_timestamp{name="ingester",state="JOINING"} 0
+cortex_ring_oldest_member_timestamp{name="ingester",state="LEAVING"} 0
+cortex_ring_oldest_member_timestamp{name="ingester",state="PENDING"} 0
+cortex_ring_oldest_member_timestamp{name="ingester",state="Unhealthy"} 0
+cortex_ring_oldest_member_timestamp{name="scheduler",state="ACTIVE"} 1.773678533e+09
+cortex_ring_oldest_member_timestamp{name="scheduler",state="JOINING"} 0
+cortex_ring_oldest_member_timestamp{name="scheduler",state="LEAVING"} 0
+cortex_ring_oldest_member_timestamp{name="scheduler",state="PENDING"} 0
+cortex_ring_oldest_member_timestamp{name="scheduler",state="Unhealthy"} 0
+# HELP cortex_ring_tokens_total Number of tokens in the ring
+# TYPE cortex_ring_tokens_total gauge
+cortex_ring_tokens_total{name="compactor"} 1
+cortex_ring_tokens_total{name="distributor"} 1
+cortex_ring_tokens_total{name="ingester"} 128
+cortex_ring_tokens_total{name="scheduler"} 1
+# HELP cortex_ruler_clients The current number of ruler clients in the pool.
+# TYPE cortex_ruler_clients gauge
+cortex_ruler_clients 0
+# HELP cortex_ruler_managers_total Total number of managers registered and running in the ruler
+# TYPE cortex_ruler_managers_total gauge
+cortex_ruler_managers_total 0
+# HELP cortex_ruler_ring_check_errors_total Number of errors that have occurred when checking the ring for ownership
+# TYPE cortex_ruler_ring_check_errors_total counter
+cortex_ruler_ring_check_errors_total 0
+# HELP cortex_ruler_sync_rules_total Total number of times the ruler sync operation triggered.
+# TYPE cortex_ruler_sync_rules_total counter
+cortex_ruler_sync_rules_total{reason="initial"} 1
+cortex_ruler_sync_rules_total{reason="periodic"} 84
+# HELP deprecated_flags_inuse_total The number of deprecated flags currently set.
+# TYPE deprecated_flags_inuse_total counter
+deprecated_flags_inuse_total 0
+# HELP go_cgo_go_to_c_calls_calls_total Count of calls made from Go to C by the current process.
+# TYPE go_cgo_go_to_c_calls_calls_total counter
+go_cgo_go_to_c_calls_calls_total 0
+# HELP go_cpu_classes_gc_mark_assist_cpu_seconds_total Estimated total CPU time goroutines spent performing GC tasks to assist the GC and prevent it from falling behind the application. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_gc_mark_assist_cpu_seconds_total counter
+go_cpu_classes_gc_mark_assist_cpu_seconds_total 0.012337649
+# HELP go_cpu_classes_gc_mark_dedicated_cpu_seconds_total Estimated total CPU time spent performing GC tasks on processors (as defined by GOMAXPROCS) dedicated to those tasks. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_gc_mark_dedicated_cpu_seconds_total counter
+go_cpu_classes_gc_mark_dedicated_cpu_seconds_total 1.108846543
+# HELP go_cpu_classes_gc_mark_idle_cpu_seconds_total Estimated total CPU time spent performing GC tasks on spare CPU resources that the Go scheduler could not otherwise find a use for. This should be subtracted from the total GC CPU time to obtain a measure of compulsory GC CPU time. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_gc_mark_idle_cpu_seconds_total counter
+go_cpu_classes_gc_mark_idle_cpu_seconds_total 0.153401055
+# HELP go_cpu_classes_gc_pause_cpu_seconds_total Estimated total CPU time spent with the application paused by the GC. Even if only one thread is running during the pause, this is computed as GOMAXPROCS times the pause latency because nothing else can be executing. This is the exact sum of samples in /gc/pause:seconds if each sample is multiplied by GOMAXPROCS at the time it is taken. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_gc_pause_cpu_seconds_total counter
+go_cpu_classes_gc_pause_cpu_seconds_total 0.056846984
+# HELP go_cpu_classes_gc_total_cpu_seconds_total Estimated total CPU time spent performing GC tasks. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics. Sum of all metrics in /cpu/classes/gc.
+# TYPE go_cpu_classes_gc_total_cpu_seconds_total counter
+go_cpu_classes_gc_total_cpu_seconds_total 1.331432231
+# HELP go_cpu_classes_idle_cpu_seconds_total Estimated total available CPU time not spent executing any Go or Go runtime code. In other words, the part of /cpu/classes/total:cpu-seconds that was unused. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_idle_cpu_seconds_total counter
+go_cpu_classes_idle_cpu_seconds_total 39433.392071808
+# HELP go_cpu_classes_scavenge_assist_cpu_seconds_total Estimated total CPU time spent returning unused memory to the underlying platform in response eagerly in response to memory pressure. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_scavenge_assist_cpu_seconds_total counter
+go_cpu_classes_scavenge_assist_cpu_seconds_total 9.69e-07
+# HELP go_cpu_classes_scavenge_background_cpu_seconds_total Estimated total CPU time spent performing background tasks to return unused memory to the underlying platform. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_scavenge_background_cpu_seconds_total counter
+go_cpu_classes_scavenge_background_cpu_seconds_total 0.017251039
+# HELP go_cpu_classes_scavenge_total_cpu_seconds_total Estimated total CPU time spent performing tasks that return unused memory to the underlying platform. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics. Sum of all metrics in /cpu/classes/scavenge.
+# TYPE go_cpu_classes_scavenge_total_cpu_seconds_total counter
+go_cpu_classes_scavenge_total_cpu_seconds_total 0.017252008
+# HELP go_cpu_classes_total_cpu_seconds_total Estimated total available CPU time for user Go code or the Go runtime, as defined by GOMAXPROCS. In other words, GOMAXPROCS integrated over the wall-clock duration this process has been executing for. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics. Sum of all metrics in /cpu/classes.
+# TYPE go_cpu_classes_total_cpu_seconds_total counter
+go_cpu_classes_total_cpu_seconds_total 39468.455761664
+# HELP go_cpu_classes_user_cpu_seconds_total Estimated total CPU time spent running user Go code. This may also include some small amount of time spent in the Go runtime. This metric is an overestimate, and not directly comparable to system CPU time measurements. Compare only with other /cpu/classes metrics.
+# TYPE go_cpu_classes_user_cpu_seconds_total counter
+go_cpu_classes_user_cpu_seconds_total 33.715005617
+# HELP go_gc_cycles_automatic_gc_cycles_total Count of completed GC cycles generated by the Go runtime.
+# TYPE go_gc_cycles_automatic_gc_cycles_total counter
+go_gc_cycles_automatic_gc_cycles_total 48
+# HELP go_gc_cycles_forced_gc_cycles_total Count of completed GC cycles forced by the application.
+# TYPE go_gc_cycles_forced_gc_cycles_total counter
+go_gc_cycles_forced_gc_cycles_total 0
+# HELP go_gc_cycles_total_gc_cycles_total Count of all completed GC cycles.
+# TYPE go_gc_cycles_total_gc_cycles_total counter
+go_gc_cycles_total_gc_cycles_total 48
+# HELP go_gc_duration_seconds A summary of the pause duration of garbage collection cycles.
+# TYPE go_gc_duration_seconds summary
+go_gc_duration_seconds{quantile="0"} 3.964e-05
+go_gc_duration_seconds{quantile="0.25"} 0.000100646
+go_gc_duration_seconds{quantile="0.5"} 0.000119287
+go_gc_duration_seconds{quantile="0.75"} 0.000193952
+go_gc_duration_seconds{quantile="1"} 0.000585019
+go_gc_duration_seconds_sum 0.007105873
+go_gc_duration_seconds_count 48
+# HELP go_gc_gogc_percent Heap size target percentage configured by the user, otherwise 100. This value is set by the GOGC environment variable, and the runtime/debug.SetGCPercent function.
+# TYPE go_gc_gogc_percent gauge
+go_gc_gogc_percent 100
+# HELP go_gc_gomemlimit_bytes Go runtime memory limit configured by the user, otherwise math.MaxInt64. This value is set by the GOMEMLIMIT environment variable, and the runtime/debug.SetMemoryLimit function.
+# TYPE go_gc_gomemlimit_bytes gauge
+go_gc_gomemlimit_bytes 9.223372036854776e+18
+# HELP go_gc_heap_allocs_by_size_bytes Distribution of heap allocations by approximate size. Bucket counts increase monotonically. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.
+# TYPE go_gc_heap_allocs_by_size_bytes histogram
+go_gc_heap_allocs_by_size_bytes_bucket{le="8.999999999999998"} 259906
+go_gc_heap_allocs_by_size_bytes_bucket{le="24.999999999999996"} 3.244554e+06
+go_gc_heap_allocs_by_size_bytes_bucket{le="64.99999999999999"} 9.5573e+06
+go_gc_heap_allocs_by_size_bytes_bucket{le="144.99999999999997"} 1.090429e+07
+go_gc_heap_allocs_by_size_bytes_bucket{le="320.99999999999994"} 1.1131799e+07
+go_gc_heap_allocs_by_size_bytes_bucket{le="704.9999999999999"} 1.117138e+07
+go_gc_heap_allocs_by_size_bytes_bucket{le="1536.9999999999998"} 1.118196e+07
+go_gc_heap_allocs_by_size_bytes_bucket{le="3200.9999999999995"} 1.1187069e+07
+go_gc_heap_allocs_by_size_bytes_bucket{le="6528.999999999999"} 1.1196945e+07
+go_gc_heap_allocs_by_size_bytes_bucket{le="13568.999999999998"} 1.1198738e+07
+go_gc_heap_allocs_by_size_bytes_bucket{le="27264.999999999996"} 1.1200839e+07
+go_gc_heap_allocs_by_size_bytes_bucket{le="+Inf"} 1.1207911e+07
+go_gc_heap_allocs_by_size_bytes_sum 1.12145892e+09
+go_gc_heap_allocs_by_size_bytes_count 1.1207911e+07
+# HELP go_gc_heap_allocs_bytes_total Cumulative sum of memory allocated to the heap by the application.
+# TYPE go_gc_heap_allocs_bytes_total counter
+go_gc_heap_allocs_bytes_total 1.12145892e+09
+# HELP go_gc_heap_allocs_objects_total Cumulative count of heap allocations triggered by the application. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.
+# TYPE go_gc_heap_allocs_objects_total counter
+go_gc_heap_allocs_objects_total 1.1207911e+07
+# HELP go_gc_heap_frees_by_size_bytes Distribution of freed heap allocations by approximate size. Bucket counts increase monotonically. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.
+# TYPE go_gc_heap_frees_by_size_bytes histogram
+go_gc_heap_frees_by_size_bytes_bucket{le="8.999999999999998"} 253937
+go_gc_heap_frees_by_size_bytes_bucket{le="24.999999999999996"} 3.157269e+06
+go_gc_heap_frees_by_size_bytes_bucket{le="64.99999999999999"} 9.307037e+06
+go_gc_heap_frees_by_size_bytes_bucket{le="144.99999999999997"} 1.0606374e+07
+go_gc_heap_frees_by_size_bytes_bucket{le="320.99999999999994"} 1.0825743e+07
+go_gc_heap_frees_by_size_bytes_bucket{le="704.9999999999999"} 1.0862415e+07
+go_gc_heap_frees_by_size_bytes_bucket{le="1536.9999999999998"} 1.0872234e+07
+go_gc_heap_frees_by_size_bytes_bucket{le="3200.9999999999995"} 1.0876852e+07
+go_gc_heap_frees_by_size_bytes_bucket{le="6528.999999999999"} 1.0886409e+07
+go_gc_heap_frees_by_size_bytes_bucket{le="13568.999999999998"} 1.0888078e+07
+go_gc_heap_frees_by_size_bytes_bucket{le="27264.999999999996"} 1.0890106e+07
+go_gc_heap_frees_by_size_bytes_bucket{le="+Inf"} 1.0896895e+07
+go_gc_heap_frees_by_size_bytes_sum 1.055341568e+09
+go_gc_heap_frees_by_size_bytes_count 1.0896895e+07
+# HELP go_gc_heap_frees_bytes_total Cumulative sum of heap memory freed by the garbage collector.
+# TYPE go_gc_heap_frees_bytes_total counter
+go_gc_heap_frees_bytes_total 1.055341568e+09
+# HELP go_gc_heap_frees_objects_total Cumulative count of heap allocations whose storage was freed by the garbage collector. Note that this does not include tiny objects as defined by /gc/heap/tiny/allocs:objects, only tiny blocks.
+# TYPE go_gc_heap_frees_objects_total counter
+go_gc_heap_frees_objects_total 1.0896895e+07
+# HELP go_gc_heap_goal_bytes Heap size target for the end of the GC cycle.
+# TYPE go_gc_heap_goal_bytes gauge
+go_gc_heap_goal_bytes 8.8464448e+07
+# HELP go_gc_heap_live_bytes Heap memory occupied by live objects that were marked by the previous GC.
+# TYPE go_gc_heap_live_bytes gauge
+go_gc_heap_live_bytes 4.3871168e+07
+# HELP go_gc_heap_objects_objects Number of objects, live or unswept, occupying heap memory.
+# TYPE go_gc_heap_objects_objects gauge
+go_gc_heap_objects_objects 311016
+# HELP go_gc_heap_tiny_allocs_objects_total Count of small allocations that are packed together into blocks. These allocations are counted separately from other allocations because each individual allocation is not tracked by the runtime, only their block. Each block is already accounted for in allocs-by-size and frees-by-size.
+# TYPE go_gc_heap_tiny_allocs_objects_total counter
+go_gc_heap_tiny_allocs_objects_total 825664
+# HELP go_gc_limiter_last_enabled_gc_cycle GC cycle the last time the GC CPU limiter was enabled. This metric is useful for diagnosing the root cause of an out-of-memory error, because the limiter trades memory for CPU time when the GC's CPU time gets too high. This is most likely to occur with use of SetMemoryLimit. The first GC cycle is cycle 1, so a value of 0 indicates that it was never enabled.
+# TYPE go_gc_limiter_last_enabled_gc_cycle gauge
+go_gc_limiter_last_enabled_gc_cycle 0
+# HELP go_gc_pauses_seconds Distribution of individual GC-related stop-the-world pause latencies. Bucket counts increase monotonically.
+# TYPE go_gc_pauses_seconds histogram
+go_gc_pauses_seconds_bucket{le="6.399999999999999e-08"} 0
+go_gc_pauses_seconds_bucket{le="6.399999999999999e-07"} 0
+go_gc_pauses_seconds_bucket{le="7.167999999999999e-06"} 8
+go_gc_pauses_seconds_bucket{le="8.191999999999999e-05"} 61
+go_gc_pauses_seconds_bucket{le="0.0009175039999999999"} 96
+go_gc_pauses_seconds_bucket{le="0.010485759999999998"} 96
+go_gc_pauses_seconds_bucket{le="0.11744051199999998"} 96
+go_gc_pauses_seconds_bucket{le="+Inf"} 96
+go_gc_pauses_seconds_sum 0.0032522239999999997
+go_gc_pauses_seconds_count 96
+# HELP go_gc_scan_globals_bytes The total amount of global variable space that is scannable.
+# TYPE go_gc_scan_globals_bytes gauge
+go_gc_scan_globals_bytes 452072
+# HELP go_gc_scan_heap_bytes The total amount of heap space that is scannable.
+# TYPE go_gc_scan_heap_bytes gauge
+go_gc_scan_heap_bytes 2.808144e+07
+# HELP go_gc_scan_stack_bytes The number of bytes of stack that were scanned last GC cycle.
+# TYPE go_gc_scan_stack_bytes gauge
+go_gc_scan_stack_bytes 270040
+# HELP go_gc_scan_total_bytes The total amount space that is scannable. Sum of all metrics in /gc/scan.
+# TYPE go_gc_scan_total_bytes gauge
+go_gc_scan_total_bytes 2.8803552e+07
+# HELP go_gc_stack_starting_size_bytes The stack size of new goroutines.
+# TYPE go_gc_stack_starting_size_bytes gauge
+go_gc_stack_starting_size_bytes 2048
+# HELP go_godebug_non_default_behavior_execerrdot_events_total The number of non-default behaviors executed by the os/exec package due to a non-default GODEBUG=execerrdot=... setting.
+# TYPE go_godebug_non_default_behavior_execerrdot_events_total counter
+go_godebug_non_default_behavior_execerrdot_events_total 0
+# HELP go_godebug_non_default_behavior_gocachehash_events_total The number of non-default behaviors executed by the cmd/go package due to a non-default GODEBUG=gocachehash=... setting.
+# TYPE go_godebug_non_default_behavior_gocachehash_events_total counter
+go_godebug_non_default_behavior_gocachehash_events_total 0
+# HELP go_godebug_non_default_behavior_gocachetest_events_total The number of non-default behaviors executed by the cmd/go package due to a non-default GODEBUG=gocachetest=... setting.
+# TYPE go_godebug_non_default_behavior_gocachetest_events_total counter
+go_godebug_non_default_behavior_gocachetest_events_total 0
+# HELP go_godebug_non_default_behavior_gocacheverify_events_total The number of non-default behaviors executed by the cmd/go package due to a non-default GODEBUG=gocacheverify=... setting.
+# TYPE go_godebug_non_default_behavior_gocacheverify_events_total counter
+go_godebug_non_default_behavior_gocacheverify_events_total 0
+# HELP go_godebug_non_default_behavior_http2client_events_total The number of non-default behaviors executed by the net/http package due to a non-default GODEBUG=http2client=... setting.
+# TYPE go_godebug_non_default_behavior_http2client_events_total counter
+go_godebug_non_default_behavior_http2client_events_total 0
+# HELP go_godebug_non_default_behavior_http2server_events_total The number of non-default behaviors executed by the net/http package due to a non-default GODEBUG=http2server=... setting.
+# TYPE go_godebug_non_default_behavior_http2server_events_total counter
+go_godebug_non_default_behavior_http2server_events_total 0
+# HELP go_godebug_non_default_behavior_installgoroot_events_total The number of non-default behaviors executed by the go/build package due to a non-default GODEBUG=installgoroot=... setting.
+# TYPE go_godebug_non_default_behavior_installgoroot_events_total counter
+go_godebug_non_default_behavior_installgoroot_events_total 0
+# HELP go_godebug_non_default_behavior_jstmpllitinterp_events_total The number of non-default behaviors executed by the html/template package due to a non-default GODEBUG=jstmpllitinterp=... setting.
+# TYPE go_godebug_non_default_behavior_jstmpllitinterp_events_total counter
+go_godebug_non_default_behavior_jstmpllitinterp_events_total 0
+# HELP go_godebug_non_default_behavior_multipartmaxheaders_events_total The number of non-default behaviors executed by the mime/multipart package due to a non-default GODEBUG=multipartmaxheaders=... setting.
+# TYPE go_godebug_non_default_behavior_multipartmaxheaders_events_total counter
+go_godebug_non_default_behavior_multipartmaxheaders_events_total 0
+# HELP go_godebug_non_default_behavior_multipartmaxparts_events_total The number of non-default behaviors executed by the mime/multipart package due to a non-default GODEBUG=multipartmaxparts=... setting.
+# TYPE go_godebug_non_default_behavior_multipartmaxparts_events_total counter
+go_godebug_non_default_behavior_multipartmaxparts_events_total 0
+# HELP go_godebug_non_default_behavior_multipathtcp_events_total The number of non-default behaviors executed by the net package due to a non-default GODEBUG=multipathtcp=... setting.
+# TYPE go_godebug_non_default_behavior_multipathtcp_events_total counter
+go_godebug_non_default_behavior_multipathtcp_events_total 0
+# HELP go_godebug_non_default_behavior_panicnil_events_total The number of non-default behaviors executed by the runtime package due to a non-default GODEBUG=panicnil=... setting.
+# TYPE go_godebug_non_default_behavior_panicnil_events_total counter
+go_godebug_non_default_behavior_panicnil_events_total 0
+# HELP go_godebug_non_default_behavior_randautoseed_events_total The number of non-default behaviors executed by the math/rand package due to a non-default GODEBUG=randautoseed=... setting.
+# TYPE go_godebug_non_default_behavior_randautoseed_events_total counter
+go_godebug_non_default_behavior_randautoseed_events_total 0
+# HELP go_godebug_non_default_behavior_tarinsecurepath_events_total The number of non-default behaviors executed by the archive/tar package due to a non-default GODEBUG=tarinsecurepath=... setting.
+# TYPE go_godebug_non_default_behavior_tarinsecurepath_events_total counter
+go_godebug_non_default_behavior_tarinsecurepath_events_total 0
+# HELP go_godebug_non_default_behavior_tlsmaxrsasize_events_total The number of non-default behaviors executed by the crypto/tls package due to a non-default GODEBUG=tlsmaxrsasize=... setting.
+# TYPE go_godebug_non_default_behavior_tlsmaxrsasize_events_total counter
+go_godebug_non_default_behavior_tlsmaxrsasize_events_total 0
+# HELP go_godebug_non_default_behavior_x509sha1_events_total The number of non-default behaviors executed by the crypto/x509 package due to a non-default GODEBUG=x509sha1=... setting.
+# TYPE go_godebug_non_default_behavior_x509sha1_events_total counter
+go_godebug_non_default_behavior_x509sha1_events_total 0
+# HELP go_godebug_non_default_behavior_x509usefallbackroots_events_total The number of non-default behaviors executed by the crypto/x509 package due to a non-default GODEBUG=x509usefallbackroots=... setting.
+# TYPE go_godebug_non_default_behavior_x509usefallbackroots_events_total counter
+go_godebug_non_default_behavior_x509usefallbackroots_events_total 0
+# HELP go_godebug_non_default_behavior_zipinsecurepath_events_total The number of non-default behaviors executed by the archive/zip package due to a non-default GODEBUG=zipinsecurepath=... setting.
+# TYPE go_godebug_non_default_behavior_zipinsecurepath_events_total counter
+go_godebug_non_default_behavior_zipinsecurepath_events_total 0
+# HELP go_goroutines Number of goroutines that currently exist.
+# TYPE go_goroutines gauge
+go_goroutines 280
+# HELP go_info Information about the Go environment.
+# TYPE go_info gauge
+go_info{version="go1.21.3"} 1
+# HELP go_memory_classes_heap_free_bytes Memory that is completely free and eligible to be returned to the underlying system, but has not been. This metric is the runtime's estimate of free address space that is backed by physical memory.
+# TYPE go_memory_classes_heap_free_bytes gauge
+go_memory_classes_heap_free_bytes 1.564672e+06
+# HELP go_memory_classes_heap_objects_bytes Memory occupied by live objects and dead objects that have not yet been marked free by the garbage collector.
+# TYPE go_memory_classes_heap_objects_bytes gauge
+go_memory_classes_heap_objects_bytes 6.6117352e+07
+# HELP go_memory_classes_heap_released_bytes Memory that is completely free and has been returned to the underlying system. This metric is the runtime's estimate of free address space that is still mapped into the process, but is not backed by physical memory.
+# TYPE go_memory_classes_heap_released_bytes gauge
+go_memory_classes_heap_released_bytes 1.1247616e+07
+# HELP go_memory_classes_heap_stacks_bytes Memory allocated from the heap that is reserved for stack space, whether or not it is currently in-use. Currently, this represents all stack memory for goroutines. It also includes all OS thread stacks in non-cgo programs. Note that stacks may be allocated differently in the future, and this may change.
+# TYPE go_memory_classes_heap_stacks_bytes gauge
+go_memory_classes_heap_stacks_bytes 3.244032e+06
+# HELP go_memory_classes_heap_unused_bytes Memory that is reserved for heap objects but is not currently used to hold heap objects.
+# TYPE go_memory_classes_heap_unused_bytes gauge
+go_memory_classes_heap_unused_bytes 5.906712e+06
+# HELP go_memory_classes_metadata_mcache_free_bytes Memory that is reserved for runtime mcache structures, but not in-use.
+# TYPE go_memory_classes_metadata_mcache_free_bytes gauge
+go_memory_classes_metadata_mcache_free_bytes 6000
+# HELP go_memory_classes_metadata_mcache_inuse_bytes Memory that is occupied by runtime mcache structures that are currently being used.
+# TYPE go_memory_classes_metadata_mcache_inuse_bytes gauge
+go_memory_classes_metadata_mcache_inuse_bytes 9600
+# HELP go_memory_classes_metadata_mspan_free_bytes Memory that is reserved for runtime mspan structures, but not in-use.
+# TYPE go_memory_classes_metadata_mspan_free_bytes gauge
+go_memory_classes_metadata_mspan_free_bytes 30912
+# HELP go_memory_classes_metadata_mspan_inuse_bytes Memory that is occupied by runtime mspan structures that are currently being used.
+# TYPE go_memory_classes_metadata_mspan_inuse_bytes gauge
+go_memory_classes_metadata_mspan_inuse_bytes 637224
+# HELP go_memory_classes_metadata_other_bytes Memory that is reserved for or used to hold runtime metadata.
+# TYPE go_memory_classes_metadata_other_bytes gauge
+go_memory_classes_metadata_other_bytes 6.288552e+06
+# HELP go_memory_classes_os_stacks_bytes Stack memory allocated by the underlying operating system. In non-cgo programs this metric is currently zero. This may change in the future.In cgo programs this metric includes OS thread stacks allocated directly from the OS. Currently, this only accounts for one stack in c-shared and c-archive build modes, and other sources of stacks from the OS are not measured. This too may change in the future.
+# TYPE go_memory_classes_os_stacks_bytes gauge
+go_memory_classes_os_stacks_bytes 0
+# HELP go_memory_classes_other_bytes Memory used by execution trace buffers, structures for debugging the runtime, finalizer and profiler specials, and more.
+# TYPE go_memory_classes_other_bytes gauge
+go_memory_classes_other_bytes 1.28567e+06
+# HELP go_memory_classes_profiling_buckets_bytes Memory that is used by the stack trace hash map used for profiling.
+# TYPE go_memory_classes_profiling_buckets_bytes gauge
+go_memory_classes_profiling_buckets_bytes 1.56453e+06
+# HELP go_memory_classes_total_bytes All memory mapped by the Go runtime into the current process as read-write. Note that this does not include memory mapped by code called via cgo or via the syscall package. Sum of all metrics in /memory/classes.
+# TYPE go_memory_classes_total_bytes gauge
+go_memory_classes_total_bytes 9.7902872e+07
+# HELP go_memstats_alloc_bytes Number of bytes allocated and still in use.
+# TYPE go_memstats_alloc_bytes gauge
+go_memstats_alloc_bytes 6.6117352e+07
+# HELP go_memstats_alloc_bytes_total Total number of bytes allocated, even if freed.
+# TYPE go_memstats_alloc_bytes_total counter
+go_memstats_alloc_bytes_total 1.12145892e+09
+# HELP go_memstats_buck_hash_sys_bytes Number of bytes used by the profiling bucket hash table.
+# TYPE go_memstats_buck_hash_sys_bytes gauge
+go_memstats_buck_hash_sys_bytes 1.56453e+06
+# HELP go_memstats_frees_total Total number of frees.
+# TYPE go_memstats_frees_total counter
+go_memstats_frees_total 1.1722559e+07
+# HELP go_memstats_gc_sys_bytes Number of bytes used for garbage collection system metadata.
+# TYPE go_memstats_gc_sys_bytes gauge
+go_memstats_gc_sys_bytes 6.288552e+06
+# HELP go_memstats_heap_alloc_bytes Number of heap bytes allocated and still in use.
+# TYPE go_memstats_heap_alloc_bytes gauge
+go_memstats_heap_alloc_bytes 6.6117352e+07
+# HELP go_memstats_heap_idle_bytes Number of heap bytes waiting to be used.
+# TYPE go_memstats_heap_idle_bytes gauge
+go_memstats_heap_idle_bytes 1.2812288e+07
+# HELP go_memstats_heap_inuse_bytes Number of heap bytes that are in use.
+# TYPE go_memstats_heap_inuse_bytes gauge
+go_memstats_heap_inuse_bytes 7.2024064e+07
+# HELP go_memstats_heap_objects Number of allocated objects.
+# TYPE go_memstats_heap_objects gauge
+go_memstats_heap_objects 311016
+# HELP go_memstats_heap_released_bytes Number of heap bytes released to OS.
+# TYPE go_memstats_heap_released_bytes gauge
+go_memstats_heap_released_bytes 1.1247616e+07
+# HELP go_memstats_heap_sys_bytes Number of heap bytes obtained from system.
+# TYPE go_memstats_heap_sys_bytes gauge
+go_memstats_heap_sys_bytes 8.4836352e+07
+# HELP go_memstats_last_gc_time_seconds Number of seconds since 1970 of last garbage collection.
+# TYPE go_memstats_last_gc_time_seconds gauge
+go_memstats_last_gc_time_seconds 1.7736784267206185e+09
+# HELP go_memstats_lookups_total Total number of pointer lookups.
+# TYPE go_memstats_lookups_total counter
+go_memstats_lookups_total 0
+# HELP go_memstats_mallocs_total Total number of mallocs.
+# TYPE go_memstats_mallocs_total counter
+go_memstats_mallocs_total 1.2033575e+07
+# HELP go_memstats_mcache_inuse_bytes Number of bytes in use by mcache structures.
+# TYPE go_memstats_mcache_inuse_bytes gauge
+go_memstats_mcache_inuse_bytes 9600
+# HELP go_memstats_mcache_sys_bytes Number of bytes used for mcache structures obtained from system.
+# TYPE go_memstats_mcache_sys_bytes gauge
+go_memstats_mcache_sys_bytes 15600
+# HELP go_memstats_mspan_inuse_bytes Number of bytes in use by mspan structures.
+# TYPE go_memstats_mspan_inuse_bytes gauge
+go_memstats_mspan_inuse_bytes 637224
+# HELP go_memstats_mspan_sys_bytes Number of bytes used for mspan structures obtained from system.
+# TYPE go_memstats_mspan_sys_bytes gauge
+go_memstats_mspan_sys_bytes 668136
+# HELP go_memstats_next_gc_bytes Number of heap bytes when next garbage collection will take place.
+# TYPE go_memstats_next_gc_bytes gauge
+go_memstats_next_gc_bytes 8.8464448e+07
+# HELP go_memstats_other_sys_bytes Number of bytes used for other system allocations.
+# TYPE go_memstats_other_sys_bytes gauge
+go_memstats_other_sys_bytes 1.28567e+06
+# HELP go_memstats_stack_inuse_bytes Number of bytes in use by the stack allocator.
+# TYPE go_memstats_stack_inuse_bytes gauge
+go_memstats_stack_inuse_bytes 3.244032e+06
+# HELP go_memstats_stack_sys_bytes Number of bytes obtained from system for stack allocator.
+# TYPE go_memstats_stack_sys_bytes gauge
+go_memstats_stack_sys_bytes 3.244032e+06
+# HELP go_memstats_sys_bytes Number of bytes obtained from system.
+# TYPE go_memstats_sys_bytes gauge
+go_memstats_sys_bytes 9.7902872e+07
+# HELP go_sched_gomaxprocs_threads The current runtime.GOMAXPROCS setting, or the number of operating system threads that can execute user-level Go code simultaneously.
+# TYPE go_sched_gomaxprocs_threads gauge
+go_sched_gomaxprocs_threads 8
+# HELP go_sched_goroutines_goroutines Count of live goroutines.
+# TYPE go_sched_goroutines_goroutines gauge
+go_sched_goroutines_goroutines 280
+# HELP go_sched_latencies_seconds Distribution of the time goroutines have spent in the scheduler in a runnable state before actually running. Bucket counts increase monotonically.
+# TYPE go_sched_latencies_seconds histogram
+go_sched_latencies_seconds_bucket{le="6.399999999999999e-08"} 11928
+go_sched_latencies_seconds_bucket{le="6.399999999999999e-07"} 19535
+go_sched_latencies_seconds_bucket{le="7.167999999999999e-06"} 38196
+go_sched_latencies_seconds_bucket{le="8.191999999999999e-05"} 52901
+go_sched_latencies_seconds_bucket{le="0.0009175039999999999"} 54534
+go_sched_latencies_seconds_bucket{le="0.010485759999999998"} 54577
+go_sched_latencies_seconds_bucket{le="0.11744051199999998"} 54577
+go_sched_latencies_seconds_bucket{le="+Inf"} 54577
+go_sched_latencies_seconds_sum 0.29106336000000005
+go_sched_latencies_seconds_count 54577
+# HELP go_sync_mutex_wait_total_seconds_total Approximate cumulative time goroutines have spent blocked on a sync.Mutex or sync.RWMutex. This metric is useful for identifying global changes in lock contention. Collect a mutex or block profile using the runtime/pprof package for more detailed contention data.
+# TYPE go_sync_mutex_wait_total_seconds_total counter
+go_sync_mutex_wait_total_seconds_total 1.062275952
+# HELP go_threads Number of OS threads created.
+# TYPE go_threads gauge
+go_threads 13
+# HELP jaeger_tracer_baggage_restrictions_updates_total Number of times baggage restrictions were successfully updated
+# TYPE jaeger_tracer_baggage_restrictions_updates_total counter
+jaeger_tracer_baggage_restrictions_updates_total{result="err"} 0
+jaeger_tracer_baggage_restrictions_updates_total{result="ok"} 0
+# HELP jaeger_tracer_baggage_truncations_total Number of times baggage was truncated as per baggage restrictions
+# TYPE jaeger_tracer_baggage_truncations_total counter
+jaeger_tracer_baggage_truncations_total 0
+# HELP jaeger_tracer_baggage_updates_total Number of times baggage was successfully written or updated on spans
+# TYPE jaeger_tracer_baggage_updates_total counter
+jaeger_tracer_baggage_updates_total{result="err"} 0
+jaeger_tracer_baggage_updates_total{result="ok"} 0
+# HELP jaeger_tracer_finished_spans_total Number of sampled spans finished by this tracer
+# TYPE jaeger_tracer_finished_spans_total counter
+jaeger_tracer_finished_spans_total{sampled="delayed"} 0
+jaeger_tracer_finished_spans_total{sampled="n"} 6956
+jaeger_tracer_finished_spans_total{sampled="y"} 0
+# HELP jaeger_tracer_reporter_queue_length Current number of spans in the reporter queue
+# TYPE jaeger_tracer_reporter_queue_length gauge
+jaeger_tracer_reporter_queue_length 0
+# HELP jaeger_tracer_reporter_spans_total Number of spans successfully reported
+# TYPE jaeger_tracer_reporter_spans_total counter
+jaeger_tracer_reporter_spans_total{result="dropped"} 0
+jaeger_tracer_reporter_spans_total{result="err"} 0
+jaeger_tracer_reporter_spans_total{result="ok"} 0
+# HELP jaeger_tracer_sampler_queries_total Number of times the Sampler succeeded to retrieve sampling strategy
+# TYPE jaeger_tracer_sampler_queries_total counter
+jaeger_tracer_sampler_queries_total{result="err"} 84
+jaeger_tracer_sampler_queries_total{result="ok"} 0
+# HELP jaeger_tracer_sampler_updates_total Number of times the Sampler succeeded to retrieve and update sampling strategy
+# TYPE jaeger_tracer_sampler_updates_total counter
+jaeger_tracer_sampler_updates_total{result="err"} 0
+jaeger_tracer_sampler_updates_total{result="ok"} 0
+# HELP jaeger_tracer_span_context_decoding_errors_total Number of errors decoding tracing context
+# TYPE jaeger_tracer_span_context_decoding_errors_total counter
+jaeger_tracer_span_context_decoding_errors_total 0
+# HELP jaeger_tracer_started_spans_total Number of spans started by this tracer as sampled
+# TYPE jaeger_tracer_started_spans_total counter
+jaeger_tracer_started_spans_total{sampled="delayed"} 0
+jaeger_tracer_started_spans_total{sampled="n"} 6959
+jaeger_tracer_started_spans_total{sampled="y"} 0
+# HELP jaeger_tracer_throttled_debug_spans_total Number of times debug spans were throttled
+# TYPE jaeger_tracer_throttled_debug_spans_total counter
+jaeger_tracer_throttled_debug_spans_total 0
+# HELP jaeger_tracer_throttler_updates_total Number of times throttler successfully updated
+# TYPE jaeger_tracer_throttler_updates_total counter
+jaeger_tracer_throttler_updates_total{result="err"} 0
+jaeger_tracer_throttler_updates_total{result="ok"} 0
+# HELP jaeger_tracer_traces_total Number of traces started by this tracer as sampled
+# TYPE jaeger_tracer_traces_total counter
+jaeger_tracer_traces_total{sampled="n",state="joined"} 1052
+jaeger_tracer_traces_total{sampled="n",state="started"} 3784
+jaeger_tracer_traces_total{sampled="y",state="joined"} 0
+jaeger_tracer_traces_total{sampled="y",state="started"} 0
+# HELP kv_request_duration_seconds Time spent on kv store requests.
+# TYPE kv_request_duration_seconds histogram
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.005"} 337
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.01"} 337
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.025"} 337
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.05"} 337
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.1"} 337
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.25"} 337
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.5"} 337
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="1"} 337
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="2.5"} 337
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="5"} 337
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="10"} 337
+kv_request_duration_seconds_bucket{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory",le="+Inf"} 337
+kv_request_duration_seconds_sum{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory"} 0.07715711699999997
+kv_request_duration_seconds_count{kv_name="distributor-lifecycler",operation="CAS",role="primary",status_code="200",type="inmemory"} 337
+# HELP loki_azure_blob_egress_bytes_total Total bytes downloaded from Azure Blob Storage.
+# TYPE loki_azure_blob_egress_bytes_total counter
+loki_azure_blob_egress_bytes_total 0
+# HELP loki_boltdb_shipper_apply_retention_last_successful_run_timestamp_seconds Unix timestamp of the last successful retention run
+# TYPE loki_boltdb_shipper_apply_retention_last_successful_run_timestamp_seconds gauge
+loki_boltdb_shipper_apply_retention_last_successful_run_timestamp_seconds 0
+# HELP loki_boltdb_shipper_compact_tables_operation_duration_seconds Time (in seconds) spent in compacting all the tables
+# TYPE loki_boltdb_shipper_compact_tables_operation_duration_seconds gauge
+loki_boltdb_shipper_compact_tables_operation_duration_seconds 0.00071884
+# HELP loki_boltdb_shipper_compact_tables_operation_last_successful_run_timestamp_seconds Unix timestamp of the last successful compaction run
+# TYPE loki_boltdb_shipper_compact_tables_operation_last_successful_run_timestamp_seconds gauge
+loki_boltdb_shipper_compact_tables_operation_last_successful_run_timestamp_seconds 1.7736782986658466e+09
+# HELP loki_boltdb_shipper_compact_tables_operation_total Total number of tables compaction done by status
+# TYPE loki_boltdb_shipper_compact_tables_operation_total counter
+loki_boltdb_shipper_compact_tables_operation_total{status="success"} 8
+# HELP loki_boltdb_shipper_compactor_running Value will be 1 if compactor is currently running on this instance
+# TYPE loki_boltdb_shipper_compactor_running gauge
+loki_boltdb_shipper_compactor_running 1
+# HELP loki_boltdb_shipper_open_existing_file_failures_total Total number of failures in opening of existing files while loading active index tables during startup
+# TYPE loki_boltdb_shipper_open_existing_file_failures_total counter
+loki_boltdb_shipper_open_existing_file_failures_total{component="index-store-boltdb-shipper-2020-10-24"} 0
+# HELP loki_boltdb_shipper_request_duration_seconds Time (in seconds) spent serving requests when using boltdb shipper
+# TYPE loki_boltdb_shipper_request_duration_seconds histogram
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="0.005"} 0
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="0.01"} 1
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="0.025"} 7
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="0.05"} 12
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="0.1"} 17
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="0.25"} 17
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="0.5"} 17
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="1"} 17
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="2.5"} 17
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="5"} 17
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="10"} 17
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="25"} 17
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="50"} 17
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="100"} 17
+loki_boltdb_shipper_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200",le="+Inf"} 17
+loki_boltdb_shipper_request_duration_seconds_sum{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200"} 0.659681521
+loki_boltdb_shipper_request_duration_seconds_count{component="index-store-boltdb-shipper-2020-10-24",operation="WRITE",status_code="200"} 17
+# HELP loki_boltdb_shipper_tables_download_operation_duration_seconds Time (in seconds) spent in downloading updated files for all the tables
+# TYPE loki_boltdb_shipper_tables_download_operation_duration_seconds gauge
+loki_boltdb_shipper_tables_download_operation_duration_seconds{component="index-store-boltdb-shipper-2020-10-24"} 4.2418e-05
+# HELP loki_boltdb_shipper_tables_sync_operation_total Total number of tables sync operations done by status
+# TYPE loki_boltdb_shipper_tables_sync_operation_total counter
+loki_boltdb_shipper_tables_sync_operation_total{component="index-store-boltdb-shipper-2020-10-24",status="success"} 16
+# HELP loki_boltdb_shipper_tables_upload_operation_total Total number of upload operations done by status
+# TYPE loki_boltdb_shipper_tables_upload_operation_total counter
+loki_boltdb_shipper_tables_upload_operation_total{component="index-store-boltdb-shipper-2020-10-24",status="success"} 85
+# HELP loki_build_info A metric with a constant '1' value labeled by version, revision, branch, goversion from which loki was built, and the goos and goarch for the build.
+# TYPE loki_build_info gauge
+loki_build_info{branch="HEAD",goarch="amd64",goos="linux",goversion="go1.21.3",revision="e759cae3b9",tags="netgo",version="2.9.5"} 1
+# HELP loki_bytes_per_line The total number of bytes per line.
+# TYPE loki_bytes_per_line histogram
+loki_bytes_per_line_bucket{le="1"} 0
+loki_bytes_per_line_bucket{le="8"} 0
+loki_bytes_per_line_bucket{le="64"} 0
+loki_bytes_per_line_bucket{le="512"} 4955
+loki_bytes_per_line_bucket{le="4096"} 4966
+loki_bytes_per_line_bucket{le="32768"} 4966
+loki_bytes_per_line_bucket{le="262144"} 4966
+loki_bytes_per_line_bucket{le="2.097152e+06"} 4966
+loki_bytes_per_line_bucket{le="+Inf"} 4966
+loki_bytes_per_line_sum 1.624109e+06
+loki_bytes_per_line_count 4966
+# HELP loki_cache_corrupt_chunks_total Total count of corrupt chunks found in cache.
+# TYPE loki_cache_corrupt_chunks_total counter
+loki_cache_corrupt_chunks_total 0
+# HELP loki_cache_fetched_keys Total count of keys requested from cache.
+# TYPE loki_cache_fetched_keys counter
+loki_cache_fetched_keys{name="chunksembedded-cache"} 17
+# HELP loki_cache_hits Total count of keys found in cache.
+# TYPE loki_cache_hits counter
+loki_cache_hits{name="chunksembedded-cache"} 0
+# HELP loki_cache_request_duration_seconds Total time spent in seconds doing cache requests.
+# TYPE loki_cache_request_duration_seconds histogram
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.fetch",name="chunksembedded-cache",status_code="200",le="1.6e-05"} 14
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.fetch",name="chunksembedded-cache",status_code="200",le="6.4e-05"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.fetch",name="chunksembedded-cache",status_code="200",le="0.000256"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.fetch",name="chunksembedded-cache",status_code="200",le="0.001024"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.fetch",name="chunksembedded-cache",status_code="200",le="0.004096"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.fetch",name="chunksembedded-cache",status_code="200",le="0.016384"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.fetch",name="chunksembedded-cache",status_code="200",le="0.065536"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.fetch",name="chunksembedded-cache",status_code="200",le="0.262144"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.fetch",name="chunksembedded-cache",status_code="200",le="+Inf"} 17
+loki_cache_request_duration_seconds_sum{method="chunksembedded-cache.fetch",name="chunksembedded-cache",status_code="200"} 0.00016849299999999997
+loki_cache_request_duration_seconds_count{method="chunksembedded-cache.fetch",name="chunksembedded-cache",status_code="200"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.store",name="chunksembedded-cache",status_code="200",le="1.6e-05"} 16
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.store",name="chunksembedded-cache",status_code="200",le="6.4e-05"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.store",name="chunksembedded-cache",status_code="200",le="0.000256"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.store",name="chunksembedded-cache",status_code="200",le="0.001024"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.store",name="chunksembedded-cache",status_code="200",le="0.004096"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.store",name="chunksembedded-cache",status_code="200",le="0.016384"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.store",name="chunksembedded-cache",status_code="200",le="0.065536"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.store",name="chunksembedded-cache",status_code="200",le="0.262144"} 17
+loki_cache_request_duration_seconds_bucket{method="chunksembedded-cache.store",name="chunksembedded-cache",status_code="200",le="+Inf"} 17
+loki_cache_request_duration_seconds_sum{method="chunksembedded-cache.store",name="chunksembedded-cache",status_code="200"} 0.000178186
+loki_cache_request_duration_seconds_count{method="chunksembedded-cache.store",name="chunksembedded-cache",status_code="200"} 17
+# HELP loki_cache_value_size_bytes Size of values in the cache.
+# TYPE loki_cache_value_size_bytes histogram
+loki_cache_value_size_bytes_bucket{method="fetch",name="chunksembedded-cache",le="1024"} 0
+loki_cache_value_size_bytes_bucket{method="fetch",name="chunksembedded-cache",le="4096"} 0
+loki_cache_value_size_bytes_bucket{method="fetch",name="chunksembedded-cache",le="16384"} 0
+loki_cache_value_size_bytes_bucket{method="fetch",name="chunksembedded-cache",le="65536"} 0
+loki_cache_value_size_bytes_bucket{method="fetch",name="chunksembedded-cache",le="262144"} 0
+loki_cache_value_size_bytes_bucket{method="fetch",name="chunksembedded-cache",le="1.048576e+06"} 0
+loki_cache_value_size_bytes_bucket{method="fetch",name="chunksembedded-cache",le="4.194304e+06"} 0
+loki_cache_value_size_bytes_bucket{method="fetch",name="chunksembedded-cache",le="+Inf"} 0
+loki_cache_value_size_bytes_sum{method="fetch",name="chunksembedded-cache"} 0
+loki_cache_value_size_bytes_count{method="fetch",name="chunksembedded-cache"} 0
+loki_cache_value_size_bytes_bucket{method="store",name="chunksembedded-cache",le="1024"} 7
+loki_cache_value_size_bytes_bucket{method="store",name="chunksembedded-cache",le="4096"} 15
+loki_cache_value_size_bytes_bucket{method="store",name="chunksembedded-cache",le="16384"} 16
+loki_cache_value_size_bytes_bucket{method="store",name="chunksembedded-cache",le="65536"} 17
+loki_cache_value_size_bytes_bucket{method="store",name="chunksembedded-cache",le="262144"} 17
+loki_cache_value_size_bytes_bucket{method="store",name="chunksembedded-cache",le="1.048576e+06"} 17
+loki_cache_value_size_bytes_bucket{method="store",name="chunksembedded-cache",le="4.194304e+06"} 17
+loki_cache_value_size_bytes_bucket{method="store",name="chunksembedded-cache",le="+Inf"} 17
+loki_cache_value_size_bytes_sum{method="store",name="chunksembedded-cache"} 67820
+loki_cache_value_size_bytes_count{method="store",name="chunksembedded-cache"} 17
+# HELP loki_chunk_fetcher_cache_dequeued_total Total number of chunks asynchronously dequeued from a buffer and written back to the chunk cache.
+# TYPE loki_chunk_fetcher_cache_dequeued_total counter
+loki_chunk_fetcher_cache_dequeued_total 0
+# HELP loki_chunk_fetcher_cache_enqueued_total Total number of chunks enqueued to a buffer to be asynchronously written back to the chunk cache.
+# TYPE loki_chunk_fetcher_cache_enqueued_total counter
+loki_chunk_fetcher_cache_enqueued_total 0
+# HELP loki_chunk_fetcher_cache_skipped_buffer_full_total Total number of operations against cache that have been skipped.
+# TYPE loki_chunk_fetcher_cache_skipped_buffer_full_total counter
+loki_chunk_fetcher_cache_skipped_buffer_full_total 0
+# HELP loki_chunk_store_chunks_per_query Distribution of #chunks per query.
+# TYPE loki_chunk_store_chunks_per_query histogram
+loki_chunk_store_chunks_per_query_bucket{le="10"} 0
+loki_chunk_store_chunks_per_query_bucket{le="80"} 0
+loki_chunk_store_chunks_per_query_bucket{le="640"} 0
+loki_chunk_store_chunks_per_query_bucket{le="5120"} 0
+loki_chunk_store_chunks_per_query_bucket{le="40960"} 0
+loki_chunk_store_chunks_per_query_bucket{le="327680"} 0
+loki_chunk_store_chunks_per_query_bucket{le="2.62144e+06"} 0
+loki_chunk_store_chunks_per_query_bucket{le="+Inf"} 0
+loki_chunk_store_chunks_per_query_sum 0
+loki_chunk_store_chunks_per_query_count 0
+# HELP loki_chunk_store_deduped_bytes_total Count of bytes from chunks which were not stored because they have already been stored by another replica.
+# TYPE loki_chunk_store_deduped_bytes_total counter
+loki_chunk_store_deduped_bytes_total 0
+# HELP loki_chunk_store_deduped_chunks_total Count of chunks which were not stored because they have already been stored by another replica.
+# TYPE loki_chunk_store_deduped_chunks_total counter
+loki_chunk_store_deduped_chunks_total 0
+# HELP loki_chunk_store_index_entries_per_chunk Number of entries written to storage per chunk.
+# TYPE loki_chunk_store_index_entries_per_chunk histogram
+loki_chunk_store_index_entries_per_chunk_bucket{le="1"} 0
+loki_chunk_store_index_entries_per_chunk_bucket{le="2"} 0
+loki_chunk_store_index_entries_per_chunk_bucket{le="4"} 0
+loki_chunk_store_index_entries_per_chunk_bucket{le="8"} 16
+loki_chunk_store_index_entries_per_chunk_bucket{le="16"} 17
+loki_chunk_store_index_entries_per_chunk_bucket{le="+Inf"} 17
+loki_chunk_store_index_entries_per_chunk_sum 128
+loki_chunk_store_index_entries_per_chunk_count 17
+# HELP loki_chunk_store_index_lookups_per_query Distribution of #index lookups per query.
+# TYPE loki_chunk_store_index_lookups_per_query histogram
+loki_chunk_store_index_lookups_per_query_bucket{le="1"} 0
+loki_chunk_store_index_lookups_per_query_bucket{le="2"} 0
+loki_chunk_store_index_lookups_per_query_bucket{le="4"} 0
+loki_chunk_store_index_lookups_per_query_bucket{le="8"} 0
+loki_chunk_store_index_lookups_per_query_bucket{le="16"} 0
+loki_chunk_store_index_lookups_per_query_bucket{le="+Inf"} 0
+loki_chunk_store_index_lookups_per_query_sum 0
+loki_chunk_store_index_lookups_per_query_count 0
+# HELP loki_chunk_store_series_post_intersection_per_query Distribution of #series (post intersection) per query.
+# TYPE loki_chunk_store_series_post_intersection_per_query histogram
+loki_chunk_store_series_post_intersection_per_query_bucket{le="10"} 0
+loki_chunk_store_series_post_intersection_per_query_bucket{le="80"} 0
+loki_chunk_store_series_post_intersection_per_query_bucket{le="640"} 0
+loki_chunk_store_series_post_intersection_per_query_bucket{le="5120"} 0
+loki_chunk_store_series_post_intersection_per_query_bucket{le="40960"} 0
+loki_chunk_store_series_post_intersection_per_query_bucket{le="327680"} 0
+loki_chunk_store_series_post_intersection_per_query_bucket{le="+Inf"} 0
+loki_chunk_store_series_post_intersection_per_query_sum 0
+loki_chunk_store_series_post_intersection_per_query_count 0
+# HELP loki_chunk_store_series_pre_intersection_per_query Distribution of #series (pre intersection) per query.
+# TYPE loki_chunk_store_series_pre_intersection_per_query histogram
+loki_chunk_store_series_pre_intersection_per_query_bucket{le="10"} 0
+loki_chunk_store_series_pre_intersection_per_query_bucket{le="80"} 0
+loki_chunk_store_series_pre_intersection_per_query_bucket{le="640"} 0
+loki_chunk_store_series_pre_intersection_per_query_bucket{le="5120"} 0
+loki_chunk_store_series_pre_intersection_per_query_bucket{le="40960"} 0
+loki_chunk_store_series_pre_intersection_per_query_bucket{le="327680"} 0
+loki_chunk_store_series_pre_intersection_per_query_bucket{le="+Inf"} 0
+loki_chunk_store_series_pre_intersection_per_query_sum 0
+loki_chunk_store_series_pre_intersection_per_query_count 0
+# HELP loki_chunk_store_stored_chunk_bytes_total Total bytes stored in chunks per user.
+# TYPE loki_chunk_store_stored_chunk_bytes_total counter
+loki_chunk_store_stored_chunk_bytes_total{user="fake"} 62708
+# HELP loki_chunk_store_stored_chunks_total Total stored chunks per user.
+# TYPE loki_chunk_store_stored_chunks_total counter
+loki_chunk_store_stored_chunks_total{user="fake"} 17
+# HELP loki_consul_request_duration_seconds Time spent on consul requests.
+# TYPE loki_consul_request_duration_seconds histogram
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="0.005"} 1352
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="0.01"} 1352
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="0.025"} 1352
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="0.05"} 1352
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="0.1"} 1352
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="0.25"} 1352
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="0.5"} 1352
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="1"} 1352
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="2.5"} 1352
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="5"} 1352
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="10"} 1352
+loki_consul_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS loop",status_code="200",le="+Inf"} 1352
+loki_consul_request_duration_seconds_sum{kv_name="scheduler",operation="CAS loop",status_code="200"} 0.26999565100000067
+loki_consul_request_duration_seconds_count{kv_name="scheduler",operation="CAS loop",status_code="200"} 1352
+# HELP loki_delete_request_lookups_failed_total Number times the client has failed to look up delete requests
+# TYPE loki_delete_request_lookups_failed_total counter
+loki_delete_request_lookups_failed_total 0
+# HELP loki_delete_request_lookups_total Number times the client has looked up delete requests
+# TYPE loki_delete_request_lookups_total counter
+loki_delete_request_lookups_total 0
+# HELP loki_distributor_bytes_received_total The total number of uncompressed bytes received per tenant. Includes structured metadata bytes.
+# TYPE loki_distributor_bytes_received_total counter
+loki_distributor_bytes_received_total{retention_hours="0",tenant="fake"} 1.624109e+06
+# HELP loki_distributor_ingester_appends_total The total number of batch appends sent to ingesters.
+# TYPE loki_distributor_ingester_appends_total counter
+loki_distributor_ingester_appends_total{ingester="127.0.0.1:9095"} 718
+# HELP loki_distributor_lines_received_total The total number of lines received per tenant
+# TYPE loki_distributor_lines_received_total counter
+loki_distributor_lines_received_total{tenant="fake"} 4966
+# HELP loki_distributor_replication_factor The configured replication factor.
+# TYPE loki_distributor_replication_factor gauge
+loki_distributor_replication_factor 1
+# HELP loki_distributor_structured_metadata_bytes_received_total The total number of uncompressed bytes received per tenant for entries' structured metadata
+# TYPE loki_distributor_structured_metadata_bytes_received_total counter
+loki_distributor_structured_metadata_bytes_received_total{retention_hours="0",tenant="fake"} 0
+# HELP loki_experimental_features_in_use_total The number of experimental features in use.
+# TYPE loki_experimental_features_in_use_total counter
+loki_experimental_features_in_use_total 1
+# HELP loki_index_request_duration_seconds Time (in seconds) spent in serving index query requests
+# TYPE loki_index_request_duration_seconds histogram
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="0.005"} 0
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="0.012301915262620913"} 1
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="0.03026742382574107"} 8
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="0.07446945662441999"} 15
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="0.18322338900940766"} 17
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="0.4507997211447921"} 17
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="1.109139993987274"} 17
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="2.7289092440830625"} 17
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="6.7141620560185435"} 17
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="16.519410534528944"} 17
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="40.644077716844464"} 17
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="99.99999999999989"} 17
+loki_index_request_duration_seconds_bucket{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200",le="+Inf"} 17
+loki_index_request_duration_seconds_sum{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200"} 0.6625052370000001
+loki_index_request_duration_seconds_count{component="index-store-boltdb-shipper-2020-10-24",operation="index_chunk",status_code="200"} 17
+# HELP loki_inflight_requests Current number of inflight requests.
+# TYPE loki_inflight_requests gauge
+loki_inflight_requests{method="GET",route="metrics"} 1
+loki_inflight_requests{method="GET",route="ready"} 0
+loki_inflight_requests{method="POST",route="loki_api_v1_push"} 0
+loki_inflight_requests{method="gRPC",route="/grpc.health.v1.Health/Check"} 0
+loki_inflight_requests{method="gRPC",route="/logproto.Pusher/Push"} 0
+loki_inflight_requests{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop"} 5
+loki_inflight_requests{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop"} 10
+# HELP loki_ingester_autoforget_unhealthy_ingesters_total Total number of ingesters automatically forgotten
+# TYPE loki_ingester_autoforget_unhealthy_ingesters_total counter
+loki_ingester_autoforget_unhealthy_ingesters_total 0
+# HELP loki_ingester_blocks_per_chunk The number of blocks in a chunk.
+# TYPE loki_ingester_blocks_per_chunk histogram
+loki_ingester_blocks_per_chunk_bucket{le="5"} 0
+loki_ingester_blocks_per_chunk_bucket{le="10"} 0
+loki_ingester_blocks_per_chunk_bucket{le="20"} 0
+loki_ingester_blocks_per_chunk_bucket{le="40"} 0
+loki_ingester_blocks_per_chunk_bucket{le="80"} 0
+loki_ingester_blocks_per_chunk_bucket{le="160"} 0
+loki_ingester_blocks_per_chunk_bucket{le="+Inf"} 0
+loki_ingester_blocks_per_chunk_sum 0
+loki_ingester_blocks_per_chunk_count 0
+# HELP loki_ingester_checkpoint_creations_failed_total Total number of checkpoint creations that failed.
+# TYPE loki_ingester_checkpoint_creations_failed_total counter
+loki_ingester_checkpoint_creations_failed_total 0
+# HELP loki_ingester_checkpoint_creations_total Total number of checkpoint creations attempted.
+# TYPE loki_ingester_checkpoint_creations_total counter
+loki_ingester_checkpoint_creations_total 16
+# HELP loki_ingester_checkpoint_deletions_failed_total Total number of checkpoint deletions that failed.
+# TYPE loki_ingester_checkpoint_deletions_failed_total counter
+loki_ingester_checkpoint_deletions_failed_total 0
+# HELP loki_ingester_checkpoint_deletions_total Total number of checkpoint deletions attempted.
+# TYPE loki_ingester_checkpoint_deletions_total counter
+loki_ingester_checkpoint_deletions_total 16
+# HELP loki_ingester_checkpoint_duration_seconds Time taken to create a checkpoint.
+# TYPE loki_ingester_checkpoint_duration_seconds summary
+loki_ingester_checkpoint_duration_seconds{quantile="0.5"} 180.017951309
+loki_ingester_checkpoint_duration_seconds{quantile="0.9"} 270.014623952
+loki_ingester_checkpoint_duration_seconds{quantile="0.99"} 270.014623952
+loki_ingester_checkpoint_duration_seconds_sum 4112.140907726
+loki_ingester_checkpoint_duration_seconds_count 16
+# HELP loki_ingester_checkpoint_logged_bytes_total Total number of bytes written to disk for checkpointing.
+# TYPE loki_ingester_checkpoint_logged_bytes_total counter
+loki_ingester_checkpoint_logged_bytes_total 5.721474e+06
+# HELP loki_ingester_chunk_age_seconds Distribution of chunk ages (when stored).
+# TYPE loki_ingester_chunk_age_seconds histogram
+loki_ingester_chunk_age_seconds_bucket{le="60"} 0
+loki_ingester_chunk_age_seconds_bucket{le="300"} 0
+loki_ingester_chunk_age_seconds_bucket{le="600"} 0
+loki_ingester_chunk_age_seconds_bucket{le="1800"} 0
+loki_ingester_chunk_age_seconds_bucket{le="3600"} 16
+loki_ingester_chunk_age_seconds_bucket{le="7200"} 17
+loki_ingester_chunk_age_seconds_bucket{le="14400"} 17
+loki_ingester_chunk_age_seconds_bucket{le="36000"} 17
+loki_ingester_chunk_age_seconds_bucket{le="43200"} 17
+loki_ingester_chunk_age_seconds_bucket{le="57600"} 17
+loki_ingester_chunk_age_seconds_bucket{le="+Inf"} 17
+loki_ingester_chunk_age_seconds_sum 35172.27895445
+loki_ingester_chunk_age_seconds_count 17
+# HELP loki_ingester_chunk_bounds_hours Distribution of chunk end-start durations.
+# TYPE loki_ingester_chunk_bounds_hours histogram
+loki_ingester_chunk_bounds_hours_bucket{le="1"} 17
+loki_ingester_chunk_bounds_hours_bucket{le="2"} 17
+loki_ingester_chunk_bounds_hours_bucket{le="3"} 17
+loki_ingester_chunk_bounds_hours_bucket{le="4"} 17
+loki_ingester_chunk_bounds_hours_bucket{le="5"} 17
+loki_ingester_chunk_bounds_hours_bucket{le="6"} 17
+loki_ingester_chunk_bounds_hours_bucket{le="7"} 17
+loki_ingester_chunk_bounds_hours_bucket{le="8"} 17
+loki_ingester_chunk_bounds_hours_bucket{le="+Inf"} 17
+loki_ingester_chunk_bounds_hours_sum 1.076282656431389
+loki_ingester_chunk_bounds_hours_count 17
+# HELP loki_ingester_chunk_compression_ratio Compression ratio of chunks (when stored).
+# TYPE loki_ingester_chunk_compression_ratio histogram
+loki_ingester_chunk_compression_ratio_bucket{le="0.75"} 3
+loki_ingester_chunk_compression_ratio_bucket{le="2.75"} 9
+loki_ingester_chunk_compression_ratio_bucket{le="4.75"} 12
+loki_ingester_chunk_compression_ratio_bucket{le="6.75"} 15
+loki_ingester_chunk_compression_ratio_bucket{le="8.75"} 17
+loki_ingester_chunk_compression_ratio_bucket{le="10.75"} 17
+loki_ingester_chunk_compression_ratio_bucket{le="12.75"} 17
+loki_ingester_chunk_compression_ratio_bucket{le="14.75"} 17
+loki_ingester_chunk_compression_ratio_bucket{le="16.75"} 17
+loki_ingester_chunk_compression_ratio_bucket{le="18.75"} 17
+loki_ingester_chunk_compression_ratio_bucket{le="+Inf"} 17
+loki_ingester_chunk_compression_ratio_sum 54.58714306957542
+loki_ingester_chunk_compression_ratio_count 17
+# HELP loki_ingester_chunk_encode_time_seconds Distribution of chunk encode times.
+# TYPE loki_ingester_chunk_encode_time_seconds histogram
+loki_ingester_chunk_encode_time_seconds_bucket{le="0.01"} 17
+loki_ingester_chunk_encode_time_seconds_bucket{le="0.04"} 17
+loki_ingester_chunk_encode_time_seconds_bucket{le="0.16"} 17
+loki_ingester_chunk_encode_time_seconds_bucket{le="0.64"} 17
+loki_ingester_chunk_encode_time_seconds_bucket{le="2.56"} 17
+loki_ingester_chunk_encode_time_seconds_bucket{le="10.24"} 17
+loki_ingester_chunk_encode_time_seconds_bucket{le="+Inf"} 17
+loki_ingester_chunk_encode_time_seconds_sum 0.0032617999999999996
+loki_ingester_chunk_encode_time_seconds_count 17
+# HELP loki_ingester_chunk_entries Distribution of stored lines per chunk (when stored).
+# TYPE loki_ingester_chunk_entries histogram
+loki_ingester_chunk_entries_bucket{le="200"} 16
+loki_ingester_chunk_entries_bucket{le="400"} 16
+loki_ingester_chunk_entries_bucket{le="800"} 16
+loki_ingester_chunk_entries_bucket{le="1600"} 17
+loki_ingester_chunk_entries_bucket{le="3200"} 17
+loki_ingester_chunk_entries_bucket{le="6400"} 17
+loki_ingester_chunk_entries_bucket{le="12800"} 17
+loki_ingester_chunk_entries_bucket{le="25600"} 17
+loki_ingester_chunk_entries_bucket{le="51200"} 17
+loki_ingester_chunk_entries_bucket{le="+Inf"} 17
+loki_ingester_chunk_entries_sum 1370
+loki_ingester_chunk_entries_count 17
+# HELP loki_ingester_chunk_size_bytes Distribution of stored chunk sizes (when stored).
+# TYPE loki_ingester_chunk_size_bytes histogram
+loki_ingester_chunk_size_bytes_bucket{le="20000"} 16
+loki_ingester_chunk_size_bytes_bucket{le="40000"} 16
+loki_ingester_chunk_size_bytes_bucket{le="80000"} 17
+loki_ingester_chunk_size_bytes_bucket{le="160000"} 17
+loki_ingester_chunk_size_bytes_bucket{le="320000"} 17
+loki_ingester_chunk_size_bytes_bucket{le="640000"} 17
+loki_ingester_chunk_size_bytes_bucket{le="1.28e+06"} 17
+loki_ingester_chunk_size_bytes_bucket{le="2.56e+06"} 17
+loki_ingester_chunk_size_bytes_bucket{le="5.12e+06"} 17
+loki_ingester_chunk_size_bytes_bucket{le="1.024e+07"} 17
+loki_ingester_chunk_size_bytes_bucket{le="+Inf"} 17
+loki_ingester_chunk_size_bytes_sum 67820
+loki_ingester_chunk_size_bytes_count 17
+# HELP loki_ingester_chunk_stored_bytes_total Total bytes stored in chunks per tenant.
+# TYPE loki_ingester_chunk_stored_bytes_total counter
+loki_ingester_chunk_stored_bytes_total{tenant="fake"} 67820
+# HELP loki_ingester_chunk_utilization Distribution of stored chunk utilization (when stored).
+# TYPE loki_ingester_chunk_utilization histogram
+loki_ingester_chunk_utilization_bucket{le="0"} 0
+loki_ingester_chunk_utilization_bucket{le="0.2"} 17
+loki_ingester_chunk_utilization_bucket{le="0.4"} 17
+loki_ingester_chunk_utilization_bucket{le="0.6000000000000001"} 17
+loki_ingester_chunk_utilization_bucket{le="0.8"} 17
+loki_ingester_chunk_utilization_bucket{le="1"} 17
+loki_ingester_chunk_utilization_bucket{le="+Inf"} 17
+loki_ingester_chunk_utilization_sum 0.039868672688802086
+loki_ingester_chunk_utilization_count 17
+# HELP loki_ingester_chunks_created_total The total number of chunks created in the ingester.
+# TYPE loki_ingester_chunks_created_total counter
+loki_ingester_chunks_created_total 20
+# HELP loki_ingester_chunks_flushed_total Total flushed chunks per reason.
+# TYPE loki_ingester_chunks_flushed_total counter
+loki_ingester_chunks_flushed_total{reason="idle"} 17
+# HELP loki_ingester_chunks_stored_total Total stored chunks per tenant.
+# TYPE loki_ingester_chunks_stored_total counter
+loki_ingester_chunks_stored_total{tenant="fake"} 17
+# HELP loki_ingester_client_request_duration_seconds Time spent doing Ingester requests.
+# TYPE loki_ingester_client_request_duration_seconds histogram
+loki_ingester_client_request_duration_seconds_bucket{operation="/grpc.health.v1.Health/Check",status_code="2xx",le="0.001"} 161
+loki_ingester_client_request_duration_seconds_bucket{operation="/grpc.health.v1.Health/Check",status_code="2xx",le="0.004"} 332
+loki_ingester_client_request_duration_seconds_bucket{operation="/grpc.health.v1.Health/Check",status_code="2xx",le="0.016"} 334
+loki_ingester_client_request_duration_seconds_bucket{operation="/grpc.health.v1.Health/Check",status_code="2xx",le="0.064"} 334
+loki_ingester_client_request_duration_seconds_bucket{operation="/grpc.health.v1.Health/Check",status_code="2xx",le="0.256"} 334
+loki_ingester_client_request_duration_seconds_bucket{operation="/grpc.health.v1.Health/Check",status_code="2xx",le="1.024"} 334
+loki_ingester_client_request_duration_seconds_bucket{operation="/grpc.health.v1.Health/Check",status_code="2xx",le="+Inf"} 334
+loki_ingester_client_request_duration_seconds_sum{operation="/grpc.health.v1.Health/Check",status_code="2xx"} 0.30961935100000004
+loki_ingester_client_request_duration_seconds_count{operation="/grpc.health.v1.Health/Check",status_code="2xx"} 334
+loki_ingester_client_request_duration_seconds_bucket{operation="/logproto.Pusher/Push",status_code="2xx",le="0.001"} 270
+loki_ingester_client_request_duration_seconds_bucket{operation="/logproto.Pusher/Push",status_code="2xx",le="0.004"} 704
+loki_ingester_client_request_duration_seconds_bucket{operation="/logproto.Pusher/Push",status_code="2xx",le="0.016"} 718
+loki_ingester_client_request_duration_seconds_bucket{operation="/logproto.Pusher/Push",status_code="2xx",le="0.064"} 718
+loki_ingester_client_request_duration_seconds_bucket{operation="/logproto.Pusher/Push",status_code="2xx",le="0.256"} 718
+loki_ingester_client_request_duration_seconds_bucket{operation="/logproto.Pusher/Push",status_code="2xx",le="1.024"} 718
+loki_ingester_client_request_duration_seconds_bucket{operation="/logproto.Pusher/Push",status_code="2xx",le="+Inf"} 718
+loki_ingester_client_request_duration_seconds_sum{operation="/logproto.Pusher/Push",status_code="2xx"} 0.913277617
+loki_ingester_client_request_duration_seconds_count{operation="/logproto.Pusher/Push",status_code="2xx"} 718
+# HELP loki_ingester_limiter_enabled Whether the ingester's limiter is enabled
+# TYPE loki_ingester_limiter_enabled gauge
+loki_ingester_limiter_enabled 1
+# HELP loki_ingester_memory_chunks The total number of chunks in memory.
+# TYPE loki_ingester_memory_chunks gauge
+loki_ingester_memory_chunks 3
+# HELP loki_ingester_memory_streams The total number of streams in memory per tenant.
+# TYPE loki_ingester_memory_streams gauge
+loki_ingester_memory_streams{tenant="fake"} 3
+# HELP loki_ingester_memory_streams_labels_bytes Total bytes of labels of the streams in memory.
+# TYPE loki_ingester_memory_streams_labels_bytes gauge
+loki_ingester_memory_streams_labels_bytes 433
+# HELP loki_ingester_received_chunks The total number of chunks received by this ingester whilst joining.
+# TYPE loki_ingester_received_chunks counter
+loki_ingester_received_chunks 0
+# HELP loki_ingester_samples_per_chunk The number of samples in a chunk.
+# TYPE loki_ingester_samples_per_chunk histogram
+loki_ingester_samples_per_chunk_bucket{le="4096"} 0
+loki_ingester_samples_per_chunk_bucket{le="6144"} 0
+loki_ingester_samples_per_chunk_bucket{le="8192"} 0
+loki_ingester_samples_per_chunk_bucket{le="10240"} 0
+loki_ingester_samples_per_chunk_bucket{le="12288"} 0
+loki_ingester_samples_per_chunk_bucket{le="14336"} 0
+loki_ingester_samples_per_chunk_bucket{le="+Inf"} 0
+loki_ingester_samples_per_chunk_sum 0
+loki_ingester_samples_per_chunk_count 0
+# HELP loki_ingester_sent_chunks The total number of chunks sent by this ingester whilst leaving.
+# TYPE loki_ingester_sent_chunks counter
+loki_ingester_sent_chunks 0
+# HELP loki_ingester_shutdown_marker 1 if prepare shutdown has been called, 0 otherwise
+# TYPE loki_ingester_shutdown_marker gauge
+loki_ingester_shutdown_marker 0
+# HELP loki_ingester_streams_created_total The total number of streams created per tenant.
+# TYPE loki_ingester_streams_created_total counter
+loki_ingester_streams_created_total{tenant="fake"} 20
+# HELP loki_ingester_streams_removed_total The total number of streams removed per tenant.
+# TYPE loki_ingester_streams_removed_total counter
+loki_ingester_streams_removed_total{tenant="fake"} 17
+# HELP loki_ingester_wal_bytes_in_use Total number of bytes in use by the WAL recovery process.
+# TYPE loki_ingester_wal_bytes_in_use gauge
+loki_ingester_wal_bytes_in_use 0
+# HELP loki_ingester_wal_disk_full_failures_total Total number of wal write failures due to full disk.
+# TYPE loki_ingester_wal_disk_full_failures_total counter
+loki_ingester_wal_disk_full_failures_total 0
+# HELP loki_ingester_wal_duplicate_entries_total Entries discarded during WAL replay due to existing in checkpoints.
+# TYPE loki_ingester_wal_duplicate_entries_total counter
+loki_ingester_wal_duplicate_entries_total 0
+# HELP loki_ingester_wal_logged_bytes_total Total number of bytes written to disk for WAL records.
+# TYPE loki_ingester_wal_logged_bytes_total counter
+loki_ingester_wal_logged_bytes_total 1.690095e+06
+# HELP loki_ingester_wal_records_logged_total Total number of WAL records logged.
+# TYPE loki_ingester_wal_records_logged_total counter
+loki_ingester_wal_records_logged_total 730
+# HELP loki_ingester_wal_recovered_bytes_total Total number of bytes recovered from the WAL.
+# TYPE loki_ingester_wal_recovered_bytes_total counter
+loki_ingester_wal_recovered_bytes_total 0
+# HELP loki_ingester_wal_recovered_chunks_total Total number of chunks recovered from the WAL checkpoints.
+# TYPE loki_ingester_wal_recovered_chunks_total counter
+loki_ingester_wal_recovered_chunks_total 0
+# HELP loki_ingester_wal_recovered_entries_total Total number of entries recovered from the WAL.
+# TYPE loki_ingester_wal_recovered_entries_total counter
+loki_ingester_wal_recovered_entries_total 0
+# HELP loki_ingester_wal_recovered_streams_total Total number of streams recovered from the WAL.
+# TYPE loki_ingester_wal_recovered_streams_total counter
+loki_ingester_wal_recovered_streams_total 0
+# HELP loki_ingester_wal_replay_active Whether the WAL is replaying
+# TYPE loki_ingester_wal_replay_active gauge
+loki_ingester_wal_replay_active 0
+# HELP loki_ingester_wal_replay_duration_seconds Time taken to replay the checkpoint and the WAL.
+# TYPE loki_ingester_wal_replay_duration_seconds gauge
+loki_ingester_wal_replay_duration_seconds 0.000988595
+# HELP loki_ingester_wal_replay_flushing Whether the wal replay is in a flushing phase due to backpressure
+# TYPE loki_ingester_wal_replay_flushing gauge
+loki_ingester_wal_replay_flushing 0
+# HELP loki_internal_log_messages_total Total number of log messages created by Loki itself.
+# TYPE loki_internal_log_messages_total counter
+loki_internal_log_messages_total{level="debug"} 43115
+loki_internal_log_messages_total{level="error"} 0
+loki_internal_log_messages_total{level="info"} 615
+loki_internal_log_messages_total{level="warn"} 3
+# HELP loki_kv_request_duration_seconds Time spent on kv store requests.
+# TYPE loki_kv_request_duration_seconds histogram
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.005"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.01"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.025"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.05"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.1"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.25"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.5"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="1"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="2.5"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="5"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="10"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory",le="+Inf"} 338
+loki_kv_request_duration_seconds_sum{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory"} 0.0757853909999999
+loki_kv_request_duration_seconds_count{kv_name="compactor",operation="CAS",role="primary",status_code="200",type="inmemory"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="0.005"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="0.01"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="0.025"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="0.05"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="0.1"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="0.25"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="0.5"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="1"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="2.5"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="5"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="10"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory",le="+Inf"} 1
+loki_kv_request_duration_seconds_sum{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory"} 4.1082e-05
+loki_kv_request_duration_seconds_count{kv_name="compactor",operation="GET",role="primary",status_code="200",type="inmemory"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.005"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.01"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.025"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.05"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.1"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.25"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="0.5"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="1"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="2.5"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="5"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="10"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory",le="+Inf"} 338
+loki_kv_request_duration_seconds_sum{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory"} 0.07630702300000003
+loki_kv_request_duration_seconds_count{kv_name="scheduler",operation="CAS",role="primary",status_code="200",type="inmemory"} 338
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.005"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.01"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.025"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.05"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.1"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.25"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="0.5"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="1"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="2.5"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="5"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="10"} 1
+loki_kv_request_duration_seconds_bucket{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory",le="+Inf"} 1
+loki_kv_request_duration_seconds_sum{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory"} 4.7123e-05
+loki_kv_request_duration_seconds_count{kv_name="scheduler",operation="GET",role="primary",status_code="200",type="inmemory"} 1
+# HELP loki_log_flushes Histogram of log flushes using the line-buffered logger.
+# TYPE loki_log_flushes histogram
+loki_log_flushes_bucket{le="1"} 0
+loki_log_flushes_bucket{le="2"} 0
+loki_log_flushes_bucket{le="4"} 1
+loki_log_flushes_bucket{le="8"} 1
+loki_log_flushes_bucket{le="16"} 1
+loki_log_flushes_bucket{le="32"} 1
+loki_log_flushes_bucket{le="64"} 1
+loki_log_flushes_bucket{le="128"} 1
+loki_log_flushes_bucket{le="256"} 1
+loki_log_flushes_bucket{le="+Inf"} 1
+loki_log_flushes_sum 3
+loki_log_flushes_count 1
+# HELP loki_log_messages_total DEPRECATED. Use internal_log_messages_total for the same functionality. Total number of log messages created by Loki itself.
+# TYPE loki_log_messages_total counter
+loki_log_messages_total{level="debug"} 43115
+loki_log_messages_total{level="error"} 0
+loki_log_messages_total{level="info"} 615
+loki_log_messages_total{level="warn"} 3
+# HELP loki_logql_querystats_duplicates_total Total count of duplicates found while executing LogQL queries.
+# TYPE loki_logql_querystats_duplicates_total counter
+loki_logql_querystats_duplicates_total 0
+# HELP loki_logql_querystats_ingester_sent_lines_total Total count of lines sent from ingesters while executing LogQL queries.
+# TYPE loki_logql_querystats_ingester_sent_lines_total counter
+loki_logql_querystats_ingester_sent_lines_total 0
+# HELP loki_panic_total The total number of panic triggered
+# TYPE loki_panic_total counter
+loki_panic_total 0
+# HELP loki_querier_index_cache_corruptions_total The number of cache corruptions for the index cache.
+# TYPE loki_querier_index_cache_corruptions_total counter
+loki_querier_index_cache_corruptions_total 0
+# HELP loki_querier_index_cache_encode_errors_total The number of errors for the index cache while encoding the body.
+# TYPE loki_querier_index_cache_encode_errors_total counter
+loki_querier_index_cache_encode_errors_total 0
+# HELP loki_querier_index_cache_gets_total The number of gets for the index cache.
+# TYPE loki_querier_index_cache_gets_total counter
+loki_querier_index_cache_gets_total 0
+# HELP loki_querier_index_cache_hits_total The number of cache hits for the index cache.
+# TYPE loki_querier_index_cache_hits_total counter
+loki_querier_index_cache_hits_total 0
+# HELP loki_querier_index_cache_puts_total The number of puts for the index cache.
+# TYPE loki_querier_index_cache_puts_total counter
+loki_querier_index_cache_puts_total 0
+# HELP loki_querier_query_frontend_clients The current number of clients connected to query-frontend.
+# TYPE loki_querier_query_frontend_clients gauge
+loki_querier_query_frontend_clients 0
+# HELP loki_querier_tail_active Number of active tailers
+# TYPE loki_querier_tail_active gauge
+loki_querier_tail_active 0
+# HELP loki_querier_tail_active_streams Number of active streams being tailed
+# TYPE loki_querier_tail_active_streams gauge
+loki_querier_tail_active_streams 0
+# HELP loki_querier_tail_bytes_total total bytes tailed
+# TYPE loki_querier_tail_bytes_total counter
+loki_querier_tail_bytes_total 0
+# HELP loki_querier_worker_concurrency Number of concurrent querier workers
+# TYPE loki_querier_worker_concurrency gauge
+loki_querier_worker_concurrency 10
+# HELP loki_querier_worker_inflight_queries Number of queries being processed by the querier workers
+# TYPE loki_querier_worker_inflight_queries gauge
+loki_querier_worker_inflight_queries 0
+# HELP loki_query_frontend_log_result_cache_hit_total
+# TYPE loki_query_frontend_log_result_cache_hit_total counter
+loki_query_frontend_log_result_cache_hit_total 0
+# HELP loki_query_frontend_log_result_cache_miss_total
+# TYPE loki_query_frontend_log_result_cache_miss_total counter
+loki_query_frontend_log_result_cache_miss_total 0
+# HELP loki_query_frontend_partitions Number of time-based partitions (sub-requests) per request
+# TYPE loki_query_frontend_partitions histogram
+loki_query_frontend_partitions_bucket{le="1"} 0
+loki_query_frontend_partitions_bucket{le="4"} 0
+loki_query_frontend_partitions_bucket{le="16"} 0
+loki_query_frontend_partitions_bucket{le="64"} 0
+loki_query_frontend_partitions_bucket{le="256"} 0
+loki_query_frontend_partitions_bucket{le="+Inf"} 0
+loki_query_frontend_partitions_sum 0
+loki_query_frontend_partitions_count 0
+# HELP loki_query_frontend_shard_factor Number of downstream queries per request
+# TYPE loki_query_frontend_shard_factor histogram
+loki_query_frontend_shard_factor_bucket{mapper="range",le="1"} 0
+loki_query_frontend_shard_factor_bucket{mapper="range",le="4"} 0
+loki_query_frontend_shard_factor_bucket{mapper="range",le="16"} 0
+loki_query_frontend_shard_factor_bucket{mapper="range",le="64"} 0
+loki_query_frontend_shard_factor_bucket{mapper="range",le="256"} 0
+loki_query_frontend_shard_factor_bucket{mapper="range",le="1024"} 0
+loki_query_frontend_shard_factor_bucket{mapper="range",le="4096"} 0
+loki_query_frontend_shard_factor_bucket{mapper="range",le="16384"} 0
+loki_query_frontend_shard_factor_bucket{mapper="range",le="+Inf"} 0
+loki_query_frontend_shard_factor_sum{mapper="range"} 0
+loki_query_frontend_shard_factor_count{mapper="range"} 0
+loki_query_frontend_shard_factor_bucket{mapper="shard",le="1"} 0
+loki_query_frontend_shard_factor_bucket{mapper="shard",le="4"} 0
+loki_query_frontend_shard_factor_bucket{mapper="shard",le="16"} 0
+loki_query_frontend_shard_factor_bucket{mapper="shard",le="64"} 0
+loki_query_frontend_shard_factor_bucket{mapper="shard",le="256"} 0
+loki_query_frontend_shard_factor_bucket{mapper="shard",le="1024"} 0
+loki_query_frontend_shard_factor_bucket{mapper="shard",le="4096"} 0
+loki_query_frontend_shard_factor_bucket{mapper="shard",le="16384"} 0
+loki_query_frontend_shard_factor_bucket{mapper="shard",le="+Inf"} 0
+loki_query_frontend_shard_factor_sum{mapper="shard"} 0
+loki_query_frontend_shard_factor_count{mapper="shard"} 0
+# HELP loki_rate_store_expired_streams_total The number of streams that have been expired by the ratestore
+# TYPE loki_rate_store_expired_streams_total counter
+loki_rate_store_expired_streams_total 0
+# HELP loki_rate_store_max_stream_rate_bytes The maximum stream rate for any stream reported by ingesters during a sync operation. Sharded Streams are combined.
+# TYPE loki_rate_store_max_stream_rate_bytes gauge
+loki_rate_store_max_stream_rate_bytes 0
+# HELP loki_rate_store_max_stream_shards The number of shards for a single stream reported by ingesters during a sync operation.
+# TYPE loki_rate_store_max_stream_shards gauge
+loki_rate_store_max_stream_shards 0
+# HELP loki_rate_store_max_unique_stream_rate_bytes The maximum stream rate for any stream reported by ingesters during a sync operation. Sharded Streams are considered separate.
+# TYPE loki_rate_store_max_unique_stream_rate_bytes gauge
+loki_rate_store_max_unique_stream_rate_bytes 0
+# HELP loki_rate_store_stream_rate_bytes The distribution of stream rates for any stream reported by ingesters during a sync operation. Sharded Streams are combined.
+# TYPE loki_rate_store_stream_rate_bytes histogram
+loki_rate_store_stream_rate_bytes_bucket{le="20000"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="40000"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="80000"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="160000"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="320000"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="640000"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="1.28e+06"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="2.56e+06"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="5.12e+06"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="1.024e+07"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="2.048e+07"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="4.096e+07"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="8.192e+07"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="1.6384e+08"} 0
+loki_rate_store_stream_rate_bytes_bucket{le="+Inf"} 0
+loki_rate_store_stream_rate_bytes_sum 0
+loki_rate_store_stream_rate_bytes_count 0
+# HELP loki_rate_store_stream_shards The distribution of number of shards for a single stream reported by ingesters during a sync operation.
+# TYPE loki_rate_store_stream_shards histogram
+loki_rate_store_stream_shards_bucket{le="0"} 0
+loki_rate_store_stream_shards_bucket{le="1"} 0
+loki_rate_store_stream_shards_bucket{le="2"} 0
+loki_rate_store_stream_shards_bucket{le="4"} 0
+loki_rate_store_stream_shards_bucket{le="8"} 0
+loki_rate_store_stream_shards_bucket{le="16"} 0
+loki_rate_store_stream_shards_bucket{le="32"} 0
+loki_rate_store_stream_shards_bucket{le="64"} 0
+loki_rate_store_stream_shards_bucket{le="128"} 0
+loki_rate_store_stream_shards_bucket{le="+Inf"} 0
+loki_rate_store_stream_shards_sum 0
+loki_rate_store_stream_shards_count 0
+# HELP loki_rate_store_streams The number of unique streams reported by all ingesters. Sharded streams are combined
+# TYPE loki_rate_store_streams gauge
+loki_rate_store_streams 0
+# HELP loki_request_duration_seconds Time (in seconds) spent serving HTTP requests.
+# TYPE loki_request_duration_seconds histogram
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="0.005"} 11
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="0.01"} 211
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="0.025"} 618
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="0.05"} 668
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="0.1"} 668
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="0.25"} 668
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="0.5"} 668
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="1"} 668
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="2.5"} 668
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="5"} 668
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="10"} 668
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="25"} 668
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="50"} 668
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="100"} 668
+loki_request_duration_seconds_bucket{method="GET",route="metrics",status_code="200",ws="false",le="+Inf"} 668
+loki_request_duration_seconds_sum{method="GET",route="metrics",status_code="200",ws="false"} 10.290103742999994
+loki_request_duration_seconds_count{method="GET",route="metrics",status_code="200",ws="false"} 668
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="0.005"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="0.01"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="0.025"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="0.05"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="0.1"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="0.25"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="0.5"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="1"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="2.5"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="5"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="10"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="25"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="50"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="100"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="200",ws="false",le="+Inf"} 669
+loki_request_duration_seconds_sum{method="GET",route="ready",status_code="200",ws="false"} 0.035349055000000004
+loki_request_duration_seconds_count{method="GET",route="ready",status_code="200",ws="false"} 669
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="0.005"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="0.01"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="0.025"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="0.05"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="0.1"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="0.25"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="0.5"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="1"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="2.5"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="5"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="10"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="25"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="50"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="100"} 2
+loki_request_duration_seconds_bucket{method="GET",route="ready",status_code="503",ws="false",le="+Inf"} 2
+loki_request_duration_seconds_sum{method="GET",route="ready",status_code="503",ws="false"} 0.00019914
+loki_request_duration_seconds_count{method="GET",route="ready",status_code="503",ws="false"} 2
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="0.005"} 697
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="0.01"} 717
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="0.025"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="0.05"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="0.1"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="0.25"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="0.5"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="1"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="2.5"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="5"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="10"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="25"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="50"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="100"} 718
+loki_request_duration_seconds_bucket{method="POST",route="loki_api_v1_push",status_code="204",ws="false",le="+Inf"} 718
+loki_request_duration_seconds_sum{method="POST",route="loki_api_v1_push",status_code="204",ws="false"} 1.4811765909999985
+loki_request_duration_seconds_count{method="POST",route="loki_api_v1_push",status_code="204",ws="false"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="0.005"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="0.01"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="0.025"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="0.05"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="0.1"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="0.25"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="0.5"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="1"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="2.5"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="5"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="10"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="25"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="50"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="100"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false",le="+Inf"} 334
+loki_request_duration_seconds_sum{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false"} 0.003967622
+loki_request_duration_seconds_count{method="gRPC",route="/grpc.health.v1.Health/Check",status_code="success",ws="false"} 334
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="0.005"} 716
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="0.01"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="0.025"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="0.05"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="0.1"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="0.25"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="0.5"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="1"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="2.5"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="5"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="10"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="25"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="50"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="100"} 718
+loki_request_duration_seconds_bucket{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false",le="+Inf"} 718
+loki_request_duration_seconds_sum{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false"} 0.157192234
+loki_request_duration_seconds_count{method="gRPC",route="/logproto.Pusher/Push",status_code="success",ws="false"} 718
+# HELP loki_request_message_bytes Size (in bytes) of messages received in the request.
+# TYPE loki_request_message_bytes histogram
+loki_request_message_bytes_bucket{method="GET",route="metrics",le="1.048576e+06"} 668
+loki_request_message_bytes_bucket{method="GET",route="metrics",le="2.62144e+06"} 668
+loki_request_message_bytes_bucket{method="GET",route="metrics",le="5.24288e+06"} 668
+loki_request_message_bytes_bucket{method="GET",route="metrics",le="1.048576e+07"} 668
+loki_request_message_bytes_bucket{method="GET",route="metrics",le="2.62144e+07"} 668
+loki_request_message_bytes_bucket{method="GET",route="metrics",le="5.24288e+07"} 668
+loki_request_message_bytes_bucket{method="GET",route="metrics",le="1.048576e+08"} 668
+loki_request_message_bytes_bucket{method="GET",route="metrics",le="2.62144e+08"} 668
+loki_request_message_bytes_bucket{method="GET",route="metrics",le="+Inf"} 668
+loki_request_message_bytes_sum{method="GET",route="metrics"} 0
+loki_request_message_bytes_count{method="GET",route="metrics"} 668
+loki_request_message_bytes_bucket{method="GET",route="ready",le="1.048576e+06"} 671
+loki_request_message_bytes_bucket{method="GET",route="ready",le="2.62144e+06"} 671
+loki_request_message_bytes_bucket{method="GET",route="ready",le="5.24288e+06"} 671
+loki_request_message_bytes_bucket{method="GET",route="ready",le="1.048576e+07"} 671
+loki_request_message_bytes_bucket{method="GET",route="ready",le="2.62144e+07"} 671
+loki_request_message_bytes_bucket{method="GET",route="ready",le="5.24288e+07"} 671
+loki_request_message_bytes_bucket{method="GET",route="ready",le="1.048576e+08"} 671
+loki_request_message_bytes_bucket{method="GET",route="ready",le="2.62144e+08"} 671
+loki_request_message_bytes_bucket{method="GET",route="ready",le="+Inf"} 671
+loki_request_message_bytes_sum{method="GET",route="ready"} 0
+loki_request_message_bytes_count{method="GET",route="ready"} 671
+loki_request_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="1.048576e+06"} 718
+loki_request_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="2.62144e+06"} 718
+loki_request_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="5.24288e+06"} 718
+loki_request_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="1.048576e+07"} 718
+loki_request_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="2.62144e+07"} 718
+loki_request_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="5.24288e+07"} 718
+loki_request_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="1.048576e+08"} 718
+loki_request_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="2.62144e+08"} 718
+loki_request_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="+Inf"} 718
+loki_request_message_bytes_sum{method="POST",route="loki_api_v1_push"} 776856
+loki_request_message_bytes_count{method="POST",route="loki_api_v1_push"} 718
+loki_request_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="1.048576e+06"} 334
+loki_request_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="2.62144e+06"} 334
+loki_request_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="5.24288e+06"} 334
+loki_request_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="1.048576e+07"} 334
+loki_request_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="2.62144e+07"} 334
+loki_request_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="5.24288e+07"} 334
+loki_request_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="1.048576e+08"} 334
+loki_request_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="2.62144e+08"} 334
+loki_request_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="+Inf"} 334
+loki_request_message_bytes_sum{method="gRPC",route="/grpc.health.v1.Health/Check"} 1670
+loki_request_message_bytes_count{method="gRPC",route="/grpc.health.v1.Health/Check"} 334
+loki_request_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="1.048576e+06"} 718
+loki_request_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="2.62144e+06"} 718
+loki_request_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="5.24288e+06"} 718
+loki_request_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="1.048576e+07"} 718
+loki_request_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="2.62144e+07"} 718
+loki_request_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="5.24288e+07"} 718
+loki_request_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="1.048576e+08"} 718
+loki_request_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="2.62144e+08"} 718
+loki_request_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="+Inf"} 718
+loki_request_message_bytes_sum{method="gRPC",route="/logproto.Pusher/Push"} 1.900537e+06
+loki_request_message_bytes_count{method="gRPC",route="/logproto.Pusher/Push"} 718
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="1.048576e+06"} 5
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="2.62144e+06"} 5
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="5.24288e+06"} 5
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="1.048576e+07"} 5
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="2.62144e+07"} 5
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="5.24288e+07"} 5
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="1.048576e+08"} 5
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="2.62144e+08"} 5
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="+Inf"} 5
+loki_request_message_bytes_sum{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop"} 120
+loki_request_message_bytes_count{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop"} 5
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop",le="1.048576e+06"} 10
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop",le="2.62144e+06"} 10
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop",le="5.24288e+06"} 10
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop",le="1.048576e+07"} 10
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop",le="2.62144e+07"} 10
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop",le="5.24288e+07"} 10
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop",le="1.048576e+08"} 10
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop",le="2.62144e+08"} 10
+loki_request_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop",le="+Inf"} 10
+loki_request_message_bytes_sum{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop"} 280
+loki_request_message_bytes_count{method="gRPC",route="/schedulerpb.SchedulerForQuerier/QuerierLoop"} 10
+# HELP loki_response_message_bytes Size (in bytes) of messages sent in response.
+# TYPE loki_response_message_bytes histogram
+loki_response_message_bytes_bucket{method="GET",route="metrics",le="1.048576e+06"} 668
+loki_response_message_bytes_bucket{method="GET",route="metrics",le="2.62144e+06"} 668
+loki_response_message_bytes_bucket{method="GET",route="metrics",le="5.24288e+06"} 668
+loki_response_message_bytes_bucket{method="GET",route="metrics",le="1.048576e+07"} 668
+loki_response_message_bytes_bucket{method="GET",route="metrics",le="2.62144e+07"} 668
+loki_response_message_bytes_bucket{method="GET",route="metrics",le="5.24288e+07"} 668
+loki_response_message_bytes_bucket{method="GET",route="metrics",le="1.048576e+08"} 668
+loki_response_message_bytes_bucket{method="GET",route="metrics",le="2.62144e+08"} 668
+loki_response_message_bytes_bucket{method="GET",route="metrics",le="+Inf"} 668
+loki_response_message_bytes_sum{method="GET",route="metrics"} 1.1605551e+07
+loki_response_message_bytes_count{method="GET",route="metrics"} 668
+loki_response_message_bytes_bucket{method="GET",route="ready",le="1.048576e+06"} 671
+loki_response_message_bytes_bucket{method="GET",route="ready",le="2.62144e+06"} 671
+loki_response_message_bytes_bucket{method="GET",route="ready",le="5.24288e+06"} 671
+loki_response_message_bytes_bucket{method="GET",route="ready",le="1.048576e+07"} 671
+loki_response_message_bytes_bucket{method="GET",route="ready",le="2.62144e+07"} 671
+loki_response_message_bytes_bucket{method="GET",route="ready",le="5.24288e+07"} 671
+loki_response_message_bytes_bucket{method="GET",route="ready",le="1.048576e+08"} 671
+loki_response_message_bytes_bucket{method="GET",route="ready",le="2.62144e+08"} 671
+loki_response_message_bytes_bucket{method="GET",route="ready",le="+Inf"} 671
+loki_response_message_bytes_sum{method="GET",route="ready"} 4122
+loki_response_message_bytes_count{method="GET",route="ready"} 671
+loki_response_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="1.048576e+06"} 718
+loki_response_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="2.62144e+06"} 718
+loki_response_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="5.24288e+06"} 718
+loki_response_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="1.048576e+07"} 718
+loki_response_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="2.62144e+07"} 718
+loki_response_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="5.24288e+07"} 718
+loki_response_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="1.048576e+08"} 718
+loki_response_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="2.62144e+08"} 718
+loki_response_message_bytes_bucket{method="POST",route="loki_api_v1_push",le="+Inf"} 718
+loki_response_message_bytes_sum{method="POST",route="loki_api_v1_push"} 0
+loki_response_message_bytes_count{method="POST",route="loki_api_v1_push"} 718
+loki_response_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="1.048576e+06"} 334
+loki_response_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="2.62144e+06"} 334
+loki_response_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="5.24288e+06"} 334
+loki_response_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="1.048576e+07"} 334
+loki_response_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="2.62144e+07"} 334
+loki_response_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="5.24288e+07"} 334
+loki_response_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="1.048576e+08"} 334
+loki_response_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="2.62144e+08"} 334
+loki_response_message_bytes_bucket{method="gRPC",route="/grpc.health.v1.Health/Check",le="+Inf"} 334
+loki_response_message_bytes_sum{method="gRPC",route="/grpc.health.v1.Health/Check"} 2338
+loki_response_message_bytes_count{method="gRPC",route="/grpc.health.v1.Health/Check"} 334
+loki_response_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="1.048576e+06"} 718
+loki_response_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="2.62144e+06"} 718
+loki_response_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="5.24288e+06"} 718
+loki_response_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="1.048576e+07"} 718
+loki_response_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="2.62144e+07"} 718
+loki_response_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="5.24288e+07"} 718
+loki_response_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="1.048576e+08"} 718
+loki_response_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="2.62144e+08"} 718
+loki_response_message_bytes_bucket{method="gRPC",route="/logproto.Pusher/Push",le="+Inf"} 718
+loki_response_message_bytes_sum{method="gRPC",route="/logproto.Pusher/Push"} 3590
+loki_response_message_bytes_count{method="gRPC",route="/logproto.Pusher/Push"} 718
+loki_response_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="1.048576e+06"} 5
+loki_response_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="2.62144e+06"} 5
+loki_response_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="5.24288e+06"} 5
+loki_response_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="1.048576e+07"} 5
+loki_response_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="2.62144e+07"} 5
+loki_response_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="5.24288e+07"} 5
+loki_response_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="1.048576e+08"} 5
+loki_response_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="2.62144e+08"} 5
+loki_response_message_bytes_bucket{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop",le="+Inf"} 5
+loki_response_message_bytes_sum{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop"} 25
+loki_response_message_bytes_count{method="gRPC",route="/schedulerpb.SchedulerForFrontend/FrontendLoop"} 5
+# HELP loki_results_cache_version_comparisons_total Comparisons of cache key versions in the results cache between query-frontends & queriers
+# TYPE loki_results_cache_version_comparisons_total counter
+loki_results_cache_version_comparisons_total 0
+# HELP loki_stream_sharding_count Total number of times the distributor has sharded streams
+# TYPE loki_stream_sharding_count counter
+loki_stream_sharding_count 0
+# HELP loki_tcp_connections Current number of accepted TCP connections.
+# TYPE loki_tcp_connections gauge
+loki_tcp_connections{protocol="grpc"} 4
+loki_tcp_connections{protocol="http"} 5
+# HELP loki_tcp_connections_limit The max number of TCP connections that can be accepted (0 means no limit).
+# TYPE loki_tcp_connections_limit gauge
+loki_tcp_connections_limit{protocol="grpc"} 0
+loki_tcp_connections_limit{protocol="http"} 0
+# HELP process_cpu_seconds_total Total user and system CPU time spent in seconds.
+# TYPE process_cpu_seconds_total counter
+process_cpu_seconds_total 39.67
+# HELP process_max_fds Maximum number of open file descriptors.
+# TYPE process_max_fds gauge
+process_max_fds 2.147483584e+09
+# HELP process_open_fds Number of open file descriptors.
+# TYPE process_open_fds gauge
+process_open_fds 25
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+process_resident_memory_bytes 1.12029696e+08
+# HELP process_start_time_seconds Start time of the process since unix epoch in seconds.
+# TYPE process_start_time_seconds gauge
+process_start_time_seconds 1.77367349227e+09
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+process_virtual_memory_bytes 1.395191808e+09
+# HELP process_virtual_memory_max_bytes Maximum amount of virtual memory available in bytes.
+# TYPE process_virtual_memory_max_bytes gauge
+process_virtual_memory_max_bytes 1.8446744073709552e+19
+# HELP prometheus_remote_storage_exemplars_in_total Exemplars in to remote storage, compare to exemplars out for queue managers.
+# TYPE prometheus_remote_storage_exemplars_in_total counter
+prometheus_remote_storage_exemplars_in_total 0
+# HELP prometheus_remote_storage_histograms_in_total HistogramSamples in to remote storage, compare to histograms out for queue managers.
+# TYPE prometheus_remote_storage_histograms_in_total counter
+prometheus_remote_storage_histograms_in_total 0
+# HELP prometheus_remote_storage_samples_in_total Samples in to remote storage, compare to samples out for queue managers.
+# TYPE prometheus_remote_storage_samples_in_total counter
+prometheus_remote_storage_samples_in_total 0
+# HELP prometheus_remote_storage_string_interner_zero_reference_releases_total The number of times release has been called for strings that are not interned.
+# TYPE prometheus_remote_storage_string_interner_zero_reference_releases_total counter
+prometheus_remote_storage_string_interner_zero_reference_releases_total 0
+# HELP prometheus_sd_dns_lookup_failures_total The number of DNS-SD lookup failures.
+# TYPE prometheus_sd_dns_lookup_failures_total counter
+prometheus_sd_dns_lookup_failures_total 0
+# HELP prometheus_sd_dns_lookups_total The number of DNS-SD lookups.
+# TYPE prometheus_sd_dns_lookups_total counter
+prometheus_sd_dns_lookups_total 0
+# HELP prometheus_target_scrape_pool_exceeded_label_limits_total Total number of times scrape pools hit the label limits, during sync or config reload.
+# TYPE prometheus_target_scrape_pool_exceeded_label_limits_total counter
+prometheus_target_scrape_pool_exceeded_label_limits_total 0
+# HELP prometheus_target_scrape_pool_exceeded_target_limit_total Total number of times scrape pools hit the target limit, during sync or config reload.
+# TYPE prometheus_target_scrape_pool_exceeded_target_limit_total counter
+prometheus_target_scrape_pool_exceeded_target_limit_total 0
+# HELP prometheus_target_scrape_pool_reloads_failed_total Total number of failed scrape pool reloads.
+# TYPE prometheus_target_scrape_pool_reloads_failed_total counter
+prometheus_target_scrape_pool_reloads_failed_total 0
+# HELP prometheus_target_scrape_pool_reloads_total Total number of scrape pool reloads.
+# TYPE prometheus_target_scrape_pool_reloads_total counter
+prometheus_target_scrape_pool_reloads_total 0
+# HELP prometheus_target_scrape_pools_failed_total Total number of scrape pool creations that failed.
+# TYPE prometheus_target_scrape_pools_failed_total counter
+prometheus_target_scrape_pools_failed_total 0
+# HELP prometheus_target_scrape_pools_total Total number of scrape pool creation attempts.
+# TYPE prometheus_target_scrape_pools_total counter
+prometheus_target_scrape_pools_total 0
+# HELP prometheus_target_scrapes_cache_flush_forced_total How many times a scrape cache was flushed due to getting big while scrapes are failing.
+# TYPE prometheus_target_scrapes_cache_flush_forced_total counter
+prometheus_target_scrapes_cache_flush_forced_total 0
+# HELP prometheus_target_scrapes_exceeded_body_size_limit_total Total number of scrapes that hit the body size limit
+# TYPE prometheus_target_scrapes_exceeded_body_size_limit_total counter
+prometheus_target_scrapes_exceeded_body_size_limit_total 0
+# HELP prometheus_target_scrapes_exceeded_sample_limit_total Total number of scrapes that hit the sample limit and were rejected.
+# TYPE prometheus_target_scrapes_exceeded_sample_limit_total counter
+prometheus_target_scrapes_exceeded_sample_limit_total 0
+# HELP prometheus_target_scrapes_exemplar_out_of_order_total Total number of exemplar rejected due to not being out of the expected order.
+# TYPE prometheus_target_scrapes_exemplar_out_of_order_total counter
+prometheus_target_scrapes_exemplar_out_of_order_total 0
+# HELP prometheus_target_scrapes_sample_duplicate_timestamp_total Total number of samples rejected due to duplicate timestamps but different values.
+# TYPE prometheus_target_scrapes_sample_duplicate_timestamp_total counter
+prometheus_target_scrapes_sample_duplicate_timestamp_total 0
+# HELP prometheus_target_scrapes_sample_out_of_bounds_total Total number of samples rejected due to timestamp falling outside of the time bounds.
+# TYPE prometheus_target_scrapes_sample_out_of_bounds_total counter
+prometheus_target_scrapes_sample_out_of_bounds_total 0
+# HELP prometheus_target_scrapes_sample_out_of_order_total Total number of samples rejected due to not being out of the expected order.
+# TYPE prometheus_target_scrapes_sample_out_of_order_total counter
+prometheus_target_scrapes_sample_out_of_order_total 0
+# HELP prometheus_template_text_expansion_failures_total The total number of template text expansion failures.
+# TYPE prometheus_template_text_expansion_failures_total counter
+prometheus_template_text_expansion_failures_total 0
+# HELP prometheus_template_text_expansions_total The total number of template text expansions.
+# TYPE prometheus_template_text_expansions_total counter
+prometheus_template_text_expansions_total 0
+# HELP prometheus_tsdb_wal_completed_pages_total Total number of completed pages.
+# TYPE prometheus_tsdb_wal_completed_pages_total counter
+prometheus_tsdb_wal_completed_pages_total 55
+# HELP prometheus_tsdb_wal_fsync_duration_seconds Duration of write log fsync.
+# TYPE prometheus_tsdb_wal_fsync_duration_seconds summary
+prometheus_tsdb_wal_fsync_duration_seconds{quantile="0.5"} 0.009209507
+prometheus_tsdb_wal_fsync_duration_seconds{quantile="0.9"} 0.009209507
+prometheus_tsdb_wal_fsync_duration_seconds{quantile="0.99"} 0.009209507
+prometheus_tsdb_wal_fsync_duration_seconds_sum 0.11005891100000001
+prometheus_tsdb_wal_fsync_duration_seconds_count 16
+# HELP prometheus_tsdb_wal_page_flushes_total Total number of page flushes.
+# TYPE prometheus_tsdb_wal_page_flushes_total counter
+prometheus_tsdb_wal_page_flushes_total 785
+# HELP prometheus_tsdb_wal_segment_current Write log segment index that TSDB is currently writing to.
+# TYPE prometheus_tsdb_wal_segment_current gauge
+prometheus_tsdb_wal_segment_current 16
+# HELP prometheus_tsdb_wal_storage_size_bytes Size of the write log directory.
+# TYPE prometheus_tsdb_wal_storage_size_bytes gauge
+prometheus_tsdb_wal_storage_size_bytes 535860
+# HELP prometheus_tsdb_wal_truncations_failed_total Total number of write log truncations that failed.
+# TYPE prometheus_tsdb_wal_truncations_failed_total counter
+prometheus_tsdb_wal_truncations_failed_total 0
+# HELP prometheus_tsdb_wal_truncations_total Total number of write log truncations attempted.
+# TYPE prometheus_tsdb_wal_truncations_total counter
+prometheus_tsdb_wal_truncations_total 16
+# HELP prometheus_tsdb_wal_writes_failed_total Total number of write log writes that failed.
+# TYPE prometheus_tsdb_wal_writes_failed_total counter
+prometheus_tsdb_wal_writes_failed_total 0
+# HELP querier_cache_added_new_total The total number of new entries added to the cache
+# TYPE querier_cache_added_new_total counter
+querier_cache_added_new_total{cache="chunksembedded-cache"} 17
+# HELP querier_cache_added_total The total number of Put calls on the cache
+# TYPE querier_cache_added_total counter
+querier_cache_added_total{cache="chunksembedded-cache"} 17
+# HELP querier_cache_entries The total number of entries
+# TYPE querier_cache_entries gauge
+querier_cache_entries{cache="chunksembedded-cache"} 17
+# HELP querier_cache_gets_total The total number of Get calls
+# TYPE querier_cache_gets_total counter
+querier_cache_gets_total{cache="chunksembedded-cache"} 17
+# HELP querier_cache_memory_bytes The current cache size in bytes
+# TYPE querier_cache_memory_bytes gauge
+querier_cache_memory_bytes{cache="chunksembedded-cache"} 135506
+# HELP querier_cache_misses_total The total number of Get calls that had no valid entry
+# TYPE querier_cache_misses_total counter
+querier_cache_misses_total{cache="chunksembedded-cache"} 17
+# HELP querier_cache_stale_gets_total The total number of Get calls that had an entry which expired (deprecated)
+# TYPE querier_cache_stale_gets_total counter
+querier_cache_stale_gets_total{cache="chunksembedded-cache"} 0
+# HELP ring_member_heartbeats_total The total number of heartbeats sent.
+# TYPE ring_member_heartbeats_total counter
+ring_member_heartbeats_total{name="compactor"} 336
+ring_member_heartbeats_total{name="scheduler"} 336
+# HELP ring_member_tokens_owned The number of tokens owned in the ring.
+# TYPE ring_member_tokens_owned gauge
+ring_member_tokens_owned{name="compactor"} 1
+ring_member_tokens_owned{name="scheduler"} 1
+# HELP ring_member_tokens_to_own The number of tokens to own in the ring.
+# TYPE ring_member_tokens_to_own gauge
+ring_member_tokens_to_own{name="compactor"} 1
+ring_member_tokens_to_own{name="scheduler"} 1
