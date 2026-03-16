@@ -1,3 +1,10 @@
+# Create app namespace first so vault_token and ESO resources have a target
+resource "kubernetes_namespace" "app_namespace" {
+  metadata {
+    name = var.namespace
+  }
+}
+
 # Install Vault
 resource "helm_release" "vault" {
   count = var.vault_enabled ? 1 : 0
@@ -80,7 +87,10 @@ resource "kubernetes_secret" "vault_token" {
     token = var.vault_root_token
   }
 
-  depends_on = [helm_release.external_secrets]
+  depends_on = [
+    helm_release.external_secrets,
+    kubernetes_namespace.app_namespace,
+  ]
 }
 
 
@@ -192,7 +202,7 @@ resource "helm_release" "api_observabilidade" {
   name             = var.helm_release_name
   chart            = var.helm_chart_path
   namespace        = var.namespace
-  create_namespace = true
+  create_namespace = false
 
   version = var.chart_version
   wait    = true
@@ -204,6 +214,7 @@ resource "helm_release" "api_observabilidade" {
   ]
 
   depends_on = [
+    kubernetes_namespace.app_namespace,
     helm_release.external_secrets,
     null_resource.vault_init,
     kubernetes_secret.vault_token,

@@ -23,13 +23,14 @@ export TF_VAR_mysql_root_password="qualquer_valor"
          │
          └──▶ mysql.yaml
                 env MYSQL_ROOT_PASSWORD ← secretKeyRef: mysql-secrets/MYSQL_ROOT_PASSWORD
-``` 
+```
 
-## Para configurar secret
+## Para configurar secret - Colocar no seu .zshrc
 
-`export TF_VAR_mysql_root_password="sua_senha"`
-`export TF_VAR_minio_root_password="sua_senha"`
-
+export TF_VAR_mysql_root_password="mysql-senha-supersecreta"
+export TF_VAR_minio_root_password="minio-senha-muito-boa"
+export MINIO_ROOT_USER="init-minio-root-user"
+export MINIO_ROOT_PASSWORD="init-minio-root-pass"
 
 # senhas minio
 ```
@@ -66,3 +67,50 @@ MYSQL_ROOT_PASSWORD	senha do root	root — só para admin
 DB_PASSWORD	senha da aplicação	usuário com permissões limitadas (SELECT, INSERT, etc.)
 
 Isso é o princípio de least privilege — a app nunca deveria ter acesso root ao banco.
+
+
+## Fluxo de senhas atualizadas
+
+env var (senha)
+    ↓
+null_resource.vault_init
+    → vault kv put secret/inventory ...  (escreve no Vault)
+    ↓
+kubernetes_secret.vault_token
+    → cria k8s secret com o token root do Vault
+    ↓
+null_resource.setup_external_secrets
+    → aplica ClusterSecretStore  (diz ao ESO: "Vault está em X, use esse token")
+    → aplica ExternalSecrets     (diz ao ESO: "leia 'inventory' do Vault e crie o k8s secret")
+    ↓
+ESO sincroniza
+    → cria mysql-secrets e inventory-app-secrets no namespace
+    ↓
+Pods consomem os k8s secrets
+
+
+### Senhas Minio inicial em docker
+
+env var (MINIO_ROOT_PASSWORD)
+         ↓
+null_resource.vault_init
+  → vault kv put secret/inventory MINIO_ROOT_PASSWORD=...  ← já acontece hoje
+         ↓
+null_resource.setup_external_secrets
+  → ExternalSecret minio-external-secret (a adicionar em manifests/external-secrets.yaml)
+         ↓
+ESO sincroniza
+  → cria minio-secrets k8s secret
+         ↓
+MinIO pod lê via secretKeyRef → minio-secrets / MINIO_ROOT_PASSWORD
+
+
+### Verificando o conteudo do minio init
+http://localhost:9101 --> via Docker
+
+ MINIO_ROOT_USER e MINIO_ROOT_PASSWORD
+
+
+### Verificando o conteudo do minio usado pelo Mimir
+TF_VAR_minio_root_password
+user: minio
