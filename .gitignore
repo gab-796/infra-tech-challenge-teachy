@@ -10,6 +10,9 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
+# Terraform plan files (binários gerados por terraform plan -out)
+tfplan*
+
 # Terraform directories
 .terraform/
 .terraform.lock.hcl
