@@ -32,6 +32,25 @@ spec:
             - name: tempo-config
               mountPath: /etc/tempo
               readOnly: true
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+          {{- if .Values.monitoring.healthChecks.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 3200
+            {{- toYaml .Values.monitoring.healthChecks.readinessProbe | nindent 10 }}
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: 3200
+            {{- toYaml .Values.monitoring.healthChecks.livenessProbe | nindent 10 }}
+          {{- end }}
       volumes:
         - name: tempo-storage
           persistentVolumeClaim:
