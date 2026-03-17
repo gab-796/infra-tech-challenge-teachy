@@ -63,6 +63,10 @@ bootstrap_minio_state() {
 
     if docker ps --format '{{.Names}}' | grep -q '^minio-state$'; then
         echo -e "${GREEN}✓ minio-state já está rodando${NC}"
+    elif docker ps -a --format '{{.Names}}' | grep -q '^minio-state$'; then
+        echo -e "${YELLOW}🔄 minio-state existe mas está parado, reiniciando...${NC}"
+        docker start minio-state
+        sleep 3
     else
         echo -e "${YELLOW}🚀 Iniciando MinIO para state backend...${NC}"
         docker run -d --name minio-state \
