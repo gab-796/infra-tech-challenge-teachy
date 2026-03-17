@@ -43,7 +43,7 @@ loki_enabled            = true
 tempo_enabled           = true
 mimir_enabled           = true
 pyroscope_enabled       = true
-alloy_enabled           = true
+alloy_enabled           = false
 otel_collector_enabled  = true
 
 # ========================================

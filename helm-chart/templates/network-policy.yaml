@@ -1,0 +1,103 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Values.inventoryApp.name }}-network-policy
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.inventoryApp.name }}
+    {{- with .Values.commonLabels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  # ========================================
+  # APLICAÇÃO ALVO DA POLICY
+  # ========================================
+  podSelector:
+    matchLabels:
+      app: {{ .Values.inventoryApp.name }}
+
+  # Especifica tanto ingress quanto egress
+  policyTypes:
+    - Ingress
+    - Egress
+
+  # ========================================
+  # REGRAS DE ENTRADA (Ingress)
+  # ========================================
+  ingress:
+    # 1. Tráfego HTTP da app (porta 10000)
+    # Aceita de qualquer namespace/pod (ingress externo, testes, prometheus)
+    - from:
+        - namespaceSelector: {}  # Permite de qualquer namespace
+        - podSelector: {}        # Permite de qualquer pod
+      ports:
+        - protocol: TCP
+          port: {{ .Values.inventoryApp.ports.http }}
+          name: http
+    # Porta de métricas
+    - from:
+        - namespaceSelector: {}
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.inventoryApp.ports.metrics }}
+          name: metrics
+  # ========================================
+  # REGRAS DE SAÍDA (Egress)
+  # ========================================
+  egress:
+    # 1. DNS — essencial para resolver nomes de serviços
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+    # 2. MySQL — banco de dados
+    - to:
+        - podSelector:
+            matchLabels:
+              app: {{ .Values.mysql.name }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.mysql.port }}
+
+    # 3. OTel Collector — OTLP gRPC (métricas, traces, logs)
+    # Port 4317 é obrigatório para OpenTelemetry OTLP gRPC
+    - to:
+        - podSelector:
+            matchLabels:
+              app: {{ .Values.otelCollector.name }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.otelCollector.ports.otlpGrpc }}
+
+    # 4. Pyroscope — Continuous Profiling (gRPC e HTTP)
+    - to:
+        - podSelector:
+            matchLabels:
+              app: {{ .Values.pyroscope.name }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.pyroscope.ports.http }}    # HTTP (4040)
+        - protocol: TCP
+          port: {{ .Values.pyroscope.ports.grpc }}    # gRPC (4041)
+
+    # 5. Kubernetes API — para verificações de saúde/metadata do cluster
+    #    Necessário se a app acessa o API server
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: default
+        - podSelector:
+            matchLabels:
+              component: kube-apiserver
+      ports:
+        - protocol: TCP
+          port: 443
+        - protocol: TCP
+          port: 6443
+{{- end }}

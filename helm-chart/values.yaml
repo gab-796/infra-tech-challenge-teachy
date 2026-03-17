@@ -14,7 +14,7 @@ global:
 inventoryApp:
   enabled: true
   name: inventory-app
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: gab796/inventory_app
     tag: v4.0
@@ -95,7 +95,7 @@ mysql:
 grafana:
   enabled: true
   name: grafana
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: grafana/grafana
     tag: 11.6.0
@@ -151,7 +151,7 @@ grafana:
 loki:
   enabled: true
   name: loki
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: grafana/loki
     tag: 2.9.5
@@ -193,7 +193,7 @@ loki:
 tempo:
   enabled: true
   name: tempo
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: grafana/tempo
     tag: 2.6.0
@@ -235,7 +235,7 @@ tempo:
 pyroscope:
   enabled: true
   name: pyroscope
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: grafana/pyroscope
     tag: 1.13.0
@@ -274,9 +274,9 @@ pyroscope:
 # ALLOY CONFIGURATION
 # ========================================
 alloy:
-  enabled: true
+  enabled: false  # ⚠️ Controlado pelo Terraform via terraform.tfvars (alloy_enabled)
   name: alloy
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: grafana/alloy
     tag: v1.9.1
@@ -313,7 +313,7 @@ alloy:
 mimir:
   enabled: true
   name: mimir
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: grafana/mimir
     tag: 2.13.0
@@ -602,9 +602,11 @@ monitoring:
     livenessProbe:
       initialDelaySeconds: 30
       periodSeconds: 10
+      failureThreshold: 5
     readinessProbe:
       initialDelaySeconds: 5
       periodSeconds: 5
+      failureThreshold: 5
 
 # ========================================
 # SCALING CONFIGURATION
@@ -636,6 +638,14 @@ commonAnnotations: {}
 
 # Image pull secrets for private registries
 imagePullSecrets: []
+
+# ========================================
+# NETWORK POLICY CONFIGURATION
+# ========================================
+# Segurança: Controla tráfego de rede entre pods
+# WARNING: Desabilitar pode quebrar tráfego de telemetria!
+networkPolicy:
+  enabled: true  # ⚠️  Mude para false se houver problemas de conectividade
 
 # Pod disruption budget
 podDisruptionBudget:

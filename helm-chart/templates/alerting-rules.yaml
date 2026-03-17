@@ -56,7 +56,7 @@ data:
               description: >-
                 Container {{ "{{" }} $labels.container {{ "}}" }} in pod
                 {{ "{{" }} $labels.pod {{ "}}" }} (namespace
-                {{ "{{" }} $labels.namespace {{ "}}" }}) is using more than
+                {{ "{{" }} $labels.exported_namespace {{ "}}" }}) is using more than
                 85% of its memory limit for 5 minutes.
 
           - alert: PodCrashLooping
@@ -68,6 +68,18 @@ data:
               summary: "Pod {{ "{{" }} $labels.pod {{ "}}" }} is crash looping"
               description: >-
                 Pod {{ "{{" }} $labels.pod {{ "}}" }} in namespace
-                {{ "{{" }} $labels.namespace {{ "}}" }} is restarting
+                {{ "{{" }} $labels.exported_namespace {{ "}}" }} is restarting
                 {{ "{{" }} printf "%.2f" $value {{ "}}" }} times per 5 minutes.
+
+          - alert: ManySuccessfulRequests
+            expr: promhttp_metric_handler_requests_total{code="200"} > 15
+            for: 1m
+            labels:
+              severity: info
+            annotations:
+              summary: "inventory-app pod is handling many successful requests"
+              description: >-
+                inventory-app in namespace
+                api-app-go is handling many successful requests
+                {{ "{{" }} printf "%.2f" $value {{ "}}" }} times per minute.
 {{- end }}

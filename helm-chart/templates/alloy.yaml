@@ -1,3 +1,4 @@
+{{- if .Values.alloy.enabled }}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -168,7 +169,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: alloy
-  namespace: api-app-go
+  namespace: {{ .Values.global.namespace }}
 spec:
   ports:
     - name: http-metrics
@@ -177,3 +178,4 @@ spec:
       targetPort: 12345
   selector:
     app: alloy
+{{- end }}
