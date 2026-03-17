@@ -174,8 +174,7 @@ spec:
             failureThreshold: 5
       volumes:
         - name: mimir-storage
-          persistentVolumeClaim:
-            claimName: mimir-pvc
+          emptyDir: {}
         - name: mimir-config
           configMap:
             name: mimir-config
@@ -186,19 +185,6 @@ spec:
           configMap:
             name: mimir-alerting-rules
         {{- end }}
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: mimir-pvc
-  namespace: {{ .Values.global.namespace }}
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: {{ .Values.global.storageClass }}
-  resources:
-    requests:
-      storage: {{ .Values.persistence.sizes.mimir }}
 ---
 apiVersion: v1
 kind: Service

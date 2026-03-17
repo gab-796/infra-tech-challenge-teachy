@@ -12,6 +12,36 @@ data:
       http_listen_port: 3100
       log_level: warn
 
+    {{- if .Values.minio.enabled }}
+    common:
+      path_prefix: /tmp/loki
+      storage:
+        s3:
+          endpoint: {{ .Values.minio.name }}.{{ .Values.global.namespace }}.svc.cluster.local:9000
+          bucketnames: loki-chunks
+          access_key_id: {{ .Values.minio.credentials.rootUser }}
+          secret_access_key: ${MINIO_ROOT_PASSWORD}
+          insecure: true
+          s3forcepathstyle: true
+      replication_factor: 1
+      ring:
+        kvstore:
+          store: memberlist
+
+    memberlist:
+      join_members:
+        - loki-headless.{{ .Values.global.namespace }}.svc.cluster.local:7946
+
+    schema_config:
+      configs:
+        - from: 2020-10-24
+          store: tsdb
+          object_store: s3
+          schema: v13
+          index:
+            prefix: index_
+            period: 24h
+    {{- else }}
     common:
       path_prefix: /loki
       storage:
@@ -41,6 +71,7 @@ data:
         shared_store: filesystem
       filesystem:
         directory: /loki/chunks
+    {{- end }}
 
     limits_config:
       enforce_metric_name: false
@@ -60,12 +91,12 @@ data:
       storage:
         type: local
         local:
-          directory: /loki/rules
-      rule_path: /loki/rules-temp
+          directory: /tmp/loki/rules
+      rule_path: /tmp/loki/rules-temp
       alertmanager_url: http://localhost:9093
       ring:
         kvstore:
-          store: inmemory
+          store: memberlist
       enable_api: true
 ---
 apiVersion: apps/v1
@@ -85,14 +116,46 @@ spec:
       labels:
         app: loki
     spec:
+      {{- if .Values.minio.enabled }}
+      initContainers:
+        - name: minio-init-bucket
+          image: minio/mc:latest
+          env:
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secrets
+                  key: MINIO_ROOT_PASSWORD
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until mc alias set myminio http://{{ .Values.minio.name }}.{{ .Values.global.namespace }}.svc.cluster.local:9000 {{ .Values.minio.credentials.rootUser }} $MINIO_ROOT_PASSWORD; do
+                echo "Aguardando MinIO ficar disponivel..."
+                sleep 5
+              done
+              mc mb --ignore-existing myminio/loki-chunks
+              echo "Bucket loki-chunks criado/verificado com sucesso."
+      {{- end }}
       containers:
         - name: loki
           image: grafana/loki:2.9.5
           args:
             - -config.file=/etc/loki/config.yaml
+            - -config.expand-env=true
           ports:
             - containerPort: 3100
               name: http
+            - containerPort: 7946
+              name: memberlist
+          {{- if .Values.minio.enabled }}
+          env:
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minio-secrets
+                  key: MINIO_ROOT_PASSWORD
+          {{- end }}
           volumeMounts:
             - name: loki-storage
               mountPath: /loki
@@ -124,11 +187,16 @@ spec:
             failureThreshold: 3
       volumes:
         - name: loki-storage
+          {{- if .Values.minio.enabled }}
+          emptyDir: {}
+          {{- else }}
           persistentVolumeClaim:
             claimName: loki-pvc
+          {{- end }}
         - name: loki-config
           configMap:
             name: loki-config
+{{- if not .Values.minio.enabled }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -142,6 +210,7 @@ spec:
   resources:
     requests:
       storage: {{ .Values.persistence.sizes.loki }}
+{{- end }}
 ---
 apiVersion: v1
 kind: Service
@@ -154,5 +223,22 @@ spec:
       protocol: TCP
       port: 3100
       targetPort: 3100
+  selector:
+    app: loki
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki-headless
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: loki
+spec:
+  clusterIP: None
+  ports:
+    - name: memberlist
+      port: 7946
+      targetPort: 7946
+      protocol: TCP
   selector:
     app: loki
