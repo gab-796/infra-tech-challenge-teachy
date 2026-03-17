@@ -139,6 +139,30 @@ Para um ambiente local de desenvolvimento e demonstração, o dev mode é sufici
 
 ---
 
+## null_resource.vault_init — por que não um recurso Terraform nativo?
+
+**Contexto:** Após o Helm release do Vault subir, é necessário:
+1. Habilitar o secrets engine KV v2 (`vault secrets enable kv-v2`)
+2. Injetar as credenciais iniciais (`vault kv put secret/inventory ...`)
+
+**Por que `null_resource` + `local-exec`?**
+
+O Terraform não possui um recurso nativo para executar comandos imperativos *dentro* de um pod Kubernetes em tempo de apply. As alternativas consideradas foram:
+
+| Alternativa | Problema |
+|---|---|
+| Provider `hashicorp/vault` | Requer que o Vault já esteja acessível via rede do host (port-forward ou ingress) no momento do `terraform apply` — não é garantido durante o bootstrap |
+| `kubernetes_job` | Cria um Job no cluster, mas gerenciar o ciclo de vida (aguardar conclusão, limpar) adiciona complexidade desnecessária |
+| Script externo no `setup-all.sh` | Quebra a atomicidade do `terraform apply` — o init do Vault ficaria fora do grafo de dependências do Terraform |
+| `null_resource` + `local-exec` | Executa no host, usa `kubectl exec` para entrar no pod, mantém o init dentro do grafo Terraform com `depends_on` |
+
+**Trade-offs do `null_resource`:**
+- **Idempotência parcial:** O `null_resource` não tem estado real — o Terraform não sabe se o comando já foi executado. Por isso o script usa `|| echo "KV v2 already enabled, skipping."` para tornar o `secrets enable` idempotente. O `vault kv put` é naturalmente idempotente (sobrescreve).
+- **Re-execução:** Se o `null_resource` for destruído e recriado (ex: `terraform taint`), o init roda novamente — o que é o comportamento desejado, já que o Vault dev mode perde estado ao reiniciar.
+- **Dependência de ferramentas locais:** Requer `kubectl` instalado e configurado no host — já verificado pelo `setup-all.sh`.
+
+---
+
 ## Resumo das Decisões de Design e Trade-offs
 
 ### 1. Mimir em vez de Prometheus puro
