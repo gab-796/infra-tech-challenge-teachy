@@ -244,3 +244,30 @@ variable "custom_values" {
   type        = any
   default     = {}
 }
+
+# ========================================
+# ALERTMANAGER CONFIGURATION
+# ========================================
+variable "alertmanager_enabled" {
+  description = "Install AlertManager with MailHog SMTP receiver and wire Mimir ruler to it"
+  type        = bool
+  default     = false
+}
+
+variable "alertmanager_version" {
+  description = "AlertManager Helm chart version (prometheus-community/alertmanager)"
+  type        = string
+  default     = "1.31.1"
+}
+
+variable "mailhog_version" {
+  description = "MailHog Helm chart version (codecentric/mailhog)"
+  type        = string
+  default     = "5.2.3"
+}
+
+variable "alertmanager_namespace" {
+  description = "Kubernetes namespace for AlertManager and MailHog"
+  type        = string
+  default     = "alertmanager"
+}

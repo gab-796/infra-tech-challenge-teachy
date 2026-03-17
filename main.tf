@@ -27,6 +27,16 @@ module "external_secrets" {
   depends_on = [module.vault, kubernetes_namespace.app_namespace]
 }
 
+# AlertManager + MailHog — implantados antes do módulo app para que a URL seja conhecida
+module "alertmanager" {
+  source = "./modules/alertmanager"
+
+  alertmanager_enabled   = var.alertmanager_enabled
+  alertmanager_version   = var.alertmanager_version
+  mailhog_version        = var.mailhog_version
+  alertmanager_namespace = var.alertmanager_namespace
+}
+
 module "app" {
   source = "./modules/app"
 
@@ -49,7 +59,9 @@ module "app" {
   pyroscope_enabled          = var.pyroscope_enabled
   alloy_enabled              = var.alloy_enabled
   otel_collector_enabled     = var.otel_collector_enabled
+  alertmanager_enabled       = var.alertmanager_enabled
+  alertmanager_url           = module.alertmanager.alertmanager_url
   custom_values              = var.custom_values
 
-  depends_on = [module.external_secrets]
+  depends_on = [module.external_secrets, module.alertmanager]
 }

@@ -78,3 +78,11 @@ resource_limits = {
 # Para valores customizados, use um arquivo YAML
 # helm_values_file = "./custom-values.yaml"
 custom_values = {}
+
+# ========================================
+# ALERTMANAGER CONFIGURATION
+# ========================================
+alertmanager_enabled   = true
+alertmanager_version   = "1.31.1"
+alertmanager_namespace = "alertmanager"
+mailhog_version        = "5.2.3"

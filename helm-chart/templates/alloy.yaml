@@ -53,6 +53,18 @@ data:
       format = "json"
     }
 
+    // Synchronize alerting rules to Mimir and Loki
+
+    mimir.rules.kubernetes "mimir" {
+      sync_interval = "20s"
+      address = "http://mimir.local"
+      rule_selector {
+        match_labels = {
+          rule_type = "mimir",
+        }
+      }
+    }
+
     // Configuração para coletar métricas internas do próprio Alloy
     prometheus.exporter.self "alloy_metrics" { }
 
@@ -120,10 +132,24 @@ spec:
                 - ALL
       volumes:
         - name: alloy-storage
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: alloy-pvc
         - name: alloy-config
           configMap:
             name: alloy-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: alloy-pvc
+  namespace: {{ .Values.global.namespace }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.accessMode }}
+  storageClassName: {{ .Values.global.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.sizes.alloy }}
 ---
 apiVersion: v1
 kind: Service

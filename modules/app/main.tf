@@ -39,6 +39,9 @@ locals {
 
       grafana = {
         enabled = var.grafana_enabled
+        dashboards = {
+          enabled = true
+        }
       }
 
       loki = {
@@ -51,6 +54,10 @@ locals {
 
       mimir = {
         enabled = var.mimir_enabled
+        alertmanager = {
+          enabled = var.alertmanager_enabled
+          url     = var.alertmanager_url
+        }
       }
 
       pyroscope = {
@@ -80,6 +87,16 @@ resource "helm_release" "api_observabilidade" {
   timeout          = 320
 
   values = [yamlencode(local.helm_values)]
+
+  # Detecta mudanças nos arquivos do chart local automaticamente.
+  # Quando qualquer template/values muda, o hash muda e o Terraform dispara helm upgrade.
+  set {
+    name  = "global.chartChecksum"
+    value = sha256(join("", [
+      for f in sort(tolist(fileset(var.helm_chart_path, "**"))) :
+      filesha256("${var.helm_chart_path}/${f}")
+    ]))
+  }
 }
 
 # Install kube-state-metrics

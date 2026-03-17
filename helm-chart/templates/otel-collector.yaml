@@ -125,10 +125,10 @@ data:
                 - source_labels: [__meta_kubernetes_node_name]
                   target_label: kube_node
 
-      # Coleta de logs dos pods via filelog
+      # Coleta de logs dos pods via filelog (todos os namespaces)
       filelog:
         include:
-          - /var/log/pods/{{ .Values.global.namespace }}_*/*/*.log
+          - /var/log/pods/*/*/*.log
         start_at: beginning
         include_file_path: true
         include_file_name: false
@@ -201,7 +201,7 @@ data:
       memory_limiter:
         # 80% da memória que você definiu no resources.limits
         check_interval: 1s
-        limit_mib: 400 
+        limit_mib: 400
         spike_limit_mib: 100
 
       k8sattributes:

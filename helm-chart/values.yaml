@@ -137,8 +137,7 @@ grafana:
       type: phlare
 
   dashboards:
-    inventory:
-      enabled: true
+    enabled: true
 
 # ========================================
 # LOKI CONFIGURATION
@@ -312,6 +311,11 @@ mimir:
       backend: filesystem
       filesystem:
         dir: /var/mimir
+
+  # AlertManager integration — overridden via Terraform locals when alertmanager_enabled=true
+  alertmanager:
+    enabled: true
+    url: ""
 
 # ========================================
 # MINIO CONFIGURATION
@@ -542,6 +546,8 @@ persistence:
     pyroscope: 5Gi
     mimir: 20Gi
     minio: 10Gi
+    grafana: 5Gi
+    alloy: 5Gi
 
 # ========================================
 # MONITORING CONFIGURATION

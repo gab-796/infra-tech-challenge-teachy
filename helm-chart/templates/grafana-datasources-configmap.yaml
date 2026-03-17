@@ -106,6 +106,21 @@ data:
         uid: mimir
         jsonData:
           httpMethod: GET
+{{- if .Values.mimir.alertmanager.enabled }}
+      - name: AlertManager
+        type: alertmanager
+        access: proxy
+        orgId: 1
+        url: http://alertmanager:9093
+        basicAuth: false
+        isDefault: false
+        version: 1
+        editable: true
+        uid: alertmanager
+        jsonData:
+          implementation: prometheus
+          handleGrafanaManagedAlerts: false
+{{- end }}
 ---
 apiVersion: v1
 kind: ConfigMap

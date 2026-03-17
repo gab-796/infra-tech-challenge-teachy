@@ -1,8 +1,8 @@
-{{- if and .Values.grafana.enabled .Values.grafana.dashboards.inventory.enabled }}
+{{- if and .Values.grafana.enabled (dig "dashboards" "enabled" true .Values.grafana) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: grafana-dashboard-inventory
+  name: grafana-dashboards
   namespace: {{ .Values.global.namespace }}
   labels:
     app: {{ .Values.grafana.name }}

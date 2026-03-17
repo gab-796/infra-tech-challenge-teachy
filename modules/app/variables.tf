@@ -99,3 +99,15 @@ variable "custom_values" {
   type        = any
   default     = {}
 }
+
+variable "alertmanager_enabled" {
+  description = "Enable AlertManager integration in Mimir ruler and Grafana datasource"
+  type        = bool
+  default     = false
+}
+
+variable "alertmanager_url" {
+  description = "AlertManager internal cluster URL for Mimir ruler alertmanager_url config"
+  type        = string
+  default     = ""
+}

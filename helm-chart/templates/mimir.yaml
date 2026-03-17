@@ -53,9 +53,20 @@ data:
           store: inmemory
 
     ruler:
+      {{- if .Values.mimir.alertmanager.enabled }}
+      alertmanager_url: {{ .Values.mimir.alertmanager.url }}
+      enable_api: true
+      {{- end }}
       ring:
         kvstore:
           store: inmemory
+
+    {{- if .Values.mimir.alertmanager.enabled }}
+    ruler_storage:
+      backend: local
+      local:
+        directory: /rules
+    {{- end }}
 
     limits:
       max_label_names_per_series: 30
@@ -133,6 +144,11 @@ spec:
               readOnly: true
             - name: tmp
               mountPath: /tmp
+            {{- if .Values.mimir.alertmanager.enabled }}
+            - name: mimir-rules
+              mountPath: /rules/anonymous
+              readOnly: true
+            {{- end }}
           resources:
             limits:
               memory: "1Gi"
@@ -165,6 +181,11 @@ spec:
             name: mimir-config
         - name: tmp
           emptyDir: {}
+        {{- if .Values.mimir.alertmanager.enabled }}
+        - name: mimir-rules
+          configMap:
+            name: mimir-alerting-rules
+        {{- end }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

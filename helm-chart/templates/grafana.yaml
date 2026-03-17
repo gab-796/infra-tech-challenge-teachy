@@ -52,7 +52,7 @@ spec:
             - name: grafana-dashboard-providers
               mountPath: /etc/grafana/provisioning/dashboards
               readOnly: true
-            - name: grafana-dashboard-inventory
+            - name: grafana-dashboards
               mountPath: /var/lib/grafana/dashboards
               readOnly: true
           resources:
@@ -64,16 +64,30 @@ spec:
               cpu: "250m"
       volumes:
         - name: grafana-storage
-          emptyDir: {}
+          persistentVolumeClaim:
+            claimName: grafana-pvc
         - name: grafana-datasources
           configMap:
             name: grafana-datasources
         - name: grafana-dashboard-providers
           configMap:
             name: grafana-dashboard-providers
-        - name: grafana-dashboard-inventory
+        - name: grafana-dashboards
           configMap:
-            name: grafana-dashboard-inventory
+            name: grafana-dashboards
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-pvc
+  namespace: {{ .Values.global.namespace }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.accessMode }}
+  storageClassName: {{ .Values.global.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.sizes.grafana }}
 ---
 apiVersion: v1
 kind: Service
