@@ -20,7 +20,6 @@ graph TB
             Tempo["Tempo"]
             Mimir["Mimir"]
             Pyroscope["Pyroscope"]
-            Alloy["Alloy"]
             MinIO["MinIO"]
             AlertMgr["AlertManager"]
             MailHog["MailHog"]
@@ -50,9 +49,6 @@ graph TB
     OTel --> Tempo
     OTel --> Mimir
     OTel --> Loki
-
-    Alloy --> Mimir
-    Alloy --> KSM
 
     Grafana --> Loki
     Grafana --> Tempo
@@ -84,7 +80,6 @@ flowchart LR
 
     subgraph METRICS["Métricas"]
         Mimir["Mimir\n(long-term storage)"]
-        Alloy["Alloy\n(cluster scrape)"]
         KSM["kube-state-metrics"]
     end
 
@@ -105,8 +100,6 @@ flowchart LR
 
     App -->|"OTLP gRPC\n(metrics+logs+traces)"| R_OTLP
     App -->|"pprof endpoint"| Pyroscope
-    Alloy -->|scrape| KSM
-    Alloy -->|scrape| App
 
     R_OTLP --> P_BATCH
     R_PROM --> P_BATCH

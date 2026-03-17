@@ -18,7 +18,7 @@ Cluster Kind local com 1 control plane + 2 workers, provisionado 100% via Terraf
 | Loki | 2.9.5 | Agregação e consulta de logs |
 | Tempo | 2.6.0 | Distributed tracing |
 | Pyroscope | 1.13.0 | Continuous profiling (4º pilar de observabilidade) |
-| Alloy | v1.9.1 | receptor de profiling + sincronização de alertas |
+| Alloy | v1.9.1 | sincronização de regras de alerta para o Mimir ruler (profiling é enviado diretamente pela app ao Pyroscope) |
 | OTel Collector | 0.123.0 | DaemonSet receptor de traces/logs/métricas |
 | Vault | 0.27.0 | Gerenciamento de secrets |
 | External Secrets Operator | 0.10.0 | Injeção automática de secrets no cluster |
@@ -81,13 +81,15 @@ Dashboards provisionados automaticamente:
 **Integração**
 ```
 inventory-app
-    └── OTLP → OTel Collector (DaemonSet)
-                    ├── métricas → Mimir (remote write)
-                    ├── logs    → Loki (push API)
-                    └── traces  → Tempo (OTLP gRPC)
+    ├── OTLP → OTel Collector (DaemonSet)
+    │               ├── métricas → Mimir (remote write)
+    │               ├── logs    → Loki (push API)
+    │               └── traces  → Tempo (OTLP gRPC)
+    └── SDK Pyroscope → Pyroscope (direto, sem intermediário)
+
 Alloy
-    ├── scrape métricas → Mimir (remote write)
-    └── sync alertas   → Mimir ruler (PrometheusRule ConfigMaps)
+    └── sync alertas → Mimir ruler (PrometheusRule ConfigMaps)
+        (Alloy NÃO é necessário para profiling — a app envia direto ao Pyroscope)
 ```
 
 #### 3. Aplicação de exemplo
@@ -108,7 +110,7 @@ Alloy
 | Item | Status | Detalhe |
 |---|---|---|
 | RBAC | ✅ | `ServiceAccount` no helm chart; Vault e ESO requerem `ClusterRole`/`ClusterRoleBinding` criados pelos módulos Terraform |
-| Network Policies | ❌ | Não implementado — nenhum `NetworkPolicy` resource existe no projeto |
+| Network Policies | ✅ | Implementado e funcional — `NetworkPolicy` resources em `helm-chart/templates/network-policy.yaml`; Cilium aplica as políticas nativamente |
 | Secrets Management | ✅ | Vault (KV v2) + External Secrets Operator; ExternalSecret CRDs para mysql-secrets, minio-secrets e inventory-app-secrets |
 
 **Fluxo de secrets:**
@@ -177,101 +179,6 @@ otel-collector   → DaemonSet          — escala com nós, HPA desabilitado
 
 Service Mesh está fora do escopo desta entrega. O distributed tracing é feito diretamente via OTel Collector sem um service mesh.
 
----
-
-## Decisões de Design e Trade-offs
-
-### 1. Mimir em vez de Prometheus puro
-
-**Decisão:** Usar Grafana Mimir (modo monolítico) como backend de métricas.
-
-**Justificativa:** Mimir é 100% compatível com remote write Prometheus e oferece armazenamento de longo prazo nativo com compactação. Em modo monolítico, o overhead de operação é igual ao de um Prometheus simples.
-
-**Trade-off:** Complexidade ligeiramente maior no bootstrap; ganho em escalabilidade e retenção.
-
----
-
-### 2. Vault em modo dev
-
-**Decisão:** Vault instalado com `server.dev.enabled=true`.
-
-**Justificativa:** Modo dev não requer unseal manual e inicia instantaneamente — ideal para ambiente local de challenge.
-
-**Trade-off:** Sem persistência de dados. Se o pod do Vault reiniciar, todos os secrets são perdidos e o `setup-all.sh` precisa reinjetar as credenciais. **Não adequado para produção.**
-
----
-
-### 3. External Secrets Operator para injeção de secrets
-
-**Decisão:** Em vez de criar Kubernetes Secrets diretamente no Terraform, usar ESO com `ClusterSecretStore` apontando para o Vault.
-
-**Justificativa:** Desacopla a aplicação do mecanismo de gerenciamento de secrets. A troca do backend (Vault → AWS Secrets Manager, por exemplo) não requer mudanças no Helm chart.
-
----
-
-### 4. MinIO como backend do Terraform state
-
-**Decisão:** Container Docker `minio-state` (porta `9100`) como backend S3 para o Terraform state (`tfstate` bucket).
-
-**Justificativa:** Permite usar o backend S3 do Terraform sem dependência de AWS, de forma completamente local e controlada.
-
-**Observação:** `setup-all.sh` garante que o container esteja rodando antes de qualquer `terraform init`, inclusive após reinicialização da máquina.
-
----
-
-### 5. MinIO in-cluster para Loki e Mimir (habilitando HPA)
-
-**Decisão:** Tanto Loki quanto Mimir usam MinIO (S3) como backend de object storage em vez de PVCs.
-
-**Justificativa:** `StorageClass: standard` do Kind usa `ReadWriteOnce` (RWO). Um PVC RWO só pode ser montado por um pod em um único nó. Com HPA escalando para 2 réplicas em nós diferentes, o segundo pod ficaria em estado `Pending` indefinidamente aguardando o PVC.
-
-A migração para object storage (S3) torna esses componentes verdadeiramente stateless e multitenante.
-
----
-
-### 6. emptyDir para o WAL do Mimir
-
-**Decisão:** O Mimir usa `emptyDir` para o WAL (Write-Ahead Log) em vez de PVC.
-
-**Justificativa:** O WAL do Mimir é um buffer temporário de segundos a minutos antes de flush para o object storage (MinIO). Perder o WAL em caso de crash significa perder apenas as métricas dos últimos poucos segundos antes do restart.
-
-**Trade-off:** Risco de perda mínima de dados em crash de pod. Aceitável para ambiente de desenvolvimento.
-
----
-
-### 7. Memberlist para coordenação de múltiplas réplicas (Loki e Mimir)
-
-**Decisão:** Loki e Mimir usam `kvstore: memberlist` com headless services para coordenação de rings.
-
-**Justificativa:** Com HPA criando 2 réplicas, cada pod precisa descobrir seus pares para coordenar o ring (ingester, distributor, store_gateway, etc.). Sem memberlist, cada réplica operaria de forma isolada, causando inconsistências nas queries.
-
-**Implementação:**
-- Headless services `loki-headless:7946` e `mimir-headless:7946`
-- `join_members` aponta para o headless service (DNS resolve para IPs de todos os pods)
-
----
-
-### 8. OTel Collector como DaemonSet
-
-**Decisão:** OTel Collector implantado como `DaemonSet`, não `Deployment`.
-
-**Justificativa:** Como coletor de nível de nó, o DaemonSet garante exatamente uma réplica por nó e escala automaticamente conforme novos nós são adicionados. HPA não faz sentido para um DaemonSet.
-
----
-
-### 9. Alloy para sincronização de regras (GitOps de alertas)
-
-**Decisão:** Alloy configurado para fazer scrape de `ConfigMap` com PrometheusRules e sincronizá-las para o ruler do Mimir.
-
-**Justificativa:** As regras de alert ficam versionadas em código (Helm ConfigMap `mimir-alerting-rules`). O Alloy detecta mudanças e as aplica automaticamente ao Mimir, sem intervenção manual.
-
----
-
-### 10. AlertManager em namespace separado com depends_on explícito
-
-**Decisão:** AlertManager e MailHog implantados no namespace `alertmanager` via módulo separado, antes do módulo `app`.
-
-**Justificativa:** O módulo `app` passa a URL do AlertManager como `helm_values` para o Mimir. O `depends_on` garante que a URL esteja disponível como output antes de o Helm release ser aplicado. Namespaces separados facilitam troubleshooting e permitem policies de rede independentes.
 
 ---
 
@@ -282,7 +189,7 @@ Além dos requisitos core e suggested, os seguintes itens foram adicionados:
 | Extra | Detalhe |
 |---|---|
 | **Pyroscope** | 4º pilar de observabilidade — continuous profiling. Permite identificar hotspots de CPU/memória em nível de código |
-| **Alloy** | Substituição moderna do Grafana Agent; coleta métricas via scrape + recebe OTLP; sincroniza alertas para Mimir |
+| **Alloy** | Sincroniza regras de alerta (PrometheusRule ConfigMaps) para o Mimir ruler via `mimir.rules.kubernetes`. **Não é necessário para profiling** — a `inventory-app` envia dados diretamente ao Pyroscope via SDK (`PYROSCOPE_URL: http://pyroscope:4040`) |
 | **kube-state-metrics** | Expõe métricas de estado de objetos Kubernetes (Deployments, Pods, HPAs, etc.) para consumo pelo Alloy/Mimir |
 | **MinIO in-cluster** | Object storage para Loki (chunks) e Mimir (blocks); `initContainer` cria os buckets automaticamente no deploy |
 | **MinIO state server** | Container Docker como backend do Terraform state; totalmente local, sem dependência de cloud |
@@ -297,7 +204,6 @@ Além dos requisitos core e suggested, os seguintes itens foram adicionados:
 
 | Item | Motivo |
 |---|---|
-| **Network Policies** | Não há `NetworkPolicy` resources no projeto. Cilium suporta, mas as políticas não foram definidas |
 | **PodDisruptionBudgets** | Stubs existem em `values.yaml` (`podDisruptionBudget.enabled: false`), mas nenhum template `pdb.yaml` existe — os valores não são renderizados em nenhum resource |
 | **Service Mesh (Istio/Linkerd)** | Fora do escopo da entrega. Distributed tracing funciona via OTel direto, sem service mesh |
 | **SLO/SLI** | Sem definições de Service Level Objectives ou dashboards de SLI tracking |
@@ -386,7 +292,7 @@ infra-tech-challenge-teachy/
 
 ---
 
-## Como Executar
+## Como Executar Manualmente
 
 Consulte o [README.md](../README.md) para instruções completas de setup. Resumo:
 
@@ -410,9 +316,6 @@ terraform init && terraform apply
 # 5. Deploy da stack completa
 cd ..
 terraform init && terraform apply
-
-# 6. Ou usar o menu interativo
-bash setup-all.sh
 ```
 
 **Acessos após deploy:**
@@ -498,53 +401,6 @@ variable "mysql_password" {
 }
 ```
 
----
-
-## 🎓 Recursos de Aprendizado
-
-- **Terraform Docs**: https://www.terraform.io/docs
-- **Helm Provider**: https://registry.terraform.io/providers/hashicorp/helm
-- **Kubernetes Provider**: https://registry.terraform.io/providers/hashicorp/kubernetes
-- **Kind Docs**: https://kind.sigs.k8s.io/
-
----
-
-## 🆘 Precisa de Ajuda?
-
-### Erro: "Command not found: terraform"
-```bash
-# Instalar Terraform
-curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add -
-apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
-apt-get update && apt-get install terraform
-```
-
-### Erro: "Cluster already exists"
-```bash
-kind delete cluster --name asus-local
-# OU
-terraform apply -var="create_kind_cluster=false"
-```
-
-### Erro: "Port 80 already in use"
-```bash
-# Edit kind-cluster/cluster/config.yaml
-# Mudar "hostPort: 80" para outro (ex: 8080)
-```
-
----
-
-## 🎁 Bônus: Próximos Passos
-
-1. **Terraform Cloud** - Gerenciar estado remotamente
-2. **CI/CD** - GitHub Actions / GitLab CI
-3. **Monitoring** - Prometheus + Grafana
-4. **Backup** - Automatizar backups MySQL
-5. **Multi-cluster** - Expandir para múltiplos clusters
-6. **GitOps** - ArgoCD + Git
-
----
-
 ## 📞 Resumo Rápido
 
 | O que | Onde | Como |
@@ -556,7 +412,6 @@ terraform apply -var="create_kind_cluster=false"
 | Customizar | `terraform.tfvars` | Editar variáveis |
 | Destruir | Qualquer lugar | `terraform destroy` |
 
----
 
 ## ✅ Entrega Completa
 
@@ -570,22 +425,8 @@ terraform apply -var="create_kind_cluster=false"
 ✓ .gitignore configurado
 ✓ README em cada pasta
 ✓ Comentários em todo código
-✓ Pronto para produção
 ```
 
----
-
-## 🚀 Comece Agora!
-
-```bash
-cd /home/gabriel/Documentos/api-observabilidade/terraform-helm
-bash setup-all.sh
-```
-
-Ou direto:
-```bash
-terraform init && terraform apply
-```
 
 ---
 

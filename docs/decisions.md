@@ -1,17 +1,17 @@
-# Erros e seus tratamentos
+# Decisões de arquitetura
 
 ## HPA — Scaling real bloqueado por PVC ReadWriteOnce no Kind
 
-**Causa raiz:** grafana, loki, tempo, pyroscope, alloy e mimir usam PVCs com `accessMode: ReadWriteOnce` (RWO). Um volume RWO só pode ser montado por **um pod em um único nó** ao mesmo tempo. Quando o HPA tenta criar um segundo pod, o Kubernetes não consegue montar o mesmo PVC e o pod fica preso em `Pending` com:
+**Causa raiz:** grafana, loki, tempo, pyroscope e mimir usam PVCs com `accessMode: ReadWriteOnce` (RWO). Um volume RWO só pode ser montado por **um pod em um único nó** ao mesmo tempo. Quando o HPA tenta criar um segundo pod, o Kubernetes não consegue montar o mesmo PVC e o pod fica preso em `Pending` com:
 ```
 0/3 nodes are available: 3 node(s) had volume node affinity conflict
 ```
 
 O StorageClass `standard` do Kind (`rancher.io/local-path`) **não suporta ReadWriteMany (RWM)**. Suporte a RWM exige um provisioner externo (NFS, CephFS, EFS).
 
-**Componentes com HPA desabilitado (PVC RWO):** grafana, tempo, pyroscope, alloy
+**Componentes com HPA desabilitado (PVC RWO):** grafana, tempo, pyroscope, mysql
 
-**Componentes com HPA ativo:** inventory-app, otel-collector, loki, mimir
+**Componentes com HPA ativo:** inventory-app, loki, mimir
 
 **Para habilitar RWM e scaling real nos demais componentes:**
 1. Instalar provisioner NFS no Kind (ex: `nfs-subdir-external-provisioner`)
@@ -37,8 +37,11 @@ O StorageClass `standard` do Kind (`rancher.io/local-path`) **não suporta ReadW
 
 **Memberlist para scaling real:** Com `kvstore: inmemory`, cada réplica do Loki teria seu próprio anel isolado — o Service faria load-balance entre pods que não se enxergam, causando split de dados e containers sumindo nas queries. A solução foi migrar para `kvstore: store: memberlist` + um Headless Service (`clusterIP: None`) na porta 7946 para peer discovery. Com isso os pods se descobrem e coordenam o anel distribuído, permitindo `maxReplicas: 2` sem inconsistência.
 
-### solução identica pro mimir
-**Memberlist para scaling real:** Com `kvstore: inmemory`, cada réplica do Mimir tem seu próprio anel isolado — ingester, distributor, store_gateway, compactor e ruler cada um com seu estado local. O Service fazia load-balance entre pods que não se enxergavam, causando inconsistência nas queries (métricas aparecendo ou sumindo dependendo de qual pod respondia). A solução foi migrar todos os 5 rings para `kvstore: store: memberlist` + bloco `memberlist.join_members` apontando para `mimir-headless:7946` + Headless Service (`clusterIP: None`) para peer discovery. Com isso os pods formam um cluster coordenado e qualquer pod consegue responder qualquer query com consistência.
+### Solução idêntica para o Mimir
+**Memberlist para scaling real:** Com `kvstore: inmemory`, cada réplica do Mimir tem seu próprio anel isolado — ingester, distributor, store_gateway, compactor e ruler cada um com seu estado local.
+O Service fazia load-balance entre pods que não se enxergavam, causando inconsistência nas queries (métricas aparecendo ou sumindo dependendo de qual pod respondia).
+A solução foi migrar todos os 5 rings para `kvstore: store: memberlist` + bloco `memberlist.join_members` apontando para `mimir-headless:7946` + Headless Service (`clusterIP: None`) para peer discovery.
+Com isso os pods formam um cluster coordenado e qualquer pod consegue responder qualquer query com consistência.
 
 ---
 
@@ -85,50 +88,31 @@ kubectl delete pv <nome-do-pv>
 
 ---
 
-## Caso algum container apresente o erro too many open files
+## Network Policy — Habilitada e funcional
 
-Para o Fedora:
+A `NetworkPolicy` está implementada e funcionando no projeto (`helm-chart/templates/network-policy.yaml`). O Cilium (CNI utilizado no cluster Kind) suporta `NetworkPolicy` nativamente, e as políticas foram validadas com a stack completa em execução.
+
+**Políticas implementadas:**
+- Isolamento por namespace: pods do namespace `api-app-go` só aceitam tráfego de dentro do mesmo namespace e do ingress controller
+- Cada componente tem regras de ingress/egress específicas para os serviços com os quais precisa se comunicar
+- O toggle `networkPolicy.enabled` no `values.yaml` permite desabilitar temporariamente em caso de troubleshooting
+
+> **Atenção:** Desabilitar a NetworkPolicy (`networkPolicy.enabled: false`) abre o tráfego entre todos os pods do namespace. Recomendado manter habilitado em qualquer ambiente.
+
+---
+
+## Alloy — Não é necessário para profiling
+
+O Alloy **não é necessário para coleta de profiling**. A `inventory-app` envia dados de profiling diretamente para o Pyroscope via SDK, usando a variável de ambiente `PYROSCOPE_URL: http://pyroscope:4040`. Não há intermediário nesse fluxo.
 
 ```
-sudo nano /etc/sysctl.d/99-inotify.conf
-fs.inotify.max_user_watches=1048576
-fs.inotify.max_user_instances=2048
-
-sudo sysctl --system
+inventory-app
+    └── SDK Pyroscope → Pyroscope (direto, sem Alloy)
 ```
 
-Nota: Essas configs já nascem com o cluster kind, mas podem se perder por reinicio de VM ou host.
-Já está com a persistencia la, mas vai que...
+O Alloy existe nesta stack exclusivamente para **sincronização de regras de alerta** com o Mimir ruler (via `mimir.rules.kubernetes`). Ele lê os `PrometheusRule` ConfigMaps do cluster e os aplica automaticamente ao Mimir, mantendo as regras versionadas em código (GitOps de alertas).
 
-
-## Mudança do Alloy pro otel na coleta de logs
-
-Por que DaemonSet?
-O filelog lê arquivos em /var/log/pods do node local. Como o cluster tem múltiplos nodes, o OTel precisa rodar em cada node para ler os logs locais — exatamente o que um DaemonSet faz.
-
-O Alloy usava a API do Kubernetes para stream de logs (sem precisar ser DaemonSet), mas o OTel não tem esse mecanismo.
-
-### explicacao
-- filelog receiver: lê /var/log/pods/<namespace>_*/*/*.log, detecta formato Docker/CRI-O, extrai namespace, pod_name, container_name do path do arquivo, faz parse de JSON body quando disponível, extrai level
-
-- k8sattributes processor: enriquece com k8s.pod.name, k8s.namespace.name, k8s.deployment.name, k8s.node.name e label service do app
-
-- loki exporter: push para Loki com resource labels namespace, pod, container e attribute level
-
-- Pipeline logs: filelog → k8sattributes, batch → loki
-
-- Deployment → DaemonSet (sem replicas) para ler logs de todos os nodes
-
-- Volume varlogpods montando /var/log/pods do host em readOnly
-
-- ClusterRole: adicionado pods/log
-
-remediando 2
-- loki exporter: substituído labels por default_labels_enabled (formato correto)
-
-- Adicionado transform/loki_hints processor: define quais resource attributes (k8s.namespace.name, k8s.pod.name, k8s.container.name) e log attributes (level) viram labels no Loki via o mecanismo de hints
-
-- Pipeline logs: adicionado transform/loki_hints antes do batch
+Se o objetivo for apenas profiling, o Alloy pode ser desabilitado sem impacto nenhum na coleta de dados do Pyroscope.
 
 ---
 
@@ -152,3 +136,120 @@ Sair do dev mode exigiria configurar um backend de storage real (ex: `raft` inte
 - **Renovação de tokens/leases**: gerenciar TTLs e renovação dos secrets
 
 Para um ambiente local de desenvolvimento e demonstração, o dev mode é suficiente e mantém a stack simples. Em produção, usaria um Vault gerenciado (HCP Vault, AWS Secrets Manager, etc.) em vez de self-hosted dev mode.
+
+---
+
+## Resumo das Decisões de Design e Trade-offs
+
+### 1. Mimir em vez de Prometheus puro
+
+**Decisão:** Usar Grafana Mimir (modo monolítico) como backend de métricas.
+
+**Justificativa:** Mimir é 100% compatível com remote write Prometheus e oferece armazenamento de longo prazo nativo com compactação. Em modo monolítico, o overhead de operação é igual ao de um Prometheus simples.
+
+**Trade-off:** Complexidade ligeiramente maior no bootstrap; ganho em escalabilidade e retenção.
+
+---
+
+### 2. Vault em modo dev
+
+**Decisão:** Vault instalado com `server.dev.enabled=true`.
+
+**Justificativa:** Modo dev não requer unseal manual e inicia instantaneamente — ideal para ambiente local de challenge.
+
+**Trade-off:** Sem persistência de dados. Se o pod do Vault reiniciar, todos os secrets são perdidos e o `setup-all.sh` precisa reinjetar as credenciais. **Não adequado para produção.**
+
+---
+
+### 3. External Secrets Operator para injeção de secrets
+
+**Decisão:** Em vez de criar Kubernetes Secrets diretamente no Terraform, usar ESO com `ClusterSecretStore` apontando para o Vault.
+
+**Justificativa:** Desacopla a aplicação do mecanismo de gerenciamento de secrets. A troca do backend (Vault → AWS Secrets Manager, por exemplo) não requer mudanças no Helm chart.
+
+---
+
+### 4. MinIO como backend do Terraform state
+
+**Decisão:** Container Docker `minio-state` (porta `9100`) como backend S3 para o Terraform state (`tfstate` bucket).
+
+**Justificativa:** Permite usar o backend S3 do Terraform sem dependência de AWS, de forma completamente local e controlada.
+
+**Observação:** `setup-all.sh` garante que o container esteja rodando antes de qualquer `terraform init`, inclusive após reinicialização da máquina.
+
+---
+
+### 5. MinIO in-cluster para Loki e Mimir (habilitando HPA)
+
+**Decisão:** Tanto Loki quanto Mimir usam MinIO (S3) como backend de object storage em vez de PVCs.
+
+**Justificativa:** `StorageClass: standard` do Kind usa `ReadWriteOnce` (RWO). Um PVC RWO só pode ser montado por um pod em um único nó. Com HPA escalando para 2 réplicas em nós diferentes, o segundo pod ficaria em estado `Pending` indefinidamente aguardando o PVC.
+
+A migração para object storage (S3) torna esses componentes verdadeiramente stateless e multitenante.
+
+---
+
+### 6. emptyDir para o WAL do Mimir
+
+**Decisão:** O Mimir usa `emptyDir` para o WAL (Write-Ahead Log) em vez de PVC.
+
+**Justificativa:** O WAL do Mimir é um buffer temporário de segundos a minutos antes de flush para o object storage (MinIO). Perder o WAL em caso de crash significa perder apenas as métricas dos últimos poucos segundos antes do restart.
+
+**Trade-off:** Risco de perda mínima de dados em crash de pod. Aceitável para ambiente de desenvolvimento.
+
+---
+
+### 7. Memberlist para coordenação de múltiplas réplicas (Loki e Mimir)
+
+**Decisão:** Loki e Mimir usam `kvstore: memberlist` com headless services para coordenação de rings.
+
+**Justificativa:** Com HPA criando 2 réplicas, cada pod precisa descobrir seus pares para coordenar o ring (ingester, distributor, store_gateway, etc.). Sem memberlist, cada réplica operaria de forma isolada, causando inconsistências nas queries.
+
+**Implementação:**
+- Headless services `loki-headless:7946` e `mimir-headless:7946`
+- `join_members` aponta para o headless service (DNS resolve para IPs de todos os pods)
+
+---
+
+### 8. OTel Collector como DaemonSet
+
+**Decisão:** OTel Collector implantado como `DaemonSet`, não `Deployment`.
+
+**Justificativa:** Como coletor de nível de nó, o DaemonSet garante exatamente uma réplica por nó e escala automaticamente conforme novos nós são adicionados. HPA não faz sentido para um DaemonSet.
+
+---
+
+### 9. Alloy para sincronização de regras (GitOps de alertas)
+
+**Decisão:** Alloy configurado para fazer scrape de `ConfigMap` com PrometheusRules e sincronizá-las para o ruler do Mimir.
+
+**Justificativa:** As regras de alert ficam versionadas em código (Helm ConfigMap `mimir-alerting-rules`). O Alloy detecta mudanças e as aplica automaticamente ao Mimir, sem intervenção manual.
+
+---
+
+### 10. AlertManager em namespace separado com depends_on explícito
+
+**Decisão:** AlertManager e MailHog implantados no namespace `alertmanager` via módulo separado, antes do módulo `app`.
+
+**Justificativa:** O módulo `app` passa a URL do AlertManager como `helm_values` para o Mimir. O `depends_on` garante que a URL esteja disponível como output antes de o Helm release ser aplicado. Namespaces separados facilitam troubleshooting e permitem policies de rede independentes.
+
+
+---
+
+# Troubleshooting
+
+
+## Caso algum container apresente o erro too many open files
+
+Para o Fedora:
+
+```
+sudo nano /etc/sysctl.d/99-inotify.conf
+fs.inotify.max_user_watches=1048576
+fs.inotify.max_user_instances=2048
+
+sudo sysctl --system
+```
+
+Nota: Essas configs já nascem com o cluster kind, mas podem se perder por reinicio de VM ou host.
+Já está com a persistencia la, mas vai que...

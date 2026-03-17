@@ -1,116 +1,94 @@
-# Como as secrets são criadas
+# Como as secrets são criadas e consumidas
+
+## Fluxo completo
 
 ```
-export TF_VAR_mysql_root_password="qualquer_valor"
+export TF_VAR_mysql_root_password="suasenha-1"
+export TF_VAR_minio_root_password="suasenha-2"
          │
          ▼
-    Terraform (main.tf)
-    vault kv put secret/inventory
-      DB_PASSWORD=qualquer_valor
-      MYSQL_ROOT_PASSWORD=qualquer_valor
+    modules/vault/main.tf
+    null_resource.vault_init
+    → vault kv put secret/inventory
+        DB_PASSWORD=<mysql_root_password>
+        MYSQL_ROOT_PASSWORD=<mysql_root_password>
+        MINIO_ROOT_PASSWORD=<minio_root_password>
          │
          ▼
-    Vault (secret/inventory)
+    modules/external-secrets/main.tf
+    kubernetes_secret.vault_token
+    → cria k8s secret "vault-token" com o root token do Vault
+    (garante que o token existe antes do ESO tentar autenticar)
          │
          ▼
-    ESO (ExternalSecret)
-    lê do Vault e cria dois K8s Secrets:
-      • inventory-app-secrets → chave DB_PASSWORD
-      • mysql-secrets         → chave MYSQL_ROOT_PASSWORD
+    null_resource.setup_external_secrets
+    → aplica ClusterSecretStore (aponta para Vault, usa vault-token)
+    → aplica 3 ExternalSecrets:
+        • mysql-external-secret     → k8s secret "mysql-secrets"
+        • inventory-app-external-secret → k8s secret "inventory-app-secrets"
+        • minio-external-secret     → k8s secret "minio-secrets"
+    → aguarda os 3 secrets existirem antes de continuar
+         │
+         ├──▶ mysql.yaml
+         │      env MYSQL_ROOT_PASSWORD ← secretKeyRef: mysql-secrets/MYSQL_ROOT_PASSWORD
          │
          ├──▶ inventory-app.yaml
          │      env DB_PASSWORD ← secretKeyRef: inventory-app-secrets/DB_PASSWORD
+         │      (nome do secret: "inventory-app-secrets", não "inventory-app-secrets")
          │
-         └──▶ mysql.yaml
-                env MYSQL_ROOT_PASSWORD ← secretKeyRef: mysql-secrets/MYSQL_ROOT_PASSWORD
+         └──▶ minio.yaml
+                env MINIO_ROOT_PASSWORD ← secretKeyRef: minio-secrets/MINIO_ROOT_PASSWORD
+                env MINIO_ROOT_USER     ← value: "minio" (hardcoded no values.yaml)
 ```
 
-## Para configurar secret - Colocar no seu .zshrc
+> **Nota:** O `inventory-app.yaml` referencia o secret como `{{ .Values.inventoryApp.name }}-secrets`, que resolve para `inventory-app-secrets`. Isso bate exatamente com o `target.name` do ExternalSecret `inventory-app-external-secret`.
 
-export TF_VAR_mysql_root_password="mysql-senha-supersecreta"
-export TF_VAR_minio_root_password="minio-senha-muito-boa"
-export MINIO_ROOT_USER="init-minio-root-user"
-export MINIO_ROOT_PASSWORD="init-minio-root-pass"
+---
 
-# senhas minio
+## Senhas MySQL — uma variável, dois usos
+
+Os dois secrets (`DB_PASSWORD` para a app e `MYSQL_ROOT_PASSWORD` para o MySQL) vêm do mesmo `TF_VAR_mysql_root_password`. Uma variável só resolve os dois.
+
+> **Boa prática não implementada:** O ideal seria separar — `MYSQL_ROOT_PASSWORD` para o root do MySQL e `DB_PASSWORD` para um usuário com permissões limitadas (SELECT, INSERT, etc.). Isso é o princípio de least privilege. A app nunca deveria ter acesso root ao banco. Para este ambiente de desenvolvimento, o acesso root foi mantido por simplicidade.
+
+---
+
+## MinIO — dois contextos diferentes
+
+| Contexto | Variável | Onde é usada |
+|---|---|---|
+| MinIO state backend (Docker local) | `MINIO_ROOT_USER` + `MINIO_ROOT_PASSWORD` | `setup-all.sh` para subir o container Docker na porta 9100 |
+| MinIO in-cluster (Kubernetes) | `TF_VAR_minio_root_password` | Vault → ESO → `minio-secrets` → pod MinIO |
+
+O usuário do MinIO in-cluster é fixo (`minio`, definido em `values.yaml`). Apenas a senha vem do secret.
+
+---
+
+## O que precisa ser exportado antes do setup
+
+```bash
+# Obrigatórias (sem default)
+export TF_VAR_mysql_root_password="suasenha"
+export MINIO_ROOT_USER="minio"
+export MINIO_ROOT_PASSWORD="suasenha"
+export TF_VAR_minio_root_password="$MINIO_ROOT_PASSWORD"
+
+# vault_root_token já tem default "root" no terraform.tfvars — não precisa exportar
 ```
-export TF_VAR_minio_root_password="suasenha"
-         │
-         ▼
-    vault kv put secret/inventory
-      MINIO_ROOT_PASSWORD=suasenha
-         │
-         ▼
-    ESO → K8s Secret "minio-secrets"
-         │
-         ├──▶ minio.yaml        → env MINIO_ROOT_PASSWORD (secretKeyRef)
-         ├──▶ mimir init container → env MINIO_ROOT_PASSWORD (secretKeyRef) → usado no mc alias set
-         └──▶ mimir container   → env MINIO_ROOT_PASSWORD (secretKeyRef) → usado no config ${MINIO_ROOT_PASSWORD}
+
+---
+
+## Verificando os secrets no cluster
+
+```bash
+# Ver os secrets criados pelo ESO
+kubectl get secrets -n api-app-go
+
+# Ver o conteúdo (base64 decode)
+kubectl get secret mysql-secrets -n api-app-go -o jsonpath='{.data.MYSQL_ROOT_PASSWORD}' | base64 -d
+kubectl get secret inventory-app-secrets -n api-app-go -o jsonpath='{.data.DB_PASSWORD}' | base64 -d
+kubectl get secret minio-secrets -n api-app-go -o jsonpath='{.data.MINIO_ROOT_PASSWORD}' | base64 -d
+
+# Ver o MinIO state backend (Docker)
+# http://localhost:9101 → console web
 ```
-
-É uma race condition clássica. O pod do MinIO começa antes do ESO ter tempo de sincronizar o ExternalSecret com o Vault e criar o minio-secrets. É a mesma razão pela qual o vault-token é criado diretamente via kubernetes_secret no Terraform — para garantir que existe antes do helm release.
-
-A solução: criar o minio-secrets diretamente via Terraform (como o vault_token), e remover o ExternalSecret do minio do helm chart. O var.minio_root_password já está disponível no Terraform.
-
-
-
-## Senhas mysql
-Os dois (DB_PASSWORD para a app e MYSQL_ROOT_PASSWORD para o MySQL) vêm do mesmo TF_VAR_mysql_root_password. Uma variável só resolve os dois.
-
-
-### app usa o acesso root ao bd
-
-Boa prática seria separar. O ideal é:
-
-Secret	Descrição	Usuário MySQL
-MYSQL_ROOT_PASSWORD	senha do root	root — só para admin
-DB_PASSWORD	senha da aplicação	usuário com permissões limitadas (SELECT, INSERT, etc.)
-
-Isso é o princípio de least privilege — a app nunca deveria ter acesso root ao banco.
-
-
-## Fluxo de senhas atualizadas
-
-env var (senha)
-    ↓
-null_resource.vault_init
-    → vault kv put secret/inventory ...  (escreve no Vault)
-    ↓
-kubernetes_secret.vault_token
-    → cria k8s secret com o token root do Vault
-    ↓
-null_resource.setup_external_secrets
-    → aplica ClusterSecretStore  (diz ao ESO: "Vault está em X, use esse token")
-    → aplica ExternalSecrets     (diz ao ESO: "leia 'inventory' do Vault e crie o k8s secret")
-    ↓
-ESO sincroniza
-    → cria mysql-secrets e inventory-app-secrets no namespace
-    ↓
-Pods consomem os k8s secrets
-
-
-### Senhas Minio inicial em docker
-
-env var (MINIO_ROOT_PASSWORD)
-         ↓
-null_resource.vault_init
-  → vault kv put secret/inventory MINIO_ROOT_PASSWORD=...  ← já acontece hoje
-         ↓
-null_resource.setup_external_secrets
-  → ExternalSecret minio-external-secret (a adicionar em manifests/external-secrets.yaml)
-         ↓
-ESO sincroniza
-  → cria minio-secrets k8s secret
-         ↓
-MinIO pod lê via secretKeyRef → minio-secrets / MINIO_ROOT_PASSWORD
-
-
-### Verificando o conteudo do minio init
-http://localhost:9101 --> via Docker
-
- MINIO_ROOT_USER e MINIO_ROOT_PASSWORD
-
-
-### Verificando o conteudo do minio usado pelo Mimir
-TF_VAR_minio_root_password
-user: minio
