@@ -37,6 +37,9 @@ O StorageClass `standard` do Kind (`rancher.io/local-path`) **não suporta ReadW
 
 **Memberlist para scaling real:** Com `kvstore: inmemory`, cada réplica do Loki teria seu próprio anel isolado — o Service faria load-balance entre pods que não se enxergam, causando split de dados e containers sumindo nas queries. A solução foi migrar para `kvstore: store: memberlist` + um Headless Service (`clusterIP: None`) na porta 7946 para peer discovery. Com isso os pods se descobrem e coordenam o anel distribuído, permitindo `maxReplicas: 2` sem inconsistência.
 
+### solução identica pro mimir
+**Memberlist para scaling real:** Com `kvstore: inmemory`, cada réplica do Mimir tem seu próprio anel isolado — ingester, distributor, store_gateway, compactor e ruler cada um com seu estado local. O Service fazia load-balance entre pods que não se enxergavam, causando inconsistência nas queries (métricas aparecendo ou sumindo dependendo de qual pod respondia). A solução foi migrar todos os 5 rings para `kvstore: store: memberlist` + bloco `memberlist.join_members` apontando para `mimir-headless:7946` + Headless Service (`clusterIP: None`) para peer discovery. Com isso os pods formam um cluster coordenado e qualquer pod consegue responder qualquer query com consistência.
+
 ---
 
 ## Mimir WAL — emptyDir em vez de PVC (habilita HPA)

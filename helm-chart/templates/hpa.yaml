@@ -149,28 +149,3 @@ spec:
           type: Utilization
           averageUtilization: {{ .Values.mimir.autoscaling.targetMemoryUtilizationPercentage | default 30 }}
 {{- end }}
-
-{{- if and .Values.otelCollector.enabled (dig "autoscaling" "enabled" false .Values.otelCollector) }}
----
-apiVersion: autoscaling/v2
-kind: HorizontalPodAutoscaler
-metadata:
-  name: {{ .Values.otelCollector.name }}-hpa
-  namespace: {{ .Values.global.namespace }}
-  labels:
-    app: {{ .Values.otelCollector.name }}
-spec:
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: {{ .Values.otelCollector.name }}
-  minReplicas: {{ .Values.otelCollector.autoscaling.minReplicas | default 1 }}
-  maxReplicas: {{ .Values.otelCollector.autoscaling.maxReplicas | default 3 }}
-  metrics:
-    - type: Resource
-      resource:
-        name: memory
-        target:
-          type: Utilization
-          averageUtilization: {{ .Values.otelCollector.autoscaling.targetMemoryUtilizationPercentage | default 30 }}
-{{- end }}

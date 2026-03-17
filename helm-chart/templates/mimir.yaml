@@ -33,24 +33,24 @@ data:
       ring:
         replication_factor: 1
         kvstore:
-          store: inmemory
+          store: memberlist
 
     distributor:
       ring:
         kvstore:
-          store: inmemory
+          store: memberlist
 
     store_gateway:
       sharding_ring:
         replication_factor: 1
         kvstore:
-          store: inmemory
+          store: memberlist
 
     compactor:
       data_dir: /data/compactor
       sharding_ring:
         kvstore:
-          store: inmemory
+          store: memberlist
 
     ruler:
       {{- if .Values.mimir.alertmanager.enabled }}
@@ -59,7 +59,11 @@ data:
       {{- end }}
       ring:
         kvstore:
-          store: inmemory
+          store: memberlist
+
+    memberlist:
+      join_members:
+        - mimir-headless.{{ .Values.global.namespace }}.svc.cluster.local:7946
 
     {{- if .Values.mimir.alertmanager.enabled }}
     ruler_storage:
@@ -126,6 +130,8 @@ spec:
           ports:
             - containerPort: {{ .Values.mimir.config.server.httpListenPort }}
               name: http
+            - containerPort: 7946
+              name: memberlist
           env:
             - name: HOSTNAME
               valueFrom:
@@ -197,5 +203,22 @@ spec:
       protocol: TCP
       port: {{ .Values.mimir.config.server.httpListenPort }}
       targetPort: {{ .Values.mimir.config.server.httpListenPort }}
+  selector:
+    app: mimir
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mimir-headless
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: mimir
+spec:
+  clusterIP: None
+  ports:
+    - name: memberlist
+      port: 7946
+      targetPort: 7946
+      protocol: TCP
   selector:
     app: mimir

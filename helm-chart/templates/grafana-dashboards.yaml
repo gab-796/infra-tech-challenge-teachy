@@ -15,4 +15,8 @@ data:
 {{ .Files.Get "dashboards/inventory-dashboard.json" | indent 4 }}
   loki-dashboard.json: |-
 {{ .Files.Get "dashboards/loki.json" | indent 4 }}
+  node-health.json: |-
+{{ .Files.Get "dashboards/node-health.json" | indent 4 }}
+  workloads-dashboard.json: |-
+{{ .Files.Get "dashboards/workloads.json" | indent 4 }}
 {{- end }}

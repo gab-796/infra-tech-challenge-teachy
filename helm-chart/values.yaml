@@ -382,7 +382,7 @@ minio:
 otelCollector:
   enabled: true
   name: otel-collector
-  replicaCount: 2
+  replicaCount: 1
   image:
     repository: otel/opentelemetry-collector-contrib
     tag: 0.123.0
@@ -433,10 +433,7 @@ otelCollector:
         endpoint: http://mimir:9009/api/v1/push
 
   autoscaling:
-    enabled: true
-    minReplicas: 1
-    maxReplicas: 3
-    targetMemoryUtilizationPercentage: 30
+    enabled: false # DaemonSet não suporta HPA — escala automaticamente com novos nós
 
 # ========================================
 # INGRESS CONFIGURATION
