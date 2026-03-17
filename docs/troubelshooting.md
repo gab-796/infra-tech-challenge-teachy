@@ -1,5 +1,26 @@
 # Erros e seus tratamentos
 
+## HPA — Scaling real bloqueado por PVC ReadWriteOnce no Kind
+
+**Causa raiz:** grafana, loki, tempo, pyroscope, alloy e mimir usam PVCs com `accessMode: ReadWriteOnce` (RWO). Um volume RWO só pode ser montado por **um pod em um único nó** ao mesmo tempo. Quando o HPA tenta criar um segundo pod, o Kubernetes não consegue montar o mesmo PVC e o pod fica preso em `Pending` com:
+```
+0/3 nodes are available: 3 node(s) had volume node affinity conflict
+```
+
+O StorageClass `standard` do Kind (`rancher.io/local-path`) **não suporta ReadWriteMany (RWM)**. Suporte a RWM exige um provisioner externo (NFS, CephFS, EFS).
+
+**Componentes com HPA desabilitado (PVC RWO):** grafana, loki, tempo, pyroscope, alloy, mimir
+
+**Componentes com HPA ativo (sem PVC):** inventory-app, otel-collector
+
+**Para habilitar RWM e scaling real:**
+1. Instalar provisioner NFS no Kind (ex: `nfs-subdir-external-provisioner`)
+2. Criar StorageClass com suporte a `ReadWriteMany`
+3. Mudar `persistence.accessMode: ReadWriteMany` no `values.yaml`
+4. Setar `autoscaling.enabled: true` nos componentes desejados
+
+---
+
 ## AlertManager PVC/PV fantasma após terraform destroy
 
 **Sintoma:** Após `terraform destroy`, o PVC `storage-alertmanager-0` some mas o PV fica em estado `Released` ou `Bound` sem PVC. No próximo `terraform apply`, o pod do alertmanager não sobe com o erro:
