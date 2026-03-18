@@ -133,8 +133,6 @@ terraform destroy
 cd kind-cluster && terraform destroy
 ```
 
----
-
 ## Documentação
 
 | Arquivo | Conteúdo |
@@ -147,4 +145,6 @@ cd kind-cluster && terraform destroy
 
 ---
 
-**Versão**: 1.0.0 | **Autor**: Gabriel Rocha
+**Versão**: 1.0.0
+**Última atualização**: 2026-03
+**Autor**: Gabriel Rocha
