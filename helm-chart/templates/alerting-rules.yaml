@@ -1,0 +1,85 @@
+{{- if .Values.mimir.alertmanager.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mimir-alerting-rules
+  namespace: {{ .Values.global.namespace }}
+data:
+  alerting-rules.yaml: |
+    groups:
+      - name: basic-infrastructure-alerts
+        interval: 1m
+        rules:
+
+          - alert: InstanceDown
+            expr: up == 0
+            for: 2m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Instance {{ "{{" }} $labels.instance {{ "}}" }} is down"
+              description: >-
+                Job {{ "{{" }} $labels.job {{ "}}" }} / instance
+                {{ "{{" }} $labels.instance {{ "}}" }} has been unreachable
+                for more than 2 minutes.
+
+          - alert: HighCPUUsage
+            expr: >
+              rate(container_cpu_usage_seconds_total{container!="",container!="POD"}[5m])
+              /
+              on(container, pod, namespace)
+              kube_pod_container_resource_limits{resource="cpu"}
+              > 0.80
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High CPU usage on pod {{ "{{" }} $labels.pod {{ "}}" }}"
+              description: >-
+                Container {{ "{{" }} $labels.container {{ "}}" }} in pod
+                {{ "{{" }} $labels.pod {{ "}}" }} (namespace
+                {{ "{{" }} $labels.namespace {{ "}}" }}) is using more than
+                80% of its CPU limit for 5 minutes.
+
+          - alert: HighMemoryUsage
+            expr: >
+              container_memory_working_set_bytes{container!="",container!="POD"}
+              /
+              on(container, pod, namespace)
+              kube_pod_container_resource_limits{resource="memory"}
+              > 0.85
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: "High memory usage on pod {{ "{{" }} $labels.pod {{ "}}" }}"
+              description: >-
+                Container {{ "{{" }} $labels.container {{ "}}" }} in pod
+                {{ "{{" }} $labels.pod {{ "}}" }} (namespace
+                {{ "{{" }} $labels.exported_namespace {{ "}}" }}) is using more than
+                85% of its memory limit for 5 minutes.
+
+          - alert: PodCrashLooping
+            expr: rate(kube_pod_container_status_restarts_total[15m]) * 60 * 5 > 0
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: "Pod {{ "{{" }} $labels.pod {{ "}}" }} is crash looping"
+              description: >-
+                Pod {{ "{{" }} $labels.pod {{ "}}" }} in namespace
+                {{ "{{" }} $labels.exported_namespace {{ "}}" }} is restarting
+                {{ "{{" }} printf "%.2f" $value {{ "}}" }} times per 5 minutes.
+
+          - alert: ManySuccessfulRequests
+            expr: promhttp_metric_handler_requests_total{code="200"} > 15
+            for: 1m
+            labels:
+              severity: info
+            annotations:
+              summary: "inventory-app pod is handling many successful requests"
+              description: >-
+                inventory-app in namespace
+                api-app-go is handling many successful requests
+                {{ "{{" }} printf "%.2f" $value {{ "}}" }} times per minute.
+{{- end }}

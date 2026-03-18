@@ -1,0 +1,249 @@
+{
+    "annotations": {
+        "list": []
+    },
+    "editable": true,
+    "graphTooltip": 1,
+    "title": "Loki Health: Deep Dive & Golden Signals",
+    "tags": [
+        "loki",
+        "sre",
+        "observability"
+    ],
+    "timezone": "browser",
+    "templating": {
+        "list": [
+            {
+                "current": {
+                    "selected": false,
+                    "text": "Mimir",
+                    "value": "Mimir"
+                },
+                "hide": 0,
+                "includeAll": false,
+                "multi": false,
+                "name": "datasource",
+                "options": [],
+                "query": "prometheus",
+                "refresh": 1,
+                "regex": "",
+                "skipUrlSync": false,
+                "type": "datasource"
+            }
+        ]
+    },
+    "panels": [
+        {
+            "title": "Row 1: RED & Golden Signals",
+            "type": "row",
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 0
+            }
+        },
+        {
+            "title": "Traffic (Rate) - Req/s by Route",
+            "type": "timeseries",
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 6,
+                "x": 0,
+                "y": 1
+            },
+            "targets": [
+                {
+                    "expr": "sum(rate(loki_request_duration_seconds_count[1m])) by (route)",
+                    "legendFormat": "{{route}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "reqps"
+                }
+            }
+        },
+        {
+            "title": "Errors - 5xx Rate (%)",
+            "type": "timeseries",
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 6,
+                "x": 6,
+                "y": 1
+            },
+            "targets": [
+                {
+                    "expr": "sum(rate(loki_request_duration_seconds_count{status_code=~\"5..\"}[1m])) / sum(rate(loki_request_duration_seconds_count[1m])) * 100",
+                    "legendFormat": "Error %"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "percent",
+                    "color": {
+                        "mode": "fixed",
+                        "fixedColor": "red"
+                    }
+                }
+            }
+        },
+        {
+            "title": "Latency (Duration) - P99",
+            "type": "timeseries",
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 6,
+                "x": 12,
+                "y": 1
+            },
+            "targets": [
+                {
+                    "expr": "histogram_quantile(0.99, sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, route))",
+                    "legendFormat": "{{route}} P99"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "s"
+                }
+            }
+        },
+        {
+            "title": "Saturation - Ingester Flush Queue",
+            "type": "gauge",
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 6,
+                "x": 18,
+                "y": 1
+            },
+            "targets": [
+                {
+                    "expr": "cortex_ingester_flush_queue_length",
+                    "legendFormat": "Pending Flushes"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "min": 0,
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "orange",
+                                "value": 100
+                            },
+                            {
+                                "color": "red",
+                                "value": 500
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "title": "Row 2: Cluster Internals & Storage",
+            "type": "row",
+            "gridPos": {
+                "h": 1,
+                "w": 24,
+                "x": 0,
+                "y": 8
+            }
+        },
+        {
+            "title": "KV Store Latency (P99)",
+            "type": "timeseries",
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 8,
+                "x": 0,
+                "y": 9
+            },
+            "targets": [
+                {
+                    "expr": "histogram_quantile(0.99, sum(rate(cortex_kv_request_duration_seconds_bucket[1m])) by (le, kv_name))",
+                    "legendFormat": "{{kv_name}}"
+                }
+            ],
+            "fieldConfig": {
+                "defaults": {
+                    "unit": "s"
+                }
+            }
+        },
+        {
+            "title": "Querier Cache Hits vs Misses",
+            "type": "timeseries",
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 8,
+                "x": 8,
+                "y": 9
+            },
+            "targets": [
+                {
+                    "expr": "sum(rate(querier_cache_gets_total[1m])) by (cache)",
+                    "legendFormat": "Gets - {{cache}}"
+                },
+                {
+                    "expr": "sum(rate(querier_cache_misses_total[1m])) by (cache)",
+                    "legendFormat": "Misses - {{cache}}"
+                }
+            ]
+        },
+        {
+            "title": "Ring Member Heartbeats",
+            "type": "timeseries",
+            "datasource": {
+                "type": "prometheus",
+                "uid": "${datasource}"
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 8,
+                "x": 16,
+                "y": 9
+            },
+            "targets": [
+                {
+                    "expr": "sum(rate(ring_member_heartbeats_total[1m])) by (name)",
+                    "legendFormat": "{{name}}"
+                }
+            ]
+        }
+    ],
+    "schemaVersion": 38,
+    "refresh": "10s"
+}

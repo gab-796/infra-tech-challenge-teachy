@@ -1,26 +1,26 @@
 output "helm_release_id" {
   description = "Helm release ID"
-  value       = helm_release.api_observabilidade.id
+  value       = module.app.helm_release_id
 }
 
 output "helm_release_name" {
   description = "Helm release name"
-  value       = helm_release.api_observabilidade.name
+  value       = module.app.helm_release_name
 }
 
 output "helm_release_namespace" {
   description = "Helm release namespace"
-  value       = helm_release.api_observabilidade.namespace
+  value       = module.app.helm_release_namespace
 }
 
 output "helm_release_status" {
   description = "Helm release status"
-  value       = helm_release.api_observabilidade.status
+  value       = module.app.helm_release_status
 }
 
 output "namespace_name" {
   description = "Kubernetes namespace name"
-  value       = var.namespace
+  value       = module.app.namespace_name
 }
 
 output "ingress_hostname" {
@@ -39,18 +39,19 @@ output "app_http_ports" {
 output "deployment_info" {
   description = "Deployment information"
   value = {
-    release_name     = helm_release.api_observabilidade.name
-    namespace        = helm_release.api_observabilidade.namespace
-    chart            = helm_release.api_observabilidade.chart
-    status           = helm_release.api_observabilidade.status
-    app_replicas     = var.inventory_app_replicas
-    mysql_database   = var.mysql_database
+    release_name   = module.app.helm_release_name
+    namespace      = module.app.helm_release_namespace
+    chart          = module.app.helm_release_chart
+    status         = module.app.helm_release_status
+    app_replicas   = var.inventory_app_replicas
+    mysql_database = var.mysql_database
   }
 }
 
 # Useful kubectl commands for users
 output "kubectl_commands" {
   description = "Useful kubectl commands"
+  sensitive   = true
   value = {
     get_pods           = "kubectl get pods -n ${var.namespace}"
     get_services       = "kubectl get services -n ${var.namespace}"

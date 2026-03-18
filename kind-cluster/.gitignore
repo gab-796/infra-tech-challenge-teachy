@@ -20,6 +20,7 @@ kubeconfig.yaml
 
 # Temporary files
 tfplan
+tfplan-app
 tfplan.backup
 *.tmp
 *.bak
