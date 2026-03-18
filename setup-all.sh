@@ -30,12 +30,18 @@ check_requirements() {
     local missing_tools=()
 
     for tool in "${required_tools[@]}"; do
-        if command -v "$tool" &> /dev/null; then
-            echo -e "${GREEN}✓${NC} $tool: $(eval "$tool" --version 2>&1 | head -n 1)"
-        else
-            echo -e "${RED}✗${NC} $tool: NOT FOUND"
-            missing_tools+=("$tool")
-        fi
+            if command -v "$tool" &> /dev/null; then
+                if [ "$tool" = "helm" ]; then
+                    echo -e "${GREEN}✓${NC} $tool: $(helm version --short 2>&1 | head -n 1)"
+                elif [ "$tool" = "kubectl" ]; then
+                    echo -e "${GREEN}✓${NC} $tool: $(kubectl version --client --short 2>&1 | head -n 1)"
+                else
+                    echo -e "${GREEN}✓${NC} $tool: $(eval "$tool" --version 2>&1 | head -n 1)"
+                fi
+            else
+                echo -e "${RED}✗${NC} $tool: NOT FOUND"
+                missing_tools+=("$tool")
+            fi
     done
 
     echo ""
