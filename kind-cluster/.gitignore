@@ -1,0 +1,38 @@
+# .gitignore - Kind Cluster Terraform
+
+# Terraform files
+terraform.tfstate
+terraform.tfstate.*
+terraform.tfstate.backup
+crash.log
+
+# Terraform directories
+.terraform/
+.terraform.lock.hcl
+
+# Kubeconfig
+kubeconfig
+kubeconfig.yml
+kubeconfig.yaml
+
+# Logs
+*.log
+
+# Temporary files
+tfplan
+tfplan.backup
+*.tmp
+*.bak
+
+# IDE
+.idea/
+*.swp
+.vscode/
+.DS_Store
+
+# Environment
+.env
+.env.local
+
+# State local
+state/

@@ -1,0 +1,189 @@
+# custom-values.yaml.example
+# 
+# Este arquivo é um exemplo de como customizar os valores do Helm Chart
+# Renomeie para custom-values.yaml e configure conforme necessário
+#
+# Para usar este arquivo, adicione a seguinte linha em terraform.tfvars:
+# helm_values_file = "./custom-values.yaml"
+
+# Global configuration
+global:
+  namespace: api-app-go
+  storageClass: standard
+  imagePullPolicy: IfNotPresent
+
+# ========================================
+# APPLICATION CONFIGURATION
+# ========================================
+inventoryApp:
+  enabled: true
+  replicaCount: 2  # Aumentar replicas
+  image:
+    repository: gab796/inventory_app
+    tag: v4.0
+    pullPolicy: IfNotPresent
+  
+  ports:
+    http: 10000
+    metrics: 2113
+  
+  resources:
+    limits:
+      memory: "256Mi"
+      cpu: "1000m"
+    requests:
+      memory: "128Mi"
+      cpu: "500m"
+  
+  # Health checks
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 10000
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 10000
+    initialDelaySeconds: 5
+    periodSeconds: 5
+
+# ========================================
+# DATABASE CONFIGURATION
+# ========================================
+mysql:
+  enabled: true
+  image:
+    tag: "8.0"
+  
+  resources:
+    limits:
+      memory: "2Gi"
+      cpu: "2000m"
+    requests:
+      memory: "1Gi"
+      cpu: "1000m"
+  
+  persistence:
+    enabled: true
+    size: 20Gi
+    # storageClassName: fast-ssd  # Descomente para usar storage class específico
+
+# ========================================
+# GRAFANA CONFIGURATION (Observability)
+# ========================================
+grafana:
+  enabled: true
+  replicaCount: 1
+  image:
+    tag: "11.6.0"
+  
+  adminPassword: "admin123"  # Alterar em produção!
+  
+  resources:
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+  
+  # Ingress para Grafana
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - host: grafana.local
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+
+# ========================================
+# LOKI CONFIGURATION (Logs)
+# ========================================
+loki:
+  enabled: true
+  
+  persistence:
+    enabled: true
+    size: 10Gi
+  
+  config:
+    limits_config:
+      retention_period: 720h  # 30 dias
+
+# ========================================
+# TEMPO CONFIGURATION (Traces)
+# ========================================
+tempo:
+  enabled: true
+  
+  retention: 168h  # 7 dias
+
+# ========================================
+# MIMIR CONFIGURATION (Metrics)
+# ========================================
+mimir:
+  enabled: true
+  
+  persistence:
+    size: 10Gi
+
+# ========================================
+# PYROSCOPE CONFIGURATION (Profiling)
+# ========================================
+pyroscope:
+  enabled: true
+
+# ========================================
+# OTEL COLLECTOR CONFIGURATION
+# ========================================
+otelCollector:
+  enabled: true
+  
+  # OpenTelemetry Collector endpoints
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+
+# ========================================
+# INGRESS CONFIGURATION
+# ========================================
+ingress:
+  enabled: true
+  ingressClassName: nginx
+  
+  hosts:
+    - host: inventory.local
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: inventory-service
+              port:
+                number: 10000
+        - path: /metrics
+          pathType: Prefix
+          backend:
+            service:
+              name: inventory-app-metrics-service
+              port:
+                number: 2113
+
+# ========================================
+# AUTOSCALING (Optional)
+# ========================================
+autoscaling:
+  enabled: false  # Ativar se HPA estiver disponível
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
