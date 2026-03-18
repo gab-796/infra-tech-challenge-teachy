@@ -5,7 +5,7 @@ kubeconfig_path = "~/.kube/config"
 namespace            = "api-app-go"
 create_namespace     = true
 helm_release_name    = "api-observabilidade"
-helm_chart_path      = "../helm-chart/infra-tech-challenge-teachy"
+helm_chart_path      = "./helm-chart"
 
 # Chart configuration
 chart_version = "1.0.0"
@@ -21,8 +21,9 @@ inventory_app_metrics_port = 2113
 # ========================================
 # DATABASE CONFIGURATION
 # ========================================
-# IMPORTANTE: Altere essa senha em produção!
-mysql_root_password = "rootpassword"
+# IMPORTANTE: Senhas devem ser passadas via variáveis de ambiente:
+#   export TF_VAR_mysql_root_password="sua_senha"
+#   export TF_VAR_minio_root_password="sua_senha"
 mysql_database      = "inventory"
 mysql_storage_size  = "10Gi"
 mysql_image_tag     = "8.0"
@@ -42,8 +43,21 @@ loki_enabled            = true
 tempo_enabled           = true
 mimir_enabled           = true
 pyroscope_enabled       = true
-alloy_enabled           = true
+alloy_enabled           = false
 otel_collector_enabled  = true
+
+# ========================================
+# VAULT CONFIGURATION
+# ========================================
+vault_enabled     = true
+vault_version     = "0.27.0"
+vault_root_token  = "root"
+
+# ========================================
+# EXTERNAL SECRETS OPERATOR
+# ========================================
+eso_enabled  = true
+eso_version  = "0.10.0"
 
 # ========================================
 # RESOURCE CONFIGURATION
@@ -64,3 +78,11 @@ resource_limits = {
 # Para valores customizados, use um arquivo YAML
 # helm_values_file = "./custom-values.yaml"
 custom_values = {}
+
+# ========================================
+# ALERTMANAGER CONFIGURATION
+# ========================================
+alertmanager_enabled   = true
+alertmanager_version   = "1.31.1"
+alertmanager_namespace = "alertmanager"
+mailhog_version        = "5.2.3"

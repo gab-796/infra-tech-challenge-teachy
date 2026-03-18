@@ -10,6 +10,10 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
+# Terraform plan files (binários gerados por terraform plan -out)
+tfplan*
+tfplan-app
+
 # Terraform directories
 .terraform/
 .terraform.lock.hcl
@@ -51,3 +55,9 @@ logs/
 # Build/dist directories
 dist/
 build/
+
+# State local
+state/
+
+# Obsidian
+.obsidian/

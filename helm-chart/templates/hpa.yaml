@@ -1,0 +1,151 @@
+{{- /* HPAs for observability stack components — inventory-app handled in inventory-app-hpa.yaml */}}
+
+{{- if and .Values.grafana.enabled (dig "autoscaling" "enabled" false .Values.grafana) }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.grafana.name }}-hpa
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.grafana.name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.grafana.name }}
+  minReplicas: {{ .Values.grafana.autoscaling.minReplicas | default 1 }}
+  maxReplicas: {{ .Values.grafana.autoscaling.maxReplicas | default 2 }}
+  metrics:
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.grafana.autoscaling.targetMemoryUtilizationPercentage | default 30 }}
+{{- end }}
+
+{{- if and .Values.loki.enabled (dig "autoscaling" "enabled" false .Values.loki) }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.loki.name }}-hpa
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.loki.name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.loki.name }}
+  minReplicas: {{ .Values.loki.autoscaling.minReplicas | default 1 }}
+  maxReplicas: {{ .Values.loki.autoscaling.maxReplicas | default 2 }}
+  metrics:
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.loki.autoscaling.targetMemoryUtilizationPercentage | default 30 }}
+{{- end }}
+
+{{- if and .Values.tempo.enabled (dig "autoscaling" "enabled" false .Values.tempo) }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.tempo.name }}-hpa
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.tempo.name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.tempo.name }}
+  minReplicas: {{ .Values.tempo.autoscaling.minReplicas | default 1 }}
+  maxReplicas: {{ .Values.tempo.autoscaling.maxReplicas | default 2 }}
+  metrics:
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.tempo.autoscaling.targetMemoryUtilizationPercentage | default 30 }}
+{{- end }}
+
+{{- if and .Values.pyroscope.enabled (dig "autoscaling" "enabled" false .Values.pyroscope) }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.pyroscope.name }}-hpa
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.pyroscope.name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.pyroscope.name }}
+  minReplicas: {{ .Values.pyroscope.autoscaling.minReplicas | default 1 }}
+  maxReplicas: {{ .Values.pyroscope.autoscaling.maxReplicas | default 2 }}
+  metrics:
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.pyroscope.autoscaling.targetMemoryUtilizationPercentage | default 30 }}
+{{- end }}
+
+{{- if and .Values.alloy.enabled (dig "autoscaling" "enabled" false .Values.alloy) }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.alloy.name }}-hpa
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.alloy.name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.alloy.name }}
+  minReplicas: {{ .Values.alloy.autoscaling.minReplicas | default 1 }}
+  maxReplicas: {{ .Values.alloy.autoscaling.maxReplicas | default 2 }}
+  metrics:
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.alloy.autoscaling.targetMemoryUtilizationPercentage | default 30 }}
+{{- end }}
+
+{{- if and .Values.mimir.enabled (dig "autoscaling" "enabled" false .Values.mimir) }}
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.mimir.name }}-hpa
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.mimir.name }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.mimir.name }}
+  minReplicas: {{ .Values.mimir.autoscaling.minReplicas | default 1 }}
+  maxReplicas: {{ .Values.mimir.autoscaling.maxReplicas | default 2 }}
+  metrics:
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.mimir.autoscaling.targetMemoryUtilizationPercentage | default 30 }}
+{{- end }}

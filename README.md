@@ -1,310 +1,147 @@
-# README.md - Terraform Helm Deployment
+# Infrastructure Technical Challenge — Kubernetes & Observability
 
-# Conversa da aplicação para Terraform with Helm
+Stack completa de observabilidade em Kubernetes local, provisionada 100% via **Terraform + Helm**, entregando métricas, logs, traces e profiling de uma aplicação Go instrumentada com OpenTelemetry.
 
-Este diretório contém a configuração completa do Terraform para fazer deploy da aplicação e suas dependências via **Helm Chart**.
+---
 
-## 📋 Pré-requisitos
+## Stack
 
-1. **Terraform** instalado (recomendado v1.0+)
-```bash
-terraform version
-```
+| Componente | Versão | Papel |
+|---|---|---|
+| inventory-app | v4.0 | API Go instrumentada (métricas, logs, traces, profiling) |
+| Grafana | 11.6.0 | Visualização unificada (dashboards pré-configurados) |
+| Mimir | 2.13.0 | Armazenamento de métricas (Prometheus-compatible) |
+| Loki | 2.9.5 | Agregação de logs |
+| Tempo | 2.6.0 | Distributed tracing |
+| Pyroscope | 1.13.0 | Continuous profiling |
+| Alloy | v1.9.1 | Sincronização de regras de alerta para o Mimir ruler |
+| OTel Collector | 0.123.0 | DaemonSet receptor de traces/logs/métricas |
+| AlertManager | 1.31.1 | Roteamento de alertas |
+| MailHog | 5.2.3 | SMTP fake para testes de alertas |
+| MinIO | latest | Object storage (Loki chunks + Mimir blocks + Terraform state) |
+| Vault | 0.27.0 | Gerenciamento de secrets (dev mode) |
+| External Secrets Operator | 0.10.0 | Sincroniza secrets do Vault para o K8s |
+| kube-state-metrics | v2.18.0 | Métricas de estado dos objetos K8s |
+| Cilium | 1.15.0 | CNI |
+| MetalLB | 0.13.7 | Load balancer local |
+| Nginx Ingress | 4.10.1 | Ingress controller |
 
-2. **kubectl** instalado e configurado
-```bash
-kubectl config current-context
-```
+> Arquitetura detalhada, diagramas de fluxo e decisões de design em [`docs/`](./docs/).
 
-3. **Helm** instalado (recomendado v3.0+)
-```bash
-helm version
-```
+---
 
-4. **Cluster Kubernetes** funcionando (Kind, Minikube, EKS, GKE, etc.)
-
-5. **Nginx Ingress Controller** instalado (se usando ingress)
-```bash
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/kind/deploy.yaml
-```
-
-6. **DNS configurado** (adicionar ao `/etc/hosts`):
-```
-127.0.0.1 inventory.local
-```
-
-## 📁 Estrutura de Arquivos
-
-```
-terraform-helm/
-├── versions.tf          # Provider versions e requirements
-├── main.tf             # Recursos principais (Helm release, namespace)
-├── variables.tf        # Declaração de variáveis
-├── outputs.tf          # Outputs do Terraform
-├── terraform.tfvars    # Valores padrões das variáveis
-└── README.md          # Este arquivo
-```
-
-## 🚀 Como Usar
-
-### 1. Inicializar o Terraform
+## Pré-requisitos
 
 ```bash
-cd terraform-helm
-terraform init
+terraform  # >= 1.0
+kubectl    # v1.29.0
+helm       # >= 3.0
+kind       # v0.27.0
+docker     # v29.3.0
+mc         # MinIO client (para o state backend local)
 ```
 
-### 2. Validar a configuração
+---
+
+## Credenciais — antes de rodar
+
+O projeto usa credenciais sensíveis que **nunca ficam no repositório**. Você precisa exportá-las no terminal antes de executar o `setup-all.sh`.
+
+### Obrigatórias (sem default)
 
 ```bash
-terraform validate
+# Senha do MySQL (escolha a sua)
+export TF_VAR_mysql_root_password="suasenha"
+
+# Senha do MinIO — usada tanto no state backend Docker quanto no MinIO in-cluster
+export MINIO_ROOT_USER="minio"
+export MINIO_ROOT_PASSWORD="suasenha"
+export TF_VAR_minio_root_password="$MINIO_ROOT_PASSWORD"
 ```
 
-### 3. Revisar o plano de deployment
+> `MINIO_ROOT_USER` e `MINIO_ROOT_PASSWORD` são lidas pelo `setup-all.sh` para iniciar o container Docker do MinIO state backend. `TF_VAR_minio_root_password` é usada pelo Terraform para injetar a senha no MinIO in-cluster via Vault + ESO.
+
+### Com default no `terraform.tfvars`
+
+O `vault_root_token` já tem o valor `"root"` definido no `terraform.tfvars` — adequado para ambiente local de desenvolvimento. Não é necessário exportar `TF_VAR_vault_root_token` a menos que queira usar um token diferente.
+
+---
+
+## Setup
+
+Com as credenciais exportadas, execute:
 
 ```bash
-terraform plan -out=tfplan
+bash setup-all.sh
 ```
 
-Este comando mostra todos os recursos que serão criados.
+O script apresenta um menu interativo com as opções:
 
-### 4. Aplicar a configuração
+| Opção | Ação |
+|---|---|
+| 1 | Criar Kind Cluster + Deploy App (completo) |
+| 2 | Apenas criar o Kind Cluster |
+| 3 | Apenas fazer deploy da App |
+| 4 | Mostrar status dos pods/serviços |
+| 5 | Destruir apenas a App (mantém o cluster) |
+| 6 | Destruir tudo (App + Cluster + MinIO state) |
+
+O fluxo completo (opção 1) executa:
+1. Valida os pré-requisitos
+2. Inicia o container Docker `minio-state` (state backend do Terraform)
+3. Cria o cluster Kind (1 CP + 2 workers, Cilium, MetalLB, Nginx Ingress)
+4. Executa `terraform apply` na raiz — provisiona Vault, ESO, AlertManager e o Helm release completo
+
+> Para detalhes sobre variáveis disponíveis, customizações e decisões de design, consulte [`docs/delivery.md`](./docs/delivery.md).
+
+---
+
+## Acessos após deploy
+
+Adicione ao `/etc/hosts`:
+
+```
+172.18.0.1 inventory.local grafana-web.local loki.local tempo.local mimir.local pyroscope.local alloy.local minio.local alertmanager.local mailhog.local
+```
+
+| Serviço | URL |
+|---|---|
+| Inventory App | http://inventory.local |
+| Grafana | http://grafana-web.local |
+| Mimir | http://mimir.local |
+| Loki | http://loki.local |
+| Tempo | http://tempo.local |
+| Pyroscope | http://pyroscope.local |
+| Alloy | http://alloy.local |
+| MinIO | http://minio.local |
+| AlertManager | http://alertmanager.local |
+| MailHog | http://mailhog.local |
+
+Grafana já vem com acesso anônimo como Admin e datasources pré-configurados (Mimir, Loki, Tempo, Pyroscope).
+
+---
+
+## Destruir o ambiente
+
+Use o menu do `setup-all.sh` (opções 5 ou 6), ou manualmente:
 
 ```bash
-terraform apply tfplan
-```
-
-Ou aplicar direto sem salvar o plano:
-
-```bash
-terraform apply
-```
-
-### 5. Verificar o status
-
-Após o deployment, você pode verificar:
-
-```bash
-# Ver todos os recursos criados
-kubectl get all -n api-app-go
-
-# Ver o Helm release
-helm list -n api-app-go
-
-# Ver detalhes do release
-helm status api-observabilidade -n api-app-go
-
-# Ver os valores usados
-helm get values api-observabilidade -n api-app-go
-```
-
-### 6. Acessar a aplicação
-
-Se estiver usando Ingress:
-
-```bash
-# Adicionar ao /etc/hosts (se não fez ainda)
-echo "127.0.0.1 inventory.local" | sudo tee -a /etc/hosts
-
-# Acessar via curl
-curl http://inventory.local/health
-
-# Acessar métricas
-curl http://inventory.local/metrics
-```
-
-Ou usar port-forward:
-
-```bash
-kubectl port-forward -n api-app-go deployment/inventory-app 10000:10000
-# Depois acessar em: http://localhost:10000
-```
-
-## 🔧 Customização
-
-### Alterar valores via variáveis
-
-Edit `terraform.tfvars`:
-
-```hcl
-inventory_app_image_tag  = "v3.1"
-inventory_app_replicas   = 3
-mysql_root_password      = "sua_senha_segura"
-```
-
-### Usar arquivo de valores customizado
-
-1. Criar arquivo `custom-values.yaml`:
-
-```yaml
-grafana:
-  enabled: true
-  ingress:
-    enabled: true
-    hosts:
-      - grafana.local
-
-loki:
-  enabled: true
-  persistence:
-    size: 50Gi
-```
-
-2. Atualizar em `terraform.tfvars`:
-
-```hcl
-helm_values_file = "./custom-values.yaml"
-```
-
-3. Reaplica:
-
-```bash
-terraform plan
-terraform apply
-```
-
-### Alterar versão da imagem
-
-```bash
-terraform plan -var="inventory_app_image_tag=v3.1"
-terraform apply -auto-approve -var="inventory_app_image_tag=v3.1"
-```
-
-## 📊 Variáveis Disponíveis
-
-| Variável | Tipo | Padrão | Descrição |
-|----------|------|--------|-----------|
-| `kubeconfig_path` | string | `~/.kube/config` | Caminho do kubeconfig |
-| `namespace` | string | `api-app-go` | Namespace do K8s |
-| `inventory_app_image_tag` | string | `v4.0` | Tag da imagem da app |
-| `inventory_app_replicas` | number | `1` | Replicas da app |
-| `mysql_root_password` | string | `rootpassword` | Senha do MySQL |
-| `mysql_database` | string | `inventory` | Nome do database |
-| `mysql_storage_size` | string | `10Gi` | Tamanho do storage MySQL |
-| `ingress_hostname` | string | `inventory.local` | Hostname do ingress |
-| `grafana_enabled` | bool | `true` | Habilitar Grafana |
-| `loki_enabled` | bool | `true` | Habilitar Loki |
-| `tempo_enabled` | bool | `true` | Habilitar Tempo |
-| `mimir_enabled` | bool | `true` | Habilitar Mimir |
-| `pyroscope_enabled` | bool | `true` | Habilitar Pyroscope |
-| `alloy_enabled` | bool | `true` | Habilitar Alloy |
-| `otel_collector_enabled` | bool | `true` | Habilitar OpenTelemetry |
-
-## 🗑️ Destruir os Recursos
-
-Para remover tudo que foi criado:
-
-```bash
+# Só a stack (mantém o cluster Kind)
 terraform destroy
+
+# Cluster Kind também
+cd kind-cluster && terraform destroy
 ```
 
-Confirme digitando `yes` quando solicitado.
+## Documentação
 
-Ou destruir sem confirmação:
-
-```bash
-terraform destroy -auto-approve
-```
-
-## 📝 Estados Terraform
-
-O arquivo `terraform.tfstate` mantém o estado dos recursos. **Importante para produção**:
-
-```bash
-# Fazer backup do estado
-cp terraform.tfstate terraform.tfstate.backup
-
-# Em produção, usar remote backend (S3, GCS, Terraform Cloud, etc.)
-```
-
-## 🔐 Segurança
-
-⚠️ **Importante**:
-
-- **Nunca commit `terraform.tfstate`** em Git
-- **Nunca commit `terraform.tfvars`** com senhas
-- Usar `terraform.tfvars.local` ignorado pelo Git
-- Usar secrets management (Vault, AWS Secrets Manager, etc.)
-
-Criar `.gitignore`:
-
-```
-terraform.tfstate*
-terraform.tfvars.local
-.terraform/
-crash.log
-```
-
-## 🛠️ Comandos Úteis
-
-```bash
-# Validar sintaxe
-terraform validate
-
-# Formatar arquivos
-terraform fmt -recursive
-
-# Ver estado atual
-terraform show
-
-# Ver estado de um recurso específico
-terraform show -json | jq '.values.root_module.resources[] | select(.address == "helm_release.api_observabilidade")'
-
-# Importar recurso existente
-terraform import helm_release.api_observabilidade api-app-go/api-observabilidade
-
-# Atualizar lock files
-terraform get -update
-
-# Listar outputs
-terraform output
-```
-
-## 📞 Troubleshooting
-
-### Erro: `Unable to read local kubeconfig`
-
-```bash
-# Verificar se o arquivo existe
-ls -la ~/.kube/config
-
-# Ou especificar manualmente
-terraform apply -var="kubeconfig_path=/path/to/kubeconfig"
-```
-
-### Erro: `namespace already exists`
-
-```bash
-terraform apply -var="create_namespace=false"
-```
-
-### Verificar logs da release Helm
-
-```bash
-helm get all api-observabilidade -n api-app-go
-```
-
-### Destruir apenas a release Helm mantendo namespace
-
-```bash
-terraform destroy -target helm_release.api_observabilidade
-```
-
-## 📚 Referências
-
-- [Terraform Helm Provider](https://registry.terraform.io/providers/hashicorp/helm/latest/docs)
-- [Terraform Kubernetes Provider](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs)
-- [Helm Charts Documentation](https://helm.sh/docs/)
-- [Kubernetes Documentation](https://kubernetes.io/docs/)
-
-## 🎯 Próximos Passos
-
-1. **Customizar Helm values** para seu ambiente
-2. **Configurar remote backend** para estado compartilhado
-3. **Setup de Prometheus** para monitoramento do Terraform
-4. **Integrar com CI/CD** (GitHub Actions, GitLab CI, etc.)
-5. **Configurar backups** do banco de dados
-6. **Setup de logging** centralizado
+| Arquivo | Conteúdo |
+|---|---|
+| [`docs/delivery.md`](./docs/delivery.md) | Mapeamento completo de requisitos, decisões de design, variáveis e estrutura do projeto |
+| [`docs/decisions.md`](./docs/decisions.md) | Problemas encontrados, soluções adotadas e trade-offs técnicos |
+| [`docs/architecture.md`](./docs/architecture.md) | Diagramas de arquitetura, fluxo de observabilidade, secrets e networking |
+| [`docs/fluxo-senhas.md`](./docs/fluxo-senhas.md) | Como as credenciais fluem do Vault até os pods via ESO |
+| [`docs/infra-challenge.md`](./docs/infra-challenge.md) | Requisitos originais do challenge |
 
 ---
 

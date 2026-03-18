@@ -1,104 +1,67 @@
-# Create namespace
-resource "kubernetes_namespace" "api_app" {
-  count = var.create_namespace ? 1 : 0
-
+# Namespace criado no root para que tanto external_secrets quanto app possam depender dele
+resource "kubernetes_namespace" "app_namespace" {
   metadata {
     name = var.namespace
   }
-
-  depends_on = []
 }
 
-# Local values for Helm charts
-locals {
-  helm_values = merge(
-    yamldecode(var.helm_values_file != "" ? file(var.helm_values_file) : "{}"),
-    {
-      global = {
-        namespace        = var.namespace
-        imagePullPolicy  = "IfNotPresent"
-        storageClass     = "standard"
-      }
-      
-      inventoryApp = {
-        enabled     = true
-        replicaCount = var.inventory_app_replicas
-        image = {
-          tag = var.inventory_app_image_tag
-        }
-        ports = {
-          http    = var.inventory_app_http_port
-          metrics = var.inventory_app_metrics_port
-        }
-      }
-      
-      mysql = {
-        enabled = true
-        image = {
-          tag = var.mysql_image_tag
-        }
-        config = {
-          rootPassword = var.mysql_root_password
-          database     = var.mysql_database
-        }
-        persistence = {
-          size = var.mysql_storage_size
-        }
-      }
-      
-      grafana = {
-        enabled = var.grafana_enabled
-      }
-      
-      loki = {
-        enabled = var.loki_enabled
-      }
-      
-      tempo = {
-        enabled = var.tempo_enabled
-      }
-      
-      mimir = {
-        enabled = var.mimir_enabled
-      }
-      
-      pyroscope = {
-        enabled = var.pyroscope_enabled
-      }
-      
-      alloy = {
-        enabled = var.alloy_enabled
-      }
-      
-      otelCollector = {
-        enabled = var.otel_collector_enabled
-      }
-    },
-    var.custom_values
-  )
+module "vault" {
+  source = "./modules/vault"
+
+  vault_enabled       = var.vault_enabled
+  vault_version       = var.vault_version
+  vault_root_token    = var.vault_root_token
+  mysql_root_password = var.mysql_root_password
+  minio_root_password = var.minio_root_password
 }
 
-# Deploy Helm chart
-resource "helm_release" "api_observabilidade" {
-  name      = var.helm_release_name
-  chart     = var.helm_chart_path
-  namespace = var.namespace
-  
-  version = var.chart_version
-  wait    = true
+module "external_secrets" {
+  source = "./modules/external-secrets"
 
-  # Convert local values to YAML and pass to Helm
-  values = [
-    yamlencode(local.helm_values)
-  ]
+  vault_enabled    = var.vault_enabled
+  eso_enabled      = var.eso_enabled
+  eso_version      = var.eso_version
+  namespace        = var.namespace
+  vault_root_token = var.vault_root_token
 
-  depends_on = [
-    kubernetes_namespace.api_app
-  ]
+  depends_on = [module.vault, kubernetes_namespace.app_namespace]
+}
 
-  # Set individual values (overrides values from file)
-  set_sensitive {
-    name  = "mysql.config.rootPassword"
-    value = var.mysql_root_password
-  }
+# AlertManager + MailHog — implantados antes do módulo app para que a URL seja conhecida
+module "alertmanager" {
+  source = "./modules/alertmanager"
+
+  alertmanager_enabled   = var.alertmanager_enabled
+  alertmanager_version   = var.alertmanager_version
+  mailhog_version        = var.mailhog_version
+  alertmanager_namespace = var.alertmanager_namespace
+}
+
+module "app" {
+  source = "./modules/app"
+
+  namespace                  = var.namespace
+  helm_release_name          = var.helm_release_name
+  helm_chart_path            = var.helm_chart_path
+  helm_values_file           = var.helm_values_file
+  chart_version              = var.chart_version
+  inventory_app_replicas     = var.inventory_app_replicas
+  inventory_app_image_tag    = var.inventory_app_image_tag
+  inventory_app_http_port    = var.inventory_app_http_port
+  inventory_app_metrics_port = var.inventory_app_metrics_port
+  mysql_image_tag            = var.mysql_image_tag
+  mysql_database             = var.mysql_database
+  mysql_storage_size         = var.mysql_storage_size
+  grafana_enabled            = var.grafana_enabled
+  loki_enabled               = var.loki_enabled
+  tempo_enabled              = var.tempo_enabled
+  mimir_enabled              = var.mimir_enabled
+  pyroscope_enabled          = var.pyroscope_enabled
+  alloy_enabled              = var.alloy_enabled
+  otel_collector_enabled     = var.otel_collector_enabled
+  alertmanager_enabled       = var.alertmanager_enabled
+  alertmanager_url           = module.alertmanager.alertmanager_url
+  custom_values              = var.custom_values
+
+  depends_on = [module.external_secrets, module.alertmanager]
 }

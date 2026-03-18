@@ -83,10 +83,15 @@ variable "mysql_image_tag" {
 }
 
 variable "mysql_root_password" {
-  description = "MySQL root password"
+  description = "MySQL root password (use TF_VAR_mysql_root_password env var)"
   type        = string
   sensitive   = true
-  default     = "rootpassword"
+}
+
+variable "minio_root_password" {
+  description = "MinIO root password (use TF_VAR_minio_root_password env var)"
+  type        = string
+  sensitive   = true
 }
 
 variable "mysql_database" {
@@ -168,6 +173,43 @@ variable "otel_collector_enabled" {
 }
 
 # ========================================
+# VAULT CONFIGURATION
+# ========================================
+variable "vault_enabled" {
+  description = "Install HashiCorp Vault (dev mode)"
+  type        = bool
+  default     = true
+}
+
+variable "vault_version" {
+  description = "Vault Helm chart version"
+  type        = string
+  default     = "0.27.0"
+}
+
+variable "vault_root_token" {
+  description = "Vault dev root token"
+  type        = string
+  sensitive   = true
+  default     = "root"
+}
+
+# ========================================
+# EXTERNAL SECRETS OPERATOR CONFIGURATION
+# ========================================
+variable "eso_enabled" {
+  description = "Install External Secrets Operator"
+  type        = bool
+  default     = true
+}
+
+variable "eso_version" {
+  description = "External Secrets Operator Helm chart version"
+  type        = string
+  default     = "0.10.0"
+}
+
+# ========================================
 # RESOURCE LIMITS
 # ========================================
 variable "resource_requests" {
@@ -201,4 +243,31 @@ variable "custom_values" {
   description = "Custom Helm values (as YAML string or map)"
   type        = any
   default     = {}
+}
+
+# ========================================
+# ALERTMANAGER CONFIGURATION
+# ========================================
+variable "alertmanager_enabled" {
+  description = "Install AlertManager with MailHog SMTP receiver and wire Mimir ruler to it"
+  type        = bool
+  default     = false
+}
+
+variable "alertmanager_version" {
+  description = "AlertManager Helm chart version (prometheus-community/alertmanager)"
+  type        = string
+  default     = "1.31.1"
+}
+
+variable "mailhog_version" {
+  description = "MailHog Helm chart version (codecentric/mailhog)"
+  type        = string
+  default     = "5.2.3"
+}
+
+variable "alertmanager_namespace" {
+  description = "Kubernetes namespace for AlertManager and MailHog"
+  type        = string
+  default     = "alertmanager"
 }

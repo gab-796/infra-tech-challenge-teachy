@@ -1,0 +1,181 @@
+{{- if .Values.alloy.enabled }}
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: alloy
+  namespace: api-app-go
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: alloy
+rules:
+  - apiGroups: [""]
+    resources:
+      - nodes
+      - nodes/proxy
+      - nodes/metrics
+      - services
+      - endpoints
+      - pods
+      - pods/log
+      - ingresses
+      - configmaps
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["extensions", "networking.k8s.io"]
+    resources:
+      - ingresses
+    verbs: ["get", "list", "watch"]
+  - nonResourceURLs: ["/metrics", "/metrics/cadvisor"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: alloy
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: alloy
+subjects:
+  - kind: ServiceAccount
+    name: alloy
+    namespace: api-app-go
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alloy-config
+  namespace: api-app-go
+data:
+  alloy.yaml: |
+    logging {
+      level  = "info"
+      format = "json"
+    }
+
+    // Synchronize alerting rules to Mimir and Loki
+
+    mimir.rules.kubernetes "mimir" {
+      sync_interval = "20s"
+      address = "http://mimir.local"
+      rule_selector {
+        match_labels = {
+          rule_type = "mimir",
+        }
+      }
+    }
+
+    // Configuração para coletar métricas internas do próprio Alloy
+    prometheus.exporter.self "alloy_metrics" { }
+
+    prometheus.scrape "alloy_self" {
+      targets    = prometheus.exporter.self.alloy_metrics.targets
+      forward_to = [prometheus.remote_write.mimir.receiver]
+      job_name   = "alloy"
+      scrape_interval = "30s"
+    }
+
+    // Write para Mimir (métricas)
+    prometheus.remote_write "mimir" {
+      endpoint {
+        url = "http://mimir:9009/api/v1/push"
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alloy
+  namespace: api-app-go
+  labels:
+    app: alloy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alloy
+  template:
+    metadata:
+      labels:
+        app: alloy
+    spec:
+      serviceAccountName: alloy
+      containers:
+        - name: alloy
+          image: grafana/alloy:v1.9.1
+          args:
+            - run
+            - /etc/alloy/alloy.yaml
+            - --storage.path=/var/lib/alloy/data
+            - --server.http.listen-addr=0.0.0.0:12345  # Probe do kubelet proveniente de qq interface.
+          ports:
+            - containerPort: 12345
+              name: http-metrics
+          volumeMounts:
+            - name: alloy-storage
+              mountPath: /var/lib/alloy/data
+            - name: alloy-config
+              mountPath: /etc/alloy
+              readOnly: true
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+          {{- if .Values.monitoring.healthChecks.enabled }}
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: 12345
+            {{- toYaml .Values.monitoring.healthChecks.readinessProbe | nindent 12 }}
+          livenessProbe:
+            httpGet:
+              path: /-/healthy
+              port: 12345
+            {{- toYaml .Values.monitoring.healthChecks.livenessProbe | nindent 12 }}
+          {{- end }}
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 473
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: alloy-storage
+          persistentVolumeClaim:
+            claimName: alloy-pvc
+        - name: alloy-config
+          configMap:
+            name: alloy-config
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: alloy-pvc
+  namespace: {{ .Values.global.namespace }}
+spec:
+  accessModes:
+    - {{ .Values.persistence.accessMode }}
+  storageClassName: {{ .Values.global.storageClass }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.sizes.alloy }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alloy
+  namespace: {{ .Values.global.namespace }}
+spec:
+  ports:
+    - name: http-metrics
+      protocol: TCP
+      port: 12345
+      targetPort: 12345
+  selector:
+    app: alloy
+{{- end }}
