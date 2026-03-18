@@ -1,4 +1,4 @@
----
+{{- if .Values.mimir.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -222,3 +222,4 @@ spec:
       protocol: TCP
   selector:
     app: mimir
+{{- end }}

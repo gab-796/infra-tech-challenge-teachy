@@ -33,11 +33,6 @@ maintainers:
   - name: Gabriel Rocha
     email: gabriel.rocha@ufrj.br
 
-# Home page and source code URLs
-home: https://github.com/gab-796/api-observabilidade
-sources:
-  - https://github.com/gab-796/api-observabilidade
-
 # Dependencies (if using external charts)
 dependencies: []
 
