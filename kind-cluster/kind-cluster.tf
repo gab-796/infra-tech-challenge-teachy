@@ -20,6 +20,7 @@ resource "null_resource" "kind_cluster_create" {
       # recria o cluster desnecessariamente.
       if kind get clusters -q 2>/dev/null | grep -q "^${var.kind_cluster_name}$"; then
         echo "Cluster ${var.kind_cluster_name} already exists"
+        kind export kubeconfig --name ${var.kind_cluster_name}
         exit 0
       fi
 

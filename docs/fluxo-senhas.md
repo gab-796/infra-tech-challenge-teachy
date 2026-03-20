@@ -34,7 +34,7 @@ export TF_VAR_minio_root_password="suasenha-2"
          │
          ├──▶ inventory-app.yaml
          │      env DB_PASSWORD ← secretKeyRef: inventory-app-secrets/DB_PASSWORD
-         │      (nome do secret: "inventory-app-secrets", não "inventory-app-secrets")
+         │      (nome do secret de destino: "inventory-app-secrets")
          │
          └──▶ minio.yaml
                 env MINIO_ROOT_PASSWORD ← secretKeyRef: minio-secrets/MINIO_ROOT_PASSWORD

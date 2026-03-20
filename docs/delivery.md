@@ -283,12 +283,10 @@ infra-tech-challenge-teachy/
 │
 └── docs/
     ├── infra-challenge.md      # Requisitos originais do challenge
-    ├── ENTREGA.md              # Este documento
-    ├── architecture.md         # Diagrama de arquitetura
-    ├── troubelshooting.md      # Guia de troubleshooting com soluções documentadas
-    ├── EXEMPLOS.md             # 50+ exemplos de uso
-    └── RESUMO.md
-```
+    ├── delivery.md             # Este documento (Mapeamento completo)
+    ├── architecture.md         # Diagramas de arquitetura, fluxo e secrets
+    ├── decisions.md            # Problemas, soluções e trade-offs técnicos
+    └── fluxo-senhas.md         # Como as credenciais fluem do Vault até os pods
 
 ---
 
@@ -300,7 +298,7 @@ Consulte o [README.md](../README.md) para instruções completas de setup. Resum
 # 1. Pré-requisitos: terraform, kubectl, helm, kind, docker, mc (MinIO client)
 
 # 2. Configurar /etc/hosts
-echo "172.18.0.1 inventory.local grafana-web.local loki.local tempo.local \
+echo "172.18.0.0 inventory.local grafana-web.local loki.local tempo.local \
   mimir.local pyroscope.local alloy.local minio.local alertmanager.local mailhog.local" \
   | sudo tee -a /etc/hosts
 
@@ -430,6 +428,6 @@ variable "mysql_password" {
 
 ---
 
-Dúvidas? Revise a documentação em SETUP-COMPLETO.md, EXEMPLOS.md ou README.md.
+Dúvidas? Revise a documentação em docs/delivery.md, docs/decisions.md ou no README.md principal.
 
 Versão: 1.0.0 | Data: 2026-03 | Autor: Gabriel Rocha

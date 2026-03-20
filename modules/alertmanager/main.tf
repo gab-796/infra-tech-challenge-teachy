@@ -99,7 +99,7 @@ resource "helm_release" "alertmanager" {
 
     ingress = {
       enabled   = true
-      ingressClassName = "nginx"
+      className = "nginx"
       hosts = [
         {
           host = "alertmanager.local"
