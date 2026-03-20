@@ -9,7 +9,7 @@ Ela funciona com o ingress, então é necessário ter atualizado o /etc/hosts co
 Adicione essa linha no seu arquivo /etc/hosts:
 
 
-`172.18.0.0 grafana-mimir.local loki.local inventory.local grafana-web.local mailhog.local minio.local alertmanager.local`
+`172.18.0.0 inventory.local grafana-web.local loki.local tempo.local mimir.local pyroscope.local alloy.local minio.local alertmanager.local mailhog.local`
 
 
-> Atenção: Verifique se a sua rede docker usada pelo kind faz parte do CIDR padrão(172.18.0.0/32)
+> Atenção: Verifique se a sua rede docker usada pelo kind faz parte do CIDR padrão(172.18.0.0/16)

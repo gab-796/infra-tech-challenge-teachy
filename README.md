@@ -101,7 +101,7 @@ O fluxo completo (opção 1) executa:
 Adicione ao `/etc/hosts`:
 
 ```
-172.18.0.1 inventory.local grafana-web.local loki.local tempo.local mimir.local pyroscope.local alloy.local minio.local alertmanager.local mailhog.local
+172.18.0.0 inventory.local grafana-web.local loki.local tempo.local mimir.local pyroscope.local alloy.local minio.local alertmanager.local mailhog.local
 ```
 
 | Serviço | URL |
