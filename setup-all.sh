@@ -32,9 +32,9 @@ check_requirements() {
     for tool in "${required_tools[@]}"; do
             if command -v "$tool" &> /dev/null; then
                 if [ "$tool" = "helm" ]; then
-                    echo -e "${GREEN}✓${NC} $tool: $(helm version --short 2>&1 | head -n 1)"
+                    echo -e "${GREEN}✓${NC} $tool: $(helm version --template='{{.Version}}' 2>&1)"
                 elif [ "$tool" = "kubectl" ]; then
-                    echo -e "${GREEN}✓${NC} $tool: $(kubectl version --client --short 2>&1 | head -n 1)"
+                    echo -e "${GREEN}✓${NC} $tool: $(kubectl version --client -o yaml 2>&1 | grep gitVersion | awk '{print $2}')"
                 else
                     echo -e "${GREEN}✓${NC} $tool: $(eval "$tool" --version 2>&1 | head -n 1)"
                 fi
@@ -88,7 +88,7 @@ bootstrap_minio_state() {
     mc alias set minio-state http://localhost:9100 \
         "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD" --insecure 2>/dev/null
     mc mb minio-state/tfstate --ignore-existing
-    echo -e "${GREEN}✓ MinIO state backend pronto em http://localhost:9100${NC}"
+    echo -e "${GREEN}✓ MinIO state backend rodando. Console UI: http://localhost:9101${NC}"
     echo ""
 }
 
@@ -102,7 +102,11 @@ create_kind_cluster() {
     cd "${KIND_DIR}"
 
     echo -e "${YELLOW}🔧 Inicializando Terraform...${NC}"
-    terraform init
+    terraform init \
+        -backend-config="access_key=$MINIO_ROOT_USER" \
+        -backend-config="secret_key=$MINIO_ROOT_PASSWORD" \
+        -migrate-state \
+        -force-copy
 
     echo -e "${YELLOW}📊 Planejando cluster...${NC}"
     terraform plan -out=tfplan-kind
@@ -134,7 +138,8 @@ deploy_app() {
     terraform init \
         -backend-config="access_key=$MINIO_ROOT_USER" \
         -backend-config="secret_key=$MINIO_ROOT_PASSWORD" \
-        -migrate-state
+        -migrate-state \
+        -force-copy
 
     echo -e "${YELLOW}📊 Planejando deployment...${NC}"
     terraform plan -out=tfplan-app
@@ -225,6 +230,7 @@ main() {
                 ;;
             2)
                 if confirm "🚀 Criar Kind Cluster?"; then
+                    bootstrap_minio_state
                     create_kind_cluster
                 fi
                 ;;
@@ -244,7 +250,9 @@ main() {
                     cd "${APP_DIR}"
                     terraform init \
                         -backend-config="access_key=$MINIO_ROOT_USER" \
-                        -backend-config="secret_key=$MINIO_ROOT_PASSWORD"
+                        -backend-config="secret_key=$MINIO_ROOT_PASSWORD" \
+                        -migrate-state \
+                        -force-copy
                     terraform destroy -auto-approve
                     cd - > /dev/null
                     echo -e "${GREEN}✓ Aplicação destruída! Cluster continua rodando.${NC}"
@@ -257,12 +265,19 @@ main() {
                     cd "${APP_DIR}"
                     terraform init \
                         -backend-config="access_key=$MINIO_ROOT_USER" \
-                        -backend-config="secret_key=$MINIO_ROOT_PASSWORD"
+                        -backend-config="secret_key=$MINIO_ROOT_PASSWORD" \
+                        -migrate-state \
+                        -force-copy
                     terraform destroy -auto-approve
                     cd - > /dev/null
 
                     echo -e "${RED}Destruindo cluster...${NC}"
                     cd "${KIND_DIR}"
+                    terraform init \
+                        -backend-config="access_key=$MINIO_ROOT_USER" \
+                        -backend-config="secret_key=$MINIO_ROOT_PASSWORD" \
+                        -migrate-state \
+                        -force-copy
                     terraform destroy -auto-approve
                     cd - > /dev/null
 
